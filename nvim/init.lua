@@ -6,3 +6,5 @@ require('trzcin.core.theme')
 
 -- plugin configurations
 require('trzcin.plugins')
+
+require('trzcin.core.keymaps')

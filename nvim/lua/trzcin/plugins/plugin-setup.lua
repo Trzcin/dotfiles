@@ -21,31 +21,74 @@ vim.cmd([[
 local status, packer = pcall(require, "packer")
 -- failed to load plugins
 if not status then
-    print('packer not found')
+	print("packer not found")
 	return
 end
 
 return packer.startup(function(use)
 	use("wbthomason/packer.nvim")
-    use { "catppuccin/nvim", as = "catppuccin" }
+	use("nvim-lua/plenary.nvim")
+	use({ "catppuccin/nvim", as = "catppuccin" })
 	use("kyazdani42/nvim-web-devicons")
-    use {
-        'nvim-lualine/lualine.nvim',
-        requires = { 'kyazdani42/nvim-web-devicons', opt = true }
-    }
-    use {
-        'nvim-tree/nvim-tree.lua',
-        requires = {
-            'nvim-tree/nvim-web-devicons', -- optional, for file icons
-        },
-        tag = 'nightly' -- optional, updated every week. (see issue #1193)
-    }
+	use({
+		"nvim-lualine/lualine.nvim",
+		requires = { "kyazdani42/nvim-web-devicons", opt = true },
+	})
+	use({
+		"nvim-tree/nvim-tree.lua",
+		requires = {
+			"nvim-tree/nvim-web-devicons", -- optional, for file icons
+		},
+		tag = "nightly", -- optional, updated every week. (see issue #1193)
+	})
 	use({
 		"nvim-treesitter/nvim-treesitter",
 		run = function()
 			require("nvim-treesitter.install").update({ with_sync = true })
 		end,
 	})
+
+	-- autocompletion
+	use("hrsh7th/nvim-cmp")
+	use("hrsh7th/cmp-buffer") -- complete text from file
+	use("hrsh7th/cmp-path") -- complete paths
+
+	-- snippets
+	use("L3MON4D3/LuaSnip")
+	use("saadparwaiz1/cmp_luasnip")
+	use("rafamadriz/friendly-snippets")
+
+	-- lsp
+	use("williamboman/mason.nvim")
+	use("williamboman/mason-lspconfig.nvim")
+	use("neovim/nvim-lspconfig")
+	use("hrsh7th/cmp-nvim-lsp") -- for autocompletion
+	use({
+		"glepnir/lspsaga.nvim",
+		branch = "main",
+		requires = {
+			{ "nvim-tree/nvim-web-devicons" },
+			{ "nvim-treesitter/nvim-treesitter" },
+		},
+	}) -- enhanced lsp uis
+	use("jose-elias-alvarez/typescript.nvim") -- additional functionality for typescript server (e.g. rename file & update imports)
+	use("onsails/lspkind.nvim") -- vs-code like icons for autocompletion
+	use("jose-elias-alvarez/null-ls.nvim")
+	use("jayp0521/mason-null-ls.nvim")
+
+	-- auto closing
+	use("windwp/nvim-autopairs")
+	use("windwp/nvim-ts-autotag")
+
+	-- git
+	use("lewis6991/gitsigns.nvim")
+
+	-- comments
+	use("numToStr/Comment.nvim")
+
+	-- fuzzy finder
+	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" }) -- dependency for performence
+	use({ "nvim-telescope/telescope.nvim", branch = "0.1.x" })
 
 	if packer_bootstrap then
 		packer.sync()
