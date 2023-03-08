@@ -29,6 +29,7 @@ return packer.startup(function(use)
 	use("wbthomason/packer.nvim")
 	use("nvim-lua/plenary.nvim")
 	use({ "catppuccin/nvim", as = "catppuccin" })
+	use("christoomey/vim-tmux-navigator")
 	use("kyazdani42/nvim-web-devicons")
 	use({
 		"nvim-lualine/lualine.nvim",
@@ -80,15 +81,33 @@ return packer.startup(function(use)
 	use("windwp/nvim-autopairs")
 	use("windwp/nvim-ts-autotag")
 
-	-- git
-	use("lewis6991/gitsigns.nvim")
-
 	-- comments
 	use("numToStr/Comment.nvim")
 
 	-- fuzzy finder
 	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" }) -- dependency for performence
 	use({ "nvim-telescope/telescope.nvim", branch = "0.1.x" })
+
+	-- colors
+	use("norcalli/nvim-colorizer.lua")
+
+	use({
+		"folke/todo-comments.nvim",
+		requires = "nvim-lua/plenary.nvim",
+		config = function()
+			require("todo-comments").setup()
+		end,
+	})
+
+	use({
+		"ray-x/lsp_signature.nvim",
+		config = function()
+			require("lsp_signature").setup({
+				floating_window_above_cur_line = false,
+				hint_enable = false,
+			})
+		end,
+	})
 
 	if packer_bootstrap then
 		packer.sync()

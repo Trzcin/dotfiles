@@ -37,3 +37,4 @@ opt.splitbelow = true
 
 -- consider '-' as part of a word
 opt.iskeyword:append("-")
+opt.pumheight = 10

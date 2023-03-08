@@ -11,4 +11,12 @@ lspsaga.setup({
 	lightbulb = {
 		enable = false,
 	},
+	diagnostic = {
+		on_insert = false,
+	},
+	outline = {
+		keys = {
+			jump = "<CR>",
+		},
+	},
 })
