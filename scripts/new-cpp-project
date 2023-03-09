@@ -64,6 +64,9 @@ cd build
 cmake ../
 cp compile_commands.json ../
 make
+if [ -x \"\$(command -v termux-elf-cleaner)\" ]; then
+    termux-elf-cleaner --quiet $NAME
+fi
 ./$NAME"
 echo "$BUILD_SH" > cmake-build
 chmod +x cmake-build
