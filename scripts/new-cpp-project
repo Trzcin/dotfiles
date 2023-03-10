@@ -1,5 +1,7 @@
 #!/bin/bash
 
+TEMPLATE_DIR="$HOME/dotfiles/scripts/cpp-templates"
+
 # ask for project name
 echo -n "Project name: "
 read NAME
@@ -9,66 +11,25 @@ then
     exit 0
 fi
 mkdir $NAME
+
+# ask for template
+echo "Pick template:"
+TEMPLATES=()
+for i in $(ls -d "$TEMPLATE_DIR"/*/); do 
+    TEMPLATES+=( $(basename ${i%%/}) )
+done
+PS3="> "
+select OPTION in "${TEMPLATES[@]}"; do
+    if [[ ! " ${TEMPLATES[*]} " =~ " ${OPTION} " ]]; then
+        echo "Please select a valid option"
+        exit 0
+    fi
+    break
+done
+
+cp -r "${TEMPLATE_DIR}/${OPTION}"/* "${NAME}/"
 cd $NAME
+sed -i "s/P_NAME/$NAME/" CMakeLists.txt
+sed -i "s/P_NAME/$NAME/" run.sh
 
-# add formatter settings
-FORMAT_SETTINGS="IndentWidth: 4
-PointerAlignment: Left"
-echo "$FORMAT_SETTINGS" > .clang-format
-
-# add cmake settings
-CMAKE_SETTINGS="cmake_minimum_required(VERSION 3.10)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-project($NAME VERSION 0.1)
-
-file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS src/*.cpp)
-add_executable($NAME \${SRC_FILES})
-target_include_directories($NAME PUBLIC \${CMAKE_CURRENT_SOURCE_DIR}/include)"
-echo "$CMAKE_SETTINGS" > CMakeLists.txt
-
-# add include dir
-mkdir include
-cd include
-MAIN_H="#pragma once
-#include <iostream>
-
-void sayHello();"
-echo "$MAIN_H" > main.hpp
-cd ..
-
-# add src dir
-mkdir src
-cd src
-MAIN_CPP="#include \"main.hpp\"
-
-using namespace std;
-
-int main(int argc, char* argv[]) {
-    sayHello();
-    return 0;
-}
-
-void sayHello() { cout << \"Hello World!\" << endl; }"
-echo "$MAIN_CPP" > main.cpp
-cd ..
-
-# add build stuff
-BUILD_SH="#!/bin/bash
-
-# create build dir if there is none
-mkdir -p build
-cd build
-cmake ../
-cp compile_commands.json ../
-make
-if [ -x \"\$(command -v termux-elf-cleaner)\" ]; then
-    termux-elf-cleaner --quiet $NAME
-fi
-./$NAME"
-echo "$BUILD_SH" > cmake-build
-chmod +x cmake-build
-
-./cmake-build
+cmake -B build -G Ninja
