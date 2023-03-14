@@ -16,6 +16,12 @@ if not typescript_status then
 	return
 end
 
+local rust_tools_status, rust_tools = pcall(require, "rust-tools")
+if not rust_tools_status then
+	print("rust_tools not found")
+	return
+end
+
 local keymap = vim.keymap
 
 local on_attach = function(client, bufnr)
@@ -87,6 +93,8 @@ lspconfig["clangd"].setup({
 	capabilities = capabilities,
 	on_attach = on_attach,
 })
+
+rust_tools.setup()
 
 -- configure emmet language server
 lspconfig["emmet_ls"].setup({

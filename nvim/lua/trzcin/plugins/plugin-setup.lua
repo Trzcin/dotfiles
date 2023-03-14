@@ -76,6 +76,7 @@ return packer.startup(function(use)
 	use("onsails/lspkind.nvim") -- vs-code like icons for autocompletion
 	use("jose-elias-alvarez/null-ls.nvim")
 	use("jayp0521/mason-null-ls.nvim")
+	use("simrat39/rust-tools.nvim")
 
 	-- auto closing
 	use("windwp/nvim-autopairs")
@@ -87,6 +88,7 @@ return packer.startup(function(use)
 	-- fuzzy finder
 	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" }) -- dependency for performence
 	use({ "nvim-telescope/telescope.nvim", branch = "0.1.x" })
+	use("debugloop/telescope-undo.nvim")
 
 	-- colors
 	use("norcalli/nvim-colorizer.lua")

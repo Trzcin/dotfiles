@@ -27,7 +27,7 @@ select OPTION in "${TEMPLATES[@]}"; do
     break
 done
 
-cp -r "${TEMPLATE_DIR}/${OPTION}"/* "${NAME}/"
+cp -rT "${TEMPLATE_DIR}/${OPTION}" "${NAME}"
 cd $NAME
 sed -i "s/P_NAME/$NAME/" CMakeLists.txt
 sed -i "s/P_NAME/$NAME/" run.sh
