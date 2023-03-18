@@ -1,0 +1,43 @@
+#!/bin/bash
+
+TEMPLATE_DIR="$HOME/dotfiles/scripts/java-templates"
+
+# ask for project name
+read -p "Project name: " PROJECT_NAME
+if [ -d "$PROJECT_NAME" ];
+then
+    echo "$PROJECT_NAME already exists!"
+    exit 0
+fi
+mkdir $PROJECT_NAME
+
+# ask for package name
+read -p "Package name (com.example.app): " PACKAGE_NAME
+PACKAGE_PATH=`echo "$PACKAGE_NAME" | tr '.' '/'`
+
+# ask for template
+echo "Pick template:"
+TEMPLATES=()
+for i in $(ls -d "$TEMPLATE_DIR"/*/); do 
+    TEMPLATES+=( $(basename ${i%%/}) )
+done
+PS3="> "
+select OPTION in "${TEMPLATES[@]}"; do
+    if [[ ! " ${TEMPLATES[*]} " =~ " ${OPTION} " ]]; then
+        echo "Please select a valid option"
+        exit 0
+    fi
+    break
+done
+
+cp -rT "${TEMPLATE_DIR}/${OPTION}" "${PROJECT_NAME}"
+cd $PROJECT_NAME
+sed -i "s/PROJECT_NAME/$PROJECT_NAME/" pom.xml
+sed -i "s/PACKAGE_NAME/$PACKAGE_NAME/" pom.xml
+sed -i "s/PACKAGE_NAME/$PACKAGE_NAME/" src/test/java/AppTest.java
+sed -i "s/PACKAGE_NAME/$PACKAGE_NAME/" src/main/java/App.java
+
+mkdir -p "./src/main/java/$PACKAGE_PATH"; mv src/main/java/App.java $_
+mkdir -p "./src/test/java/$PACKAGE_PATH"; mv src/test/java/AppTest.java $_
+
+mvn install
