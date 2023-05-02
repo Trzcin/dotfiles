@@ -9,6 +9,9 @@ vim.g.loaded_netrwPlugin = 1
 
 nvim_tree.setup({
 	sort_by = "extension",
+	renderer = {
+		group_empty = true,
+	},
 })
 
 -- open nvim-tree on startup

@@ -21,13 +21,30 @@ require("luasnip/loaders/from_vscode").lazy_load()
 vim.opt.completeopt = "menu,menuone,noselect"
 
 local types = require("cmp.types")
-local function deprioritize_snippet(entry1, entry2)
-	if entry1:get_kind() == types.lsp.CompletionItemKind.Snippet then
-		return false
+local compare = require("cmp.config.compare")
+local function custom_lsp_compare(entry1, entry2)
+	local order = {
+		types.lsp.CompletionItemKind.Method,
+		types.lsp.CompletionItemKind.Field,
+		types.lsp.CompletionItemKind.Function,
+		types.lsp.CompletionItemKind.Variable,
+		types.lsp.CompletionItemKind.Keyword,
+		types.lsp.CompletionItemKind.Snippet,
+		types.lsp.CompletionItemKind.Text,
+	}
+
+	local index1 = -1
+	local index2 = -1
+	for i, v in ipairs(order) do
+		if v == entry1:get_kind() then
+			index1 = i
+		end
+		if v == entry2:get_kind() then
+			index2 = i
+		end
 	end
-	if entry2:get_kind() == types.lsp.CompletionItemKind.Snippet then
-		return true
-	end
+
+	return index1 < index2
 end
 
 cmp.setup({
@@ -61,7 +78,15 @@ cmp.setup({
 	sorting = {
 		priority_weight = 2,
 		comparators = {
-			deprioritize_snippet,
+			custom_lsp_compare,
+			compare.offset,
+			compare.exact,
+			compare.score,
+			compare.recently_used,
+			compare.kind,
+			compare.sort_text,
+			compare.length,
+			compare.order,
 		},
 	},
 })

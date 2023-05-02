@@ -14,6 +14,9 @@ lspsaga.setup({
 	diagnostic = {
 		on_insert = false,
 	},
+	symbol_in_winbar = {
+		enable = false,
+	},
 	outline = {
 		keys = {
 			jump = "<CR>",
