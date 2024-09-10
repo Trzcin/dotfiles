@@ -8,6 +8,7 @@ bind p fish_clipboard_paste
 abbr -a c clear
 abbr -a l ls -g -h
 abbr -a --position command code code --ozone-platform=wayland
+abbr -a lg lazygit
 
 set NVCC_PREPEND_FLAGS "-ccbin /home/linuxbrew/.linuxbrew/bin/g++-13"
 
