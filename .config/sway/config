@@ -152,6 +152,9 @@ bindsym $mod+c exec hyprpicker --autocopy
 bindsym Print exec grim -g "$(slurp)" "/home/$USER/Pictures/Screenshots/$(date +"%d-%m-%Y_%H:%M:%S").png"
 bindsym Shift+Print exec grim "~/Pictures/Screenshots/$(date +"%d-%m-%Y_%H:%M:%S").png"
 
+# locking
+bindsym $mod+o exec swaylock -c 000000
+
 ## Status Bar
 # read `man 5 sway-bar` for more information about this section.
 bar {
