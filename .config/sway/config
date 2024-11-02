@@ -153,7 +153,10 @@ bindsym Print exec grim -g "$(slurp)" "/home/$USER/Pictures/Screenshots/$(date +
 bindsym Shift+Print exec grim "~/Pictures/Screenshots/$(date +"%d-%m-%Y_%H:%M:%S").png"
 
 # locking
-bindsym $mod+o exec swaylock -c 000000
+set $lock swaylock -c 000000
+bindsym $mod+o exec $lock
+# suspend
+bindsym $mod+Shift+s exec $lock && systemctl suspend
 
 ## Status Bar
 # read `man 5 sway-bar` for more information about this section.
