@@ -6,7 +6,7 @@ bind yy fish_clipboard_copy
 bind p fish_clipboard_paste
 
 abbr -a c clear
-abbr -a l ls -g -h
+abbr -a l ls -gh
 abbr -a --position command code code --ozone-platform=wayland
 abbr -a lg lazygit
 abbr -a bc bluetoothctl connect
