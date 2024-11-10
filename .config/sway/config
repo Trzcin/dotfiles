@@ -20,6 +20,7 @@ set $menu rofi -show drun
 # startup
 
 exec swaync
+exec_always wl-paste --watch "~/go/bin/cliphist" store
 
 # font
 font pango:JetBrainsMono Nerd Font 10
@@ -117,8 +118,8 @@ bindsym $mod+Shift+9 move container to workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10
 
 # change split mode
-bindsym $mod+b splith
-bindsym $mod+v splitv
+bindsym $mod+Shift+b splith
+bindsym $mod+Shift+v splitv
 
 # switch container layout
 bindsym $mod+s layout stacking
@@ -163,6 +164,9 @@ bindsym $mod+c exec hyprpicker --autocopy
 # screenshots
 bindsym Print exec grim -g "$(slurp)" "/home/$USER/Pictures/Screenshots/$(date +"%d-%m-%Y_%H:%M:%S").png"
 bindsym Shift+Print exec grim "~/Pictures/Screenshots/$(date +"%d-%m-%Y_%H:%M:%S").png"
+
+# clipboard
+bindsym $mod+v exec rofi -modi "clipboard:~/.config/rofi/cliphist-rofi-img" -show clipboard
 
 # locking
 set $lock swaylock -c 000000

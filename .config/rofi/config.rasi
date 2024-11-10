@@ -1,9 +1,7 @@
 configuration {
-  display-drun: "Applications:";
-  display-run: "Run:";
   drun-display-format: "{icon} {name}";
   font: "JetBrainsMono Nerd Font Medium 12";
-  modi: "run,drun";
+  modi: "run,drun,emoji,calc";
   show-icons: true;
   icon-theme: "Papirus";
 }
@@ -12,7 +10,7 @@ configuration {
 
 * {
     bg0:    #1B1E28E6;
-    bg1:    #7E7E7E80;
+    bg1:    #17192280;
     bg2:    #89DDFFE6;
 
     fg0:    #DEDEDE;
