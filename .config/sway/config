@@ -179,4 +179,10 @@ bar {
 
 default_border pixel 0
 
+## Colors
+set $border #5DE4C7
+set $bg #1B1E28
+#class         #border #background #text   #indicator #child_border
+client.focused #333333 $border     $bg     $border
+
 include /etc/sway/config.d/*
