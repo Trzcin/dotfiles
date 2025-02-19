@@ -1,0 +1,41 @@
+[language-server.emmet-language-server]
+args = ["--stdio"]
+command = "emmet-language-server"
+
+[language-server.typescript-language-server]
+args = ["--stdio"]
+command = "typescript-language-server"
+config = { plugins = [{ name = "@styled/typescript-styled-plugin", location = "/usr/local/lib/node_modules/@styled/typescript-styled-plugin" }] }
+
+[[language]]
+name = "html"
+language-servers = ["vscode-html-language-server", "emmet-language-server"]
+formatter = { command = "npx", args = ["prettier", "--parser", "html"] }
+auto-format = true
+
+[[language]]
+name = "css"
+formatter = { command = "npx", args = ["prettier", "--parser", "css"] }
+auto-format = true
+
+[[language]]
+name = "jsx"
+language-servers = ["typescript-language-server", "emmet-language-server"]
+formatter = { command = "npx", args = ["prettier", "--parser", "typescript"] }
+auto-format = true
+
+[[language]]
+name = "javascript"
+formatter = { command = "npx", args = ["prettier", "--parser", "typescript"] }
+auto-format = true
+
+[[language]]
+name = "tsx"
+language-servers = ["typescript-language-server", "emmet-language-server"]
+formatter = { command = "npx", args = ["prettier", "--parser", "typescript"] }
+auto-format = true
+
+[[language]]
+name = "typescript"
+formatter = { command = "npx", args = ["prettier", "--parser", "typescript"] }
+auto-format = true

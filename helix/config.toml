@@ -1,0 +1,13 @@
+theme = "poimandres"
+
+[editor.cursor-shape]
+insert = "bar"
+
+[editor]
+mouse = false
+completion-trigger-len = 1
+completion-timeout = 100
+end-of-line-diagnostics = "hint"
+
+[editor.inline-diagnostics]
+cursor-line = "warning"
