@@ -10,4 +10,4 @@ completion-timeout = 100
 end-of-line-diagnostics = "hint"
 
 [editor.inline-diagnostics]
-cursor-line = "warning"
+cursor-line = "hint"
