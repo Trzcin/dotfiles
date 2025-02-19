@@ -4,6 +4,7 @@ fish_vi_key_bindings
 bind -M visual y fish_clipboard_copy
 bind yy fish_clipboard_copy
 bind p fish_clipboard_paste
+bind -M insert \cf forward-char
 
 abbr -a c clear
 abbr -a l ls -gh
