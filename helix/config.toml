@@ -1,4 +1,4 @@
-theme = "poimandres"
+theme = "github_dark"
 
 [editor.cursor-shape]
 insert = "bar"

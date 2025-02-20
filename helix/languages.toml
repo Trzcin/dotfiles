@@ -7,6 +7,14 @@ args = ["--stdio"]
 command = "typescript-language-server"
 config = { plugins = [{ name = "@styled/typescript-styled-plugin", location = "/usr/local/lib/node_modules/@styled/typescript-styled-plugin" }] }
 
+[[language-server.vscode-json-language-server.config.json.schemas]]
+fileMatch = ["tsconfig.json", "tsconfig.*.json"]
+url = "https://json.schemastore.org/tsconfig.json"
+
+[[language-server.vscode-json-language-server.config.json.schemas]]
+fileMatch = [ "package.json" ]
+url = "https://json.schemastore.org/package.json"
+
 [[language]]
 name = "html"
 language-servers = ["vscode-html-language-server", "emmet-language-server"]
