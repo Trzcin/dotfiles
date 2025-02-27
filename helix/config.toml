@@ -8,6 +8,7 @@ mouse = false
 completion-trigger-len = 1
 completion-timeout = 100
 end-of-line-diagnostics = "hint"
+true-color = true
 
 [editor.inline-diagnostics]
 cursor-line = "hint"
