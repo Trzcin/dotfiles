@@ -17,6 +17,7 @@ if vim.g.vscode then
   vim.keymap.set("n", "gI", function() vscode.action("editor.action.peekImplementation") end)
   vim.keymap.set("n", "gt", function() vscode.action("editor.action.goToTypeDefinition") end)
   vim.keymap.set("n", "gT", function() vscode.action("editor.action.peekTypeDefinition") end)
+  vim.keymap.set("n", "gs", function() vscode.action("typescript.goToSourceDefinition") end)
   vim.keymap.set("n", "]c", function() vscode.action("workbench.action.editor.nextChange") end)
   vim.keymap.set("n", "[c", function() vscode.action("workbench.action.editor.previousChange") end)
 end
