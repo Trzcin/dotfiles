@@ -1,0 +1,10 @@
+[window]
+padding = { x = 10, y = 10 }
+startup_mode = "Maximized"
+decorations = "None"
+
+[font]
+normal = { family = "JetBrainsMono Nerd Font", style = "medium" }
+size = 12
+offset.y = 3
+glyph_offset.y = 2
