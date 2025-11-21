@@ -8,3 +8,12 @@ normal = { family = "JetBrainsMono Nerd Font", style = "medium" }
 size = 12
 offset.y = 3
 glyph_offset.y = 2
+
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[general]
+import = [
+    "~/.config/alacritty/themes/modus_vivendi.toml"
+]
+
