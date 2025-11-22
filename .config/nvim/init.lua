@@ -163,3 +163,29 @@ map('n', '<leader>fh', function()
 	ensure_mini_pick()
 	MiniPick.builtin.help({ default_split = 'vertical' })
 end)
+
+map('n', '<leader>fr', function()
+	ensure_mini_pick()
+	MiniPick.builtin.resume()
+end)
+
+-- Statusline
+vim.api.nvim_set_hl(0, 'StatusLineSecondary', { fg = '#adadad' }) -- WCAG AA
+
+function StatusLine()
+	local bufid = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
+	local icon, hl = MiniIcons.get('file', vim.api.nvim_buf_get_name(bufid))
+
+	local components = {
+		'%#' .. hl .. '#' .. icon .. '%*',
+		' %f', -- relative file path
+		' %h%w%m%r', -- buffer flags
+		'%=', -- spacer
+		'%#StatusLineSecondary#l: %*%l%#StatusLineSecondary#/%L', -- line
+		' c: %c', -- column
+	}
+
+	return table.concat(components, '')
+end
+
+vim.o.statusline = '%!v:lua.StatusLine()'
