@@ -23,6 +23,7 @@ local map = vim.keymap.set
 map({ 'n', 'x' }, '<leader>y', '"+y')
 map({ 'n', 'x' }, '<leader>p', '"+p')
 map('n', 'U', '<C-r>')
+map('n', '<leader>w', '<C-w>')
 
 -- Setup mini.deps plugin manager
 local path_package = vim.fn.stdpath('data') .. '/site/'
@@ -132,4 +133,33 @@ require('oil').setup({
 	},
 })
 
-map("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+map('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
+
+-- Fuzzy finder (mini.pick)
+add('nvim-mini/mini.pick')
+
+local function ensure_mini_pick()
+	if MiniPick == nil then
+		require('mini.pick').setup()
+	end
+end
+
+map('n', '<leader>pf', function()
+	ensure_mini_pick()
+	MiniPick.builtin.files()
+end)
+
+map('n', '<leader>pb', function()
+	ensure_mini_pick()
+	MiniPick.builtin.buffers()
+end)
+
+map('n', '<leader>ps', function()
+	ensure_mini_pick()
+	MiniPick.builtin.grep_live()
+end)
+
+map('n', '<leader>ph', function()
+	ensure_mini_pick()
+	MiniPick.builtin.help({ default_split = 'vertical' })
+end)
