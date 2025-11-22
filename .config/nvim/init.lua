@@ -144,22 +144,22 @@ local function ensure_mini_pick()
 	end
 end
 
-map('n', '<leader>pf', function()
+map('n', '<leader>ff', function()
 	ensure_mini_pick()
 	MiniPick.builtin.files()
 end)
 
-map('n', '<leader>pb', function()
+map('n', '<leader>fb', function()
 	ensure_mini_pick()
 	MiniPick.builtin.buffers()
 end)
 
-map('n', '<leader>ps', function()
+map('n', '<leader>fs', function()
 	ensure_mini_pick()
 	MiniPick.builtin.grep_live()
 end)
 
-map('n', '<leader>ph', function()
+map('n', '<leader>fh', function()
 	ensure_mini_pick()
 	MiniPick.builtin.help({ default_split = 'vertical' })
 end)
