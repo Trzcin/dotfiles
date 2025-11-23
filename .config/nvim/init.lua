@@ -184,9 +184,14 @@ function StatusLineFileIcon()
 	return '%#' .. hl .. '#' .. icon .. '%*'
 end
 
+function StatusLineRelativeFilepath()
+	-- For some reason %f is sometimes absolute, sometimes relative
+	return vim.fn.expand('%:~:.')
+end
+
 local statusline_components = {
 	'%{%v:lua.StatusLineFileIcon()%}', -- file icon
-	' %f', -- relative file path
+	' %{%v:lua.StatusLineRelativeFilepath()%}', -- relative file path
 	' %h%w%m%r', -- buffer flags
 	'%=', -- spacer
 	'%#StatusLineSecondary#l: %*%l%#StatusLineSecondary#/%L', -- line
