@@ -17,6 +17,7 @@ vim.o.wrap = false
 vim.o.undofile = true
 vim.o.fillchars = 'eob: '
 vim.o.cursorline = true
+vim.o.winborder = 'rounded'
 
 -- General keymaps
 vim.g.mapleader = ' '
@@ -51,6 +52,9 @@ require('modus-themes').setup({
 	styles = {
 		keywords = { italic = false },
 	},
+	on_highlights = function (highlights, c)
+		highlights.NormalFloat = { fg = c.fg_main, bg = c.bg_main }
+	end,
 })
 
 vim.cmd.colorscheme('modus')
