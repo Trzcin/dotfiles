@@ -16,6 +16,7 @@ vim.o.smartcase = true
 vim.o.wrap = false
 vim.o.undofile = true
 vim.o.fillchars = 'eob: '
+vim.o.cursorline = true
 
 -- General keymaps
 vim.g.mapleader = ' '
@@ -172,20 +173,20 @@ end)
 -- Statusline
 vim.api.nvim_set_hl(0, 'StatusLineSecondary', { fg = '#adadad' }) -- WCAG AA
 
-function StatusLine()
-	local bufid = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
+function StatusLineFileIcon()
+	local bufid = vim.api.nvim_win_get_buf(0)
 	local icon, hl = MiniIcons.get('file', vim.api.nvim_buf_get_name(bufid))
 
-	local components = {
-		'%#' .. hl .. '#' .. icon .. '%*',
-		' %f', -- relative file path
-		' %h%w%m%r', -- buffer flags
-		'%=', -- spacer
-		'%#StatusLineSecondary#l: %*%l%#StatusLineSecondary#/%L', -- line
-		' c: %c', -- column
-	}
-
-	return table.concat(components, '')
+	return '%#' .. hl .. '#' .. icon .. '%*'
 end
 
-vim.o.statusline = '%!v:lua.StatusLine()'
+local statusline_components = {
+	'%{%v:lua.StatusLineFileIcon()%}', -- file icon
+	' %f', -- relative file path
+	' %h%w%m%r', -- buffer flags
+	'%=', -- spacer
+	'%#StatusLineSecondary#l: %*%l%#StatusLineSecondary#/%L', -- line
+	' c: %c', -- column
+}
+
+vim.o.statusline = table.concat(statusline_components, '')
