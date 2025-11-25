@@ -26,6 +26,9 @@ map({ 'n', 'x' }, '<leader>y', '"+y')
 map({ 'n', 'x' }, '<leader>p', '"+p')
 map('n', 'U', '<C-r>')
 map('n', '<leader>w', '<C-w>')
+map('n', '<leader>l', '<CMD>e #<CR>')
+map('n', '<C-d>', '<C-d>zz')
+map('n', '<C-u>', '<C-u>zz')
 
 -- Setup mini.deps plugin manager
 local path_package = vim.fn.stdpath('data') .. '/site/'
@@ -149,27 +152,27 @@ local function ensure_mini_pick()
 	end
 end
 
-map('n', '<leader>ff', function()
+map('n', '<leader>sf', function()
 	ensure_mini_pick()
 	MiniPick.builtin.files()
 end)
 
-map('n', '<leader>fb', function()
+map('n', '<leader>sb', function()
 	ensure_mini_pick()
 	MiniPick.builtin.buffers()
 end)
 
-map('n', '<leader>fs', function()
+map('n', '<leader>ss', function()
 	ensure_mini_pick()
 	MiniPick.builtin.grep_live()
 end)
 
-map('n', '<leader>fh', function()
+map('n', '<leader>sh', function()
 	ensure_mini_pick()
 	MiniPick.builtin.help({ default_split = 'vertical' })
 end)
 
-map('n', '<leader>fr', function()
+map('n', '<leader>sr', function()
 	ensure_mini_pick()
 	MiniPick.builtin.resume()
 end)
@@ -199,3 +202,43 @@ local statusline_components = {
 }
 
 vim.o.statusline = table.concat(statusline_components, '')
+
+-- LSP
+add('mason-org/mason.nvim')
+require('mason').setup()
+add('neovim/nvim-lspconfig')
+add('mason-org/mason-lspconfig.nvim')
+
+local language_servers = {
+	'lua_ls',
+}
+
+require('mason-lspconfig').setup({ ensure_installed = language_servers })
+
+vim.lsp.config("*", {
+	capabilities = vim.lsp.protocol.make_client_capabilities()
+})
+
+-- Diagnostics
+vim.diagnostic.config({
+	virtual_text = true,
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = " ",
+			[vim.diagnostic.severity.WARN] = " ",
+			[vim.diagnostic.severity.INFO] = " ",
+			[vim.diagnostic.severity.HINT] = "󰋗 ",
+		},
+	},
+})
+
+vim.api.nvim_create_autocmd("InsertEnter", {
+	pattern = "*",
+	callback = function() vim.diagnostic.enable(false) end
+})
+
+vim.api.nvim_create_autocmd("InsertLeave", {
+	pattern = "*",
+	callback = function() vim.diagnostic.enable(true) end
+})
+

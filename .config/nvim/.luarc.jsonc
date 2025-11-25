@@ -1,0 +1,24 @@
+{
+	"$schema": "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
+	"runtime": {
+		"version": "LuaJIT"
+	},
+	"workspace": {
+		"checkThirdParty": false,
+		"library": [
+			// Runtime and builtin libraries.
+			"$VIMRUNTIME/lua",
+			"${3rd}/luv/library",
+			// Include some plugins for API completion.
+			"$XDG_DATA_HOME/nvim/site/pack/deps/start/mini.deps/lua",
+			"$XDG_DATA_HOME/nvim/site/pack/deps/opt/mason-lspconfig.nvim/lua",
+			"$XDG_DATA_HOME/nvim/site/pack/deps/opt/mini.icons/lua",
+			"$XDG_DATA_HOME/nvim/site/pack/deps/opt/modus-themes.nvim/lua",
+			"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-treesitter/lua",
+			"$XDG_DATA_HOME/nvim/site/pack/deps/opt/mason.nvim/lua",
+			"$XDG_DATA_HOME/nvim/site/pack/deps/opt/mini.pick/lua",
+			"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-lspconfig/lua",
+			"$XDG_DATA_HOME/nvim/site/pack/deps/opt/oil.nvim/lua",
+		]
+	}
+}
