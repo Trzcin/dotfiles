@@ -26,7 +26,7 @@ map({ 'n', 'x' }, '<leader>y', '"+y')
 map({ 'n', 'x' }, '<leader>p', '"+p')
 map('n', 'U', '<C-r>')
 map('n', '<leader>w', '<C-w>')
-map('n', '<leader>l', '<CMD>e #<CR>')
+map('n', '<leader>L', '<CMD>e #<CR>')
 map('n', '<C-d>', '<C-d>zz')
 map('n', '<C-u>', '<C-u>zz')
 
@@ -57,6 +57,10 @@ require('modus-themes').setup({
 	},
 	on_highlights = function (highlights, c)
 		highlights.NormalFloat = { fg = c.fg_main, bg = c.bg_main }
+		highlights.Pmenu = { fg = c.fg_main, bg = c.bg_main }
+		highlights.PmenuSel = { fg = c.bg_main, bg = c.fg_main }
+		highlights.PmenuSbar = { link = 'Pmenu' }
+		highlights.PmenuThumb = { link = "Pmenu" }
 	end,
 })
 
@@ -203,6 +207,25 @@ local statusline_components = {
 
 vim.o.statusline = table.concat(statusline_components, '')
 
+-- LSP keymaps
+map('n', 'gd', function() vim.lsp.buf.definition() end)
+map('n', 'gt', function() vim.lsp.buf.type_definition() end)
+map('n', '<leader>lr', function() vim.lsp.buf.rename() end)
+map('n', '<leader>lR', function() vim.lsp.buf.references() end)
+map('n', '<leader>la', function() vim.lsp.buf.code_action() end)
+map('n', '<leader>lf', function() vim.lsp.buf.format() end)
+
+-- Autocomplete
+add({
+	source = 'saghen/blink.cmp',
+	checkout = 'v1.8.0',
+})
+local blink = require('blink.cmp')
+blink.setup({
+	keymap = { preset = 'super-tab' },
+	appearence = { nerd_font_variant = 'normal' },
+})
+
 -- LSP
 add('mason-org/mason.nvim')
 require('mason').setup()
@@ -216,7 +239,7 @@ local language_servers = {
 require('mason-lspconfig').setup({ ensure_installed = language_servers })
 
 vim.lsp.config("*", {
-	capabilities = vim.lsp.protocol.make_client_capabilities()
+	capabilities = blink.get_lsp_capabilities()
 })
 
 -- Diagnostics
@@ -241,4 +264,3 @@ vim.api.nvim_create_autocmd("InsertLeave", {
 	pattern = "*",
 	callback = function() vim.diagnostic.enable(true) end
 })
-
