@@ -59,8 +59,6 @@ require('modus-themes').setup({
 		highlights.NormalFloat = { fg = c.fg_main, bg = c.bg_main }
 		highlights.Pmenu = { fg = c.fg_main, bg = c.bg_main }
 		highlights.PmenuSel = { fg = c.bg_main, bg = c.fg_main }
-		-- highlights.PmenuSbar = { link = 'Pmenu' }
-		-- highlights.PmenuThumb = { link = "Pmenu" }
 	end,
 })
 
@@ -184,6 +182,11 @@ end)
 -- Statusline
 vim.api.nvim_set_hl(0, 'StatusLineSecondary', { fg = '#adadad' }) -- WCAG AA
 
+function StatusLineRelativeFilepath()
+	-- For some reason %f is sometimes absolute, sometimes relative
+	return vim.fn.expand('%:~:.')
+end
+
 function StatusLineFileIcon()
 	local bufid = vim.api.nvim_win_get_buf(0)
 	local icon, hl = MiniIcons.get('file', vim.api.nvim_buf_get_name(bufid))
@@ -191,16 +194,46 @@ function StatusLineFileIcon()
 	return '%#' .. hl .. '#' .. icon .. '%*'
 end
 
-function StatusLineRelativeFilepath()
-	-- For some reason %f is sometimes absolute, sometimes relative
-	return vim.fn.expand('%:~:.')
+function StatusLineDiagnostics()
+	local diagnostics = vim.diagnostic.count(0)
+	local text = ''
+
+	local errorCount = diagnostics[vim.diagnostic.severity.ERROR]
+	if errorCount ~= nil then
+		text = text .. '%#DiagnosticSignError# ' .. errorCount .. ' %*'
+	end
+
+	local warnCount = diagnostics[vim.diagnostic.severity.WARN]
+	if warnCount ~= nil then
+		text = text .. '%#DiagnosticSignWarn# ' .. warnCount .. ' %*'
+	end
+
+	local infoCount = diagnostics[vim.diagnostic.severity.INFO]
+	if infoCount ~= nil then
+		text = text .. '%#DiagnosticSignInfo# ' .. infoCount .. ' %*'
+	end
+
+	local hintCount = diagnostics[vim.diagnostic.severity.HINT]
+	if hintCount ~= nil then
+		text = text .. '%#DiagnosticSignHint#󰋗 ' .. hintCount .. ' %*'
+	end
+
+	return text
 end
+
+vim.api.nvim_create_autocmd('DiagnosticChanged', {
+	group = config_group,
+	callback = function()
+		vim.cmd('redrawstatus')
+	end
+})
 
 local statusline_components = {
 	'%{%v:lua.StatusLineFileIcon()%}', -- file icon
 	' %{%v:lua.StatusLineRelativeFilepath()%}', -- relative file path
 	' %h%w%m%r', -- buffer flags
 	'%=', -- spacer
+	'%{%v:lua.StatusLineDiagnostics()%}', -- diagnostics
 	'%#StatusLineSecondary#l: %*%l%#StatusLineSecondary#/%L', -- line
 	' c: %c', -- column
 }
@@ -262,11 +295,13 @@ vim.diagnostic.config({
 })
 
 vim.api.nvim_create_autocmd("InsertEnter", {
+	group = config_group,
 	pattern = "*",
 	callback = function() vim.diagnostic.enable(false) end
 })
 
 vim.api.nvim_create_autocmd("InsertLeave", {
+	group = config_group,
 	pattern = "*",
 	callback = function() vim.diagnostic.enable(true) end
 })
