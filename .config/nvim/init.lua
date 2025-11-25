@@ -59,8 +59,8 @@ require('modus-themes').setup({
 		highlights.NormalFloat = { fg = c.fg_main, bg = c.bg_main }
 		highlights.Pmenu = { fg = c.fg_main, bg = c.bg_main }
 		highlights.PmenuSel = { fg = c.bg_main, bg = c.fg_main }
-		highlights.PmenuSbar = { link = 'Pmenu' }
-		highlights.PmenuThumb = { link = "Pmenu" }
+		-- highlights.PmenuSbar = { link = 'Pmenu' }
+		-- highlights.PmenuThumb = { link = "Pmenu" }
 	end,
 })
 
@@ -120,7 +120,7 @@ require('nvim-treesitter').install(treesitter_langs)
 local config_group = vim.api.nvim_create_augroup('config', { clear = true })
 vim.api.nvim_create_autocmd('FileType', {
 	group = config_group,
-	pattern = langs,
+	pattern = treesitter_langs,
 	callback = function(args)
 		pcall(function() vim.treesitter.start(args.buf) end)
 		vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
@@ -224,6 +224,12 @@ local blink = require('blink.cmp')
 blink.setup({
 	keymap = { preset = 'super-tab' },
 	appearence = { nerd_font_variant = 'normal' },
+	completion = {
+		accept = {
+			auto_brackets = { enabled = false }
+		},
+	},
+	signature = { enabled = true }
 })
 
 -- LSP
