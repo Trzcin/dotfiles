@@ -155,9 +155,19 @@ local function ensure_mini_pick()
 	end
 end
 
+-- List hidden files and directories in file picker
+MiniPick.registry.files = function ()
+	return MiniPick.builtin.cli({ command = { 'rg', '--files', '--color=never', '--hidden' } }, {
+		source = {
+			name = 'Files (rg)',
+			show = function(buf_id, items, query) MiniPick.default_show(buf_id, items, query, { show_icons = true }) end,
+		},
+	})
+end
+
 map('n', '<leader>sf', function()
 	ensure_mini_pick()
-	MiniPick.builtin.files()
+	MiniPick.registry.files()
 end)
 
 map('n', '<leader>sb', function()
