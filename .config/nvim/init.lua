@@ -242,11 +242,17 @@ vim.o.statusline = table.concat(statusline_components, '')
 
 -- LSP keymaps
 map('n', 'gd', function() vim.lsp.buf.definition() end)
+map('n', '<C-w>gd', function()
+	vim.cmd.vsplit()
+	vim.lsp.buf.definition()
+end)
 map('n', 'gt', function() vim.lsp.buf.type_definition() end)
 map('n', '<leader>lr', function() vim.lsp.buf.rename() end)
 map('n', '<leader>lR', function() vim.lsp.buf.references() end)
 map('n', '<leader>la', function() vim.lsp.buf.code_action() end)
 map('n', '<leader>lf', function() vim.lsp.buf.format() end)
+map('n', '<leader>lf', function() vim.lsp.buf.format() end)
+map('n', '<leader>ld', function() vim.diagnostic.open_float() end)
 
 -- Autocomplete
 add({
