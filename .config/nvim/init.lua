@@ -60,6 +60,7 @@ require('modus-themes').setup({
 		highlights.Pmenu = { fg = c.fg_main, bg = c.bg_main }
 		highlights.PmenuSel = { fg = c.bg_main, bg = c.fg_main }
 	end,
+	on_colors = function () end
 })
 
 vim.cmd.colorscheme('modus')
