@@ -25,7 +25,7 @@ local map = vim.keymap.set
 map({ 'n', 'x' }, '<leader>y', '"+y')
 map({ 'n', 'x' }, '<leader>p', '"+p')
 map('n', 'U', '<C-r>')
-map('n', '<leader>w', '<C-w>')
+map('n', '<leader>w', '<C-w>', { remap = true })
 map('n', '<leader>L', '<CMD>e #<CR>')
 map('n', '<C-d>', '<C-d>zz')
 map('n', '<C-u>', '<C-u>zz')
