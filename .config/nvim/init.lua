@@ -149,20 +149,25 @@ map('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
 -- Fuzzy finder (mini.pick)
 add('nvim-mini/mini.pick')
 
-local function ensure_mini_pick()
-	if MiniPick == nil then
-		require('mini.pick').setup()
+local function setup_picker_registry()
+	-- List hidden files and directories in file picker
+	MiniPick.registry.files = function()
+		return MiniPick.builtin.cli({ command = { 'rg', '--files', '--color=never', '--hidden' } }, {
+			source = {
+				name = 'Files (rg)',
+				show = function(buf_id, items, query) MiniPick.default_show(buf_id, items, query, { show_icons = true }) end,
+			},
+		})
 	end
 end
 
--- List hidden files and directories in file picker
-MiniPick.registry.files = function ()
-	return MiniPick.builtin.cli({ command = { 'rg', '--files', '--color=never', '--hidden' } }, {
-		source = {
-			name = 'Files (rg)',
-			show = function(buf_id, items, query) MiniPick.default_show(buf_id, items, query, { show_icons = true }) end,
-		},
-	})
+local function ensure_mini_pick()
+	if MiniPick ~= nil then
+		return
+	end
+
+	require('mini.pick').setup()
+	setup_picker_registry()
 end
 
 map('n', '<leader>sf', function()
