@@ -19,7 +19,7 @@
 			"$HOME/.local/share/nvim/site/pack/deps/opt/mason.nvim/lua",
 			"$HOME/.local/share/nvim/site/pack/deps/opt/mini.pick/lua",
 			"$HOME/.local/share/nvim/site/pack/deps/opt/nvim-lspconfig/lua",
-			"$HOME/.local/share/nvim/site/pack/deps/opt/oil.nvim/lua",
+			"$HOME/.local/share/nvim/site/pack/deps/opt/oil.nvim/lua"
 		]
 	}
 }

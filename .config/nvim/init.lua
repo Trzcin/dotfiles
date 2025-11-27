@@ -303,6 +303,7 @@ add('mason-org/mason-lspconfig.nvim')
 
 local language_servers = {
 	'lua_ls',
+	'jsonls'
 }
 
 require('mason-lspconfig').setup({ ensure_installed = language_servers })
