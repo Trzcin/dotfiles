@@ -24,6 +24,7 @@ vim.g.mapleader = ' '
 local map = vim.keymap.set
 map({ 'n', 'x' }, '<leader>y', '"+y')
 map({ 'n', 'x' }, '<leader>p', '"+p')
+map({ 'n', 'x' }, '<leader>Y', '"+Y', { remap = true })
 map('n', 'U', '<C-r>')
 map('n', '<leader>w', '<C-w>', { remap = true })
 map('n', '<leader>L', '<CMD>e #<CR>')
