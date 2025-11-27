@@ -245,10 +245,30 @@ function StatusLineDiagnostics()
 	return text
 end
 
+-- Track git branch
+vim.g.git_branch = ''
+vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
+	group = config_group,
+	callback = function()
+		vim.system(
+			{ 'git', 'branch', '--show-current' },
+			{ text = true, cwd = vim.fn.getcwd() },
+			function(result)
+				if result.stdout == nil then
+					return
+				end
+
+				vim.g.git_branch = ' ' .. string.gsub(result.stdout, '\n', '')
+				vim.schedule(function() vim.cmd.redrawstatus() end)
+			end
+		)
+	end
+})
+
 vim.api.nvim_create_autocmd('DiagnosticChanged', {
 	group = config_group,
 	callback = function()
-		vim.cmd('redrawstatus')
+		vim.cmd.redrawstatus()
 	end
 })
 
@@ -256,6 +276,7 @@ local statusline_components = {
 	'%{%v:lua.StatusLineFileIcon()%}', -- file icon
 	' %{%v:lua.StatusLineRelativeFilepath()%}', -- relative file path
 	' %h%w%m%r', -- buffer flags
+	' %{g:git_branch}', -- git branch
 	'%=', -- spacer
 	'%{%v:lua.StatusLineDiagnostics()%}', -- diagnostics
 	'%#StatusLineSecondary#l: %*%l%#StatusLineSecondary#/%L', -- line
