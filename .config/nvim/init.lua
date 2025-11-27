@@ -149,6 +149,7 @@ map('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
 
 -- Fuzzy finder (mini.pick)
 add('nvim-mini/mini.pick')
+add('nvim-mini/mini.extra')
 
 local function setup_picker_registry()
 	-- List hidden files and directories in file picker
@@ -168,6 +169,7 @@ local function ensure_mini_pick()
 	end
 
 	require('mini.pick').setup()
+	require('mini.extra').setup()
 	setup_picker_registry()
 end
 
@@ -189,6 +191,11 @@ end)
 map('n', '<leader>sh', function()
 	ensure_mini_pick()
 	MiniPick.builtin.help({ default_split = 'vertical' })
+end)
+
+map('n', '<leader>sl', function()
+	ensure_mini_pick()
+	MiniExtra.pickers.lsp({ scope = 'document_symbol' })
 end)
 
 map('n', '<leader>sr', function()
@@ -265,7 +272,7 @@ map('n', '<C-w>gd', function()
 end)
 map('n', 'gt', function() vim.lsp.buf.type_definition() end)
 map('n', '<leader>lr', function() vim.lsp.buf.rename() end)
-map('n', '<leader>lR', function() vim.lsp.buf.references() end)
+map('n', '<leader>lR', function() MiniExtra.pickers.lsp({ scope = 'references' }) end)
 map('n', '<leader>la', function() vim.lsp.buf.code_action() end)
 map('n', '<leader>lf', function() vim.lsp.buf.format() end)
 map('n', '<leader>lf', function() vim.lsp.buf.format() end)
