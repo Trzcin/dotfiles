@@ -336,3 +336,10 @@ vim.api.nvim_create_autocmd("InsertLeave", {
 	pattern = "*",
 	callback = function() vim.diagnostic.enable(true) end
 })
+
+-- Git hunks
+add('nvim-mini/mini.diff')
+require('mini.diff').setup()
+
+map('n', 'vgh', function() MiniDiff.textobject() end)
+map('n', '<leader>h', function() MiniDiff.toggle_overlay(0) end)

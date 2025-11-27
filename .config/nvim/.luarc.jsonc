@@ -12,6 +12,7 @@
 			// Include some plugins for API completion.
 			"$HOME/.local/share/nvim/site/pack/deps/start/mini.deps/lua",
 			"$HOME/.local/share/nvim/site/pack/deps/opt/mini.extra/lua",
+			"$HOME/.local/share/nvim/site/pack/deps/opt/mini.diff/lua",
 			"$HOME/.local/share/nvim/site/pack/deps/opt/mason-lspconfig.nvim/lua",
 			"$HOME/.local/share/nvim/site/pack/deps/opt/mini.icons/lua",
 			"$HOME/.local/share/nvim/site/pack/deps/opt/modus-themes.nvim/lua",
