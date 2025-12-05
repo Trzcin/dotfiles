@@ -254,7 +254,12 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
 			{ 'git', 'branch', '--show-current' },
 			{ text = true, cwd = vim.fn.getcwd() },
 			function(result)
-				if result.stdout == nil then
+				if result.stdout == nil or result.stdout == '' then
+					if vim.g.git_branch ~= '' then
+						vim.g.git_branch = ''
+						vim.schedule(function() vim.cmd.redrawstatus() end)
+					end
+
 					return
 				end
 
