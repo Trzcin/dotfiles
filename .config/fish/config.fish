@@ -21,6 +21,7 @@ fish_add_path -P /home/linuxbrew/.linuxbrew/bin/
 
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export MANROFFOPT="-c"
+export VAGRANT_DEFAULT_PROVIDER="virtualbox"
 
 # Theme
 source ~/.config/fish/themes/modus_vivendi.fish
