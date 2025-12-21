@@ -154,7 +154,7 @@ add('nvim-mini/mini.extra')
 local function setup_picker_registry()
 	-- List hidden files and directories in file picker
 	MiniPick.registry.files = function()
-		return MiniPick.builtin.cli({ command = { 'rg', '--files', '--color=never', '--hidden' } }, {
+		return MiniPick.builtin.cli({ command = { 'rg', '--files', '--color=never', '--hidden', '--glob=!.git' } }, {
 			source = {
 				name = 'Files (rg)',
 				show = function(buf_id, items, query) MiniPick.default_show(buf_id, items, query, { show_icons = true }) end,
