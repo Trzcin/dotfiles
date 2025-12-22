@@ -18,6 +18,9 @@ vim.o.undofile = true
 vim.o.fillchars = 'eob: '
 vim.o.cursorline = true
 vim.o.winborder = 'rounded'
+vim.o.spelllang = 'en,pl'
+vim.o.spell = true
+vim.o.spellfile = vim.fn.stdpath("data") .. '/en.utf-8.add'
 
 -- General keymaps
 vim.g.mapleader = ' '
