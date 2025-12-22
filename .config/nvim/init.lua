@@ -206,6 +206,11 @@ map('n', '<leader>sr', function()
 	MiniPick.builtin.resume()
 end)
 
+map('n', 'z=', function()
+	ensure_mini_pick()
+	MiniExtra.pickers.spellsuggest()
+end)
+
 -- Statusline
 vim.api.nvim_set_hl(0, 'StatusLineSecondary', { fg = '#adadad' }) -- WCAG AA
 
