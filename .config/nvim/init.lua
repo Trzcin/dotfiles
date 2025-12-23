@@ -25,14 +25,14 @@ vim.o.spellfile = vim.fn.stdpath("data") .. '/en.utf-8.add'
 -- General keymaps
 vim.g.mapleader = ' '
 local map = vim.keymap.set
-map({ 'n', 'x' }, '<leader>y', '"+y')
-map({ 'n', 'x' }, '<leader>p', '"+p')
-map({ 'n', 'x' }, '<leader>Y', '"+Y', { remap = true })
-map('n', 'U', '<C-r>')
-map('n', '<leader>w', '<C-w>', { remap = true })
-map('n', '<leader>L', '<CMD>e #<CR>')
-map('n', '<C-d>', '<C-d>zz')
-map('n', '<C-u>', '<C-u>zz')
+map({ 'n', 'x' }, '<leader>y', '"+y', { desc = "Yank to system clipboard" })
+map({ 'n', 'x' }, '<leader>p', '"+p', { desc = "Paste from system clipboard" })
+map({ 'n', 'x' }, '<leader>Y', '"+Y', { remap = true, desc = "Yank text to the end of the line to system clipboard" })
+map('n', 'U', '<C-r>', { desc = "Undo" })
+map('n', '<leader>w', '<C-w>', { remap = true, desc = "Window commands prefix" })
+map('n', '<leader>L', '<CMD>e #<CR>', { desc = "Goto alternate file" })
+map('n', '<C-d>', '<C-d>zz', { desc = "Go down half a screen and center on cursor" })
+map('n', '<C-u>', '<C-u>zz', { desc = "Go up half a screen and center on cursor" })
 
 -- Setup mini.deps plugin manager
 local path_package = vim.fn.stdpath('data') .. '/site/'
@@ -119,11 +119,11 @@ local treesitter_langs = {
 
 require('nvim-treesitter').install(treesitter_langs)
 
--- Enable treesitter for listed languages
 local config_group = vim.api.nvim_create_augroup('config', { clear = true })
 vim.api.nvim_create_autocmd('FileType', {
 	group = config_group,
 	pattern = treesitter_langs,
+	desc = "Enable treesitter if possible",
 	callback = function(args)
 		pcall(function() vim.treesitter.start(args.buf) end)
 		vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
@@ -179,37 +179,37 @@ end
 map('n', '<leader>sf', function()
 	ensure_mini_pick()
 	MiniPick.registry.files()
-end)
+end, { desc = "Search files" })
 
 map('n', '<leader>sb', function()
 	ensure_mini_pick()
 	MiniPick.builtin.buffers()
-end)
+end, { desc = "Search buffers" })
 
 map('n', '<leader>ss', function()
 	ensure_mini_pick()
 	MiniPick.builtin.grep_live()
-end)
+end, { desc = "Search string" })
 
 map('n', '<leader>sh', function()
 	ensure_mini_pick()
 	MiniPick.builtin.help({ default_split = 'vertical' })
-end)
+end, { desc = "Search help" })
 
 map('n', '<leader>sl', function()
 	ensure_mini_pick()
 	MiniExtra.pickers.lsp({ scope = 'document_symbol' })
-end)
+end, { desc = "Search LSP document symbols" })
 
 map('n', '<leader>sr', function()
 	ensure_mini_pick()
 	MiniPick.builtin.resume()
-end)
+end, { desc = "Search resume last" })
 
 map('n', 'z=', function()
 	ensure_mini_pick()
 	MiniExtra.pickers.spellsuggest()
-end)
+end, { desc = "Search spellcheck suggestions" })
 
 -- Statusline
 vim.api.nvim_set_hl(0, 'StatusLineSecondary', { fg = '#adadad' }) -- WCAG AA
@@ -253,10 +253,10 @@ function StatusLineDiagnostics()
 	return text
 end
 
--- Track git branch
 vim.g.git_branch = ''
 vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
 	group = config_group,
+	desc = "Update vim.g.git_branch, for use in statusline",
 	callback = function()
 		vim.system(
 			{ 'git', 'branch', '--show-current' },
@@ -280,6 +280,7 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
 
 vim.api.nvim_create_autocmd('DiagnosticChanged', {
 	group = config_group,
+	desc = "Redraw statusline on diagnostic updates",
 	callback = function()
 		vim.cmd.redrawstatus()
 	end
@@ -299,18 +300,17 @@ local statusline_components = {
 vim.o.statusline = table.concat(statusline_components, '')
 
 -- LSP keymaps
-map('n', 'gd', function() vim.lsp.buf.definition() end)
+map('n', 'gd', function() vim.lsp.buf.definition() end, { desc = "LSP goto definition" })
 map('n', '<C-w>gd', function()
 	vim.cmd.vsplit()
 	vim.lsp.buf.definition()
-end)
-map('n', 'gt', function() vim.lsp.buf.type_definition() end)
-map('n', '<leader>lr', function() vim.lsp.buf.rename() end)
-map('n', '<leader>lR', function() MiniExtra.pickers.lsp({ scope = 'references' }) end)
-map('n', '<leader>la', function() vim.lsp.buf.code_action() end)
-map('n', '<leader>lf', function() vim.lsp.buf.format() end)
-map('n', '<leader>lf', function() vim.lsp.buf.format() end)
-map('n', '<leader>ld', function() vim.diagnostic.open_float() end)
+end, { desc = "LSP goto definition in vertical split" })
+map('n', 'gt', function() vim.lsp.buf.type_definition() end, { desc = "Goto type definition" })
+map('n', '<leader>lr', function() vim.lsp.buf.rename() end, { desc = "LSP rename symbol at cursor" })
+map('n', '<leader>lR', function() MiniExtra.pickers.lsp({ scope = 'references' }) end, { desc = "LSP find references" })
+map('n', '<leader>la', function() vim.lsp.buf.code_action() end, { desc = "LSP show code actions at cursor" })
+map('n', '<leader>lf', function() vim.lsp.buf.format() end, { desc = "LSP format buffer" })
+map('n', '<leader>ld', function() vim.diagnostic.open_float() end, { desc = "LSP show diagnostic in floating win" })
 
 -- Autocomplete
 add({
@@ -363,12 +363,14 @@ vim.diagnostic.config({
 vim.api.nvim_create_autocmd("InsertEnter", {
 	group = config_group,
 	pattern = "*",
+	desc = "Disable diagnostics display when entering insert mode",
 	callback = function() vim.diagnostic.enable(false) end
 })
 
 vim.api.nvim_create_autocmd("InsertLeave", {
 	group = config_group,
 	pattern = "*",
+	desc = "Enable diagnostics display when leaving insert mode",
 	callback = function() vim.diagnostic.enable(true) end
 })
 
