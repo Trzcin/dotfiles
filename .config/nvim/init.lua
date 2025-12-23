@@ -90,6 +90,9 @@ local treesitter_langs = {
     'tsx',
 	'vue',
 	'svelte',
+	'astro',
+
+	'sql',
 
     'json',
     'jsonc',
@@ -355,12 +358,28 @@ local language_servers = {
 	'eslint',
 	'svelte',
 	'vue_ls',
+	'astro',
 }
 
 require('mason-lspconfig').setup({ ensure_installed = language_servers })
 
 vim.lsp.config("*", {
 	capabilities = blink.get_lsp_capabilities()
+})
+
+-- Add Vue plugin for ts_ls
+vim.lsp.config("ts_ls", {
+	init_options = {
+		plugins = {
+			{
+				name = '@vue/typescript-plugin',
+				location = vim.fn.stdpath('data') .. "/mason/packages/vue-language-server/node_modules/@vue/language-server",
+				languages = { 'vue' },
+				configNamespace = 'typescript',
+			},
+		},
+	},
+	filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
 })
 
 -- Diagnostics
@@ -407,4 +426,3 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 		vim.api.nvim_win_set_cursor(0, cursor_pos)
 	end,
 })
-
