@@ -311,6 +311,7 @@ map('n', '<leader>lR', function() MiniExtra.pickers.lsp({ scope = 'references' }
 map('n', '<leader>la', function() vim.lsp.buf.code_action() end, { desc = "LSP show code actions at cursor" })
 map('n', '<leader>lf', function() vim.lsp.buf.format() end, { desc = "LSP format buffer" })
 map('n', '<leader>ld', function() vim.diagnostic.open_float() end, { desc = "LSP show diagnostic in floating win" })
+map('n', '<leader>lm', function() vim.cmd.Mason() end, { desc = "LSP show Mason UI" })
 
 -- Autocomplete
 add({
@@ -336,9 +337,24 @@ add('neovim/nvim-lspconfig')
 add('mason-org/mason-lspconfig.nvim')
 
 local language_servers = {
+	-- Lua
 	'lua_ls',
+
+	-- Config formats
 	'jsonls',
-	'tinymist'
+	'yamlls',
+
+	-- Typst
+	'tinymist',
+
+	-- Web
+	'html',
+	'emmet_language_server',
+	'cssls',
+	'ts_ls',
+	'eslint',
+	'svelte',
+	'vue_ls',
 }
 
 require('mason-lspconfig').setup({ ensure_installed = language_servers })
