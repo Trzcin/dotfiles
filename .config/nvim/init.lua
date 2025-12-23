@@ -379,16 +379,27 @@ require('mini.diff').setup()
 map('n', 'vgh', function() MiniDiff.textobject() end)
 map('n', '<leader>h', function() MiniDiff.toggle_overlay(0) end)
 
--- Keep one empty line at the end of buffers when writing
 vim.api.nvim_create_autocmd("BufWritePre", {
 	group = config_group,
 	pattern = '*',
+	desc = "Add a newline to last line if missing when writing buffer",
 	callback = function()
 		local n_lines = vim.api.nvim_buf_line_count(0)
 		local last_nonblank = vim.fn.prevnonblank(n_lines)
 		if last_nonblank <= n_lines then
 			vim.api.nvim_buf_set_lines(0, last_nonblank, n_lines, true, { '' })
 		end
+	end,
+})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+	group = config_group,
+	pattern = '*',
+	desc = "Trim trailing whitespace from all lines when writing buffer",
+	callback = function()
+		local cursor_pos = vim.api.nvim_win_get_cursor(0)
+		vim.cmd([[keeppatterns %s/\s\+$//e]])
+		vim.api.nvim_win_set_cursor(0, cursor_pos)
 	end,
 })
 
