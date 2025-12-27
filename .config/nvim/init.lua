@@ -329,8 +329,38 @@ blink.setup({
 		accept = {
 			auto_brackets = { enabled = false }
 		},
+		menu = {
+			draw = {
+				components = {
+					kind_icon = {
+						text = function(ctx)
+							local kind_icon, _, _ = require('mini.icons').get('lsp', ctx.kind)
+							return kind_icon
+						end,
+						highlight = function(ctx)
+							local _, hl, _ = require('mini.icons').get('lsp', ctx.kind)
+							return hl
+						end,
+					},
+					kind = {
+						highlight = function(ctx)
+							local _, hl, _ = require('mini.icons').get('lsp', ctx.kind)
+							return hl
+						end,
+					}
+				}
+			}
+		}
 	},
-	signature = { enabled = true }
+	signature = { enabled = true },
+	snippets = {
+		expand = function(snippet)
+			-- Expand snippet without select mode and tabstop highlighting
+			vim.snippet.expand(snippet)
+			vim.snippet.stop()
+			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-c>', true, false, true), 'n', true)
+		end,
+	},
 })
 
 -- LSP
