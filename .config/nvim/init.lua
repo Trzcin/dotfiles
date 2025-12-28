@@ -426,14 +426,12 @@ vim.diagnostic.config({
 
 vim.api.nvim_create_autocmd("InsertEnter", {
 	group = config_group,
-	pattern = "*",
 	desc = "Disable diagnostics display when entering insert mode",
 	callback = function() vim.diagnostic.enable(false) end
 })
 
 vim.api.nvim_create_autocmd("InsertLeave", {
 	group = config_group,
-	pattern = "*",
 	desc = "Enable diagnostics display when leaving insert mode",
 	callback = function() vim.diagnostic.enable(true) end
 })
@@ -447,7 +445,6 @@ map('n', '<leader>h', function() MiniDiff.toggle_overlay(0) end)
 
 vim.api.nvim_create_autocmd("BufWritePre", {
 	group = config_group,
-	pattern = '*',
 	desc = "Trim trailing whitespace from all lines when writing buffer",
 	callback = function()
 		local cursor_pos = vim.api.nvim_win_get_cursor(0)
