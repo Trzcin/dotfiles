@@ -25,3 +25,11 @@
 
 ;; Shorten yes/no to y/n
 (setq use-short-answers t)
+
+;; Dired
+(setq
+    dired-recursive-copies 'always
+    dired-recursive-deletes 'always
+    delete-by-moving-to-trash t
+    dired-listing-switches "-AGFhlv --group-directories-first --time-style=long-iso")
+(add-hook 'dired-mode-hook 'dired-hide-details-mode) ; Hide details by default
