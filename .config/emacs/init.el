@@ -98,3 +98,99 @@
     :ensure t
     :hook
     (after-init . marginalia-mode))
+
+;; Vim motions
+(use-package evil
+    :ensure t
+    
+    :hook
+    (after-init . evil-mode)
+    
+    :init
+    (setq evil-want-keybinding nil)
+    (setq evil-want-C-u-scroll t)
+    
+    :config
+    (evil-set-undo-system 'undo-tree)
+    
+    (setq evil-leader/in-all-states t)
+    (setq evil-want-fine-undo t)
+    
+    ;; Define the leader key as Space
+    (evil-set-leader 'normal (kbd "SPC"))
+    (evil-set-leader 'visual (kbd "SPC"))
+    
+    ;; Dired commands for file management
+    (evil-define-key 'normal 'global (kbd "-") 'dired-jump)
+    (evil-define-key 'normal 'global (kbd "<leader> x f") 'find-file)
+    
+    ;; Buffer management keybindings
+    ;; (evil-define-key 'normal 'global (kbd "<leader> b i") 'consult-buffer) ;; Open consult buffer list
+    (evil-define-key 'normal 'global (kbd "<leader> b b") 'switch-to-buffer)
+    (evil-define-key 'normal 'global (kbd "<leader> b d") 'kill-current-buffer)
+    (evil-define-key 'normal 'global (kbd "<leader> b s") 'save-buffer)
+    ;; (evil-define-key 'normal 'global (kbd "<leader> b l") 'consult-buffer) ;; Consult buffer
+    ;; (evil-define-key 'normal 'global (kbd "<leader>SPC") 'consult-buffer) ;; Consult buffer
+    
+    ;; Project management keybindings
+    ;; (evil-define-key 'normal 'global (kbd "<leader> p b") 'consult-project-buffer) ;; Consult project buffer
+    (evil-define-key 'normal 'global (kbd "<leader> p p") 'project-switch-project)
+    (evil-define-key 'normal 'global (kbd "<leader> p f") 'project-find-file)
+    (evil-define-key 'normal 'global (kbd "<leader> p g") 'project-find-regexp)
+    (evil-define-key 'normal 'global (kbd "<leader> p k") 'project-kill-buffers)
+    (evil-define-key 'normal 'global (kbd "<leader> p D") 'project-dired)
+    
+    ;; Help keybindings
+    ;; TODO - finish this
+    (evil-define-key 'normal 'global (kbd "<leader> h m") 'describe-mode)
+    (evil-define-key 'normal 'global (kbd "<leader> h f") 'describe-function)
+    (evil-define-key 'normal 'global (kbd "<leader> h v") 'describe-variable)
+    (evil-define-key 'normal 'global (kbd "<leader> h k") 'describe-key)
+
+    ;; Window keybindings
+    (evil-define-key 'normal 'global (kbd "<leader> w s") 'evil-window-split)
+    (evil-define-key 'normal 'global (kbd "<leader> w v") 'evil-window-vsplit)
+    (evil-define-key 'normal 'global (kbd "<leader> w h") 'evil-window-left)
+    (evil-define-key 'normal 'global (kbd "<leader> w j") 'evil-window-down)
+    (evil-define-key 'normal 'global (kbd "<leader> w k") 'evil-window-up)
+    (evil-define-key 'normal 'global (kbd "<leader> w l") 'evil-window-right)
+    (evil-define-key 'normal 'global (kbd "<leader> w q") 'evil-quit)
+
+    ;; Commenting functionality for single and multiple lines
+    (evil-define-key 'normal 'global (kbd "gcc")
+                     (lambda ()
+                       (interactive)
+                       (if (not (use-region-p))
+                           (comment-or-uncomment-region (line-beginning-position) (line-end-position)))))
+    
+    (evil-define-key 'visual 'global (kbd "gc")
+                     (lambda ()
+                       (interactive)
+                       (if (use-region-p)
+                           (comment-or-uncomment-region (region-beginning) (region-end)))))
+    
+    (evil-mode 1))
+
+(use-package evil-collection
+    :ensure t
+    :custom
+    (evil-collection-want-find-usages-bindings t)
+    
+    :hook
+    (evil-mode . evil-collection-init))
+
+(use-package undo-tree
+    :ensure t
+    
+    :hook
+    (after-init . global-undo-tree-mode)
+    
+    :init
+    (setq undo-tree-visualizer-timestamps t
+          undo-tree-visualizer-diff t
+          undo-limit 800000
+          undo-strong-limit 12000000
+          undo-outer-limit 120000000)
+    
+    :config
+    (setq undo-tree-history-directory-alist '(("." . "~/.config/emacs/undotree"))))
