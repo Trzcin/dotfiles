@@ -109,6 +109,7 @@
     :init
     (setq evil-want-keybinding nil)
     (setq evil-want-C-u-scroll t)
+    (setq evil-want-Y-yank-to-eol t)
     
     :config
     (evil-set-undo-system 'undo-tree)
@@ -120,9 +121,13 @@
     (evil-set-leader 'normal (kbd "SPC"))
     (evil-set-leader 'visual (kbd "SPC"))
     
-    ;; Dired commands for file management
+    ;; Dired keybindings
     (evil-define-key 'normal 'global (kbd "-") 'dired-jump)
     (evil-define-key 'normal 'global (kbd "<leader> x f") 'find-file)
+
+    ;; Clipboard
+    (evil-define-key 'normal 'global (kbd "<leader> Y") 'clipboard-kill-ring-save)
+    (evil-define-key 'normal 'global (kbd "<leader> P") 'clipboard-yank)
     
     ;; Buffer management keybindings
     ;; (evil-define-key 'normal 'global (kbd "<leader> b i") 'consult-buffer) ;; Open consult buffer list
@@ -141,20 +146,10 @@
     (evil-define-key 'normal 'global (kbd "<leader> p D") 'project-dired)
     
     ;; Help keybindings
-    ;; TODO - finish this
-    (evil-define-key 'normal 'global (kbd "<leader> h m") 'describe-mode)
-    (evil-define-key 'normal 'global (kbd "<leader> h f") 'describe-function)
-    (evil-define-key 'normal 'global (kbd "<leader> h v") 'describe-variable)
-    (evil-define-key 'normal 'global (kbd "<leader> h k") 'describe-key)
+    (evil-define-key 'normal 'global (kbd "<leader> h") 'help-command)
 
     ;; Window keybindings
-    (evil-define-key 'normal 'global (kbd "<leader> w s") 'evil-window-split)
-    (evil-define-key 'normal 'global (kbd "<leader> w v") 'evil-window-vsplit)
-    (evil-define-key 'normal 'global (kbd "<leader> w h") 'evil-window-left)
-    (evil-define-key 'normal 'global (kbd "<leader> w j") 'evil-window-down)
-    (evil-define-key 'normal 'global (kbd "<leader> w k") 'evil-window-up)
-    (evil-define-key 'normal 'global (kbd "<leader> w l") 'evil-window-right)
-    (evil-define-key 'normal 'global (kbd "<leader> w q") 'evil-quit)
+    (evil-define-key 'normal 'global (kbd "<leader> w") 'evil-window-map)
 
     ;; Commenting functionality for single and multiple lines
     (evil-define-key 'normal 'global (kbd "gcc")
