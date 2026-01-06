@@ -39,11 +39,17 @@
     ;; Line height
     (default-text-properties '(line-spacing 0.125 line-height 1.125))
 
+    (custom-file (locate-user-emacs-file "custom.el"))
+
+    (frame-title-format "%b")
+
     :hook
     (prog-mode . display-line-numbers-mode)
 
     :init
     (scroll-bar-mode -1)
+    (menu-bar-mode -1)
+    (tool-bar-mode -1)
     (fringe-mode 0)
     (blink-cursor-mode -1)
     (global-hl-line-mode)
@@ -53,7 +59,6 @@
     (save-place-mode)
     (file-name-shadow-mode)
     (modify-coding-system-alist 'file "" 'utf-8)
-    (setq custom-file (locate-user-emacs-file "custom.el")) ;; Store customize stuff in separate file
 
     :config
     ;; Fonts
@@ -78,6 +83,7 @@
     (dired-listing-switches "-AGFhlv --group-directories-first")
     (dired-dwim-target t) ;; Easy dual pane usage for moving files
     (dired-kill-when-opening-new-dired-buffer t)
+    (dired-free-space nil)
 
     :hook
     (dired-mode . dired-hide-details-mode))
@@ -99,59 +105,54 @@
     :hook
     (after-init . marginalia-mode))
 
+(use-package orderless
+    :ensure t
+    :after vertico
+    
+    :custom
+    (completion-styles '(orderless basic))
+    (completion-category-defaults nil)
+    (completion-category-overrides '((file (styles partial-completion)))))
+
 ;; Vim motions
 (use-package evil
     :ensure t
-    
     :hook
     (after-init . evil-mode)
     
-    :init
-    (setq evil-want-keybinding nil)
-    (setq evil-want-C-u-scroll t)
-    (setq evil-want-Y-yank-to-eol t)
+    :custom
+    (evil-want-keybinding nil)
+    (evil-want-C-u-scroll t)
+    (evil-want-Y-yank-to-eol t)
+    (evil-want-fine-undo t)
+    (evil-leader/in-all-states t)
+
+    :bind (:map evil-normal-state-map
+        ;; Jump to parent directory
+        ("-" . dired-jump)
+
+        ;; Clipbaord
+        ("<leader> Y" . clipboard-kill-ring-save)
+        ("<leader> P" . clipboard-yank)
+
+        ;; Find stuff
+        ("<leader> f f" . find-file)
+        ("<leader> f r" . recentf-open)
+
+        ;; Buffers
+        ("<leader> b" . switch-to-buffer)
+
+        ;; Remap prefixes to evil leader
+        ("<leader> h" . help-command)
+        ("<leader> w" . evil-window-map)
+    )
     
     :config
     (evil-set-undo-system 'undo-tree)
-    
-    (setq evil-leader/in-all-states t)
-    (setq evil-want-fine-undo t)
-    
-    ;; Define the leader key as Space
     (evil-set-leader 'normal (kbd "SPC"))
     (evil-set-leader 'visual (kbd "SPC"))
     
-    ;; Dired keybindings
-    (evil-define-key 'normal 'global (kbd "-") 'dired-jump)
-    (evil-define-key 'normal 'global (kbd "<leader> x f") 'find-file)
-
-    ;; Clipboard
-    (evil-define-key 'normal 'global (kbd "<leader> Y") 'clipboard-kill-ring-save)
-    (evil-define-key 'normal 'global (kbd "<leader> P") 'clipboard-yank)
-    
-    ;; Buffer management keybindings
-    ;; (evil-define-key 'normal 'global (kbd "<leader> b i") 'consult-buffer) ;; Open consult buffer list
-    (evil-define-key 'normal 'global (kbd "<leader> b b") 'switch-to-buffer)
-    (evil-define-key 'normal 'global (kbd "<leader> b d") 'kill-current-buffer)
-    (evil-define-key 'normal 'global (kbd "<leader> b s") 'save-buffer)
-    ;; (evil-define-key 'normal 'global (kbd "<leader> b l") 'consult-buffer) ;; Consult buffer
-    ;; (evil-define-key 'normal 'global (kbd "<leader>SPC") 'consult-buffer) ;; Consult buffer
-    
-    ;; Project management keybindings
-    ;; (evil-define-key 'normal 'global (kbd "<leader> p b") 'consult-project-buffer) ;; Consult project buffer
-    (evil-define-key 'normal 'global (kbd "<leader> p p") 'project-switch-project)
-    (evil-define-key 'normal 'global (kbd "<leader> p f") 'project-find-file)
-    (evil-define-key 'normal 'global (kbd "<leader> p g") 'project-find-regexp)
-    (evil-define-key 'normal 'global (kbd "<leader> p k") 'project-kill-buffers)
-    (evil-define-key 'normal 'global (kbd "<leader> p D") 'project-dired)
-    
-    ;; Help keybindings
-    (evil-define-key 'normal 'global (kbd "<leader> h") 'help-command)
-
-    ;; Window keybindings
-    (evil-define-key 'normal 'global (kbd "<leader> w") 'evil-window-map)
-
-    ;; Commenting functionality for single and multiple lines
+    ;; Commenting
     (evil-define-key 'normal 'global (kbd "gcc")
                      (lambda ()
                        (interactive)
@@ -162,30 +163,47 @@
                      (lambda ()
                        (interactive)
                        (if (use-region-p)
-                           (comment-or-uncomment-region (region-beginning) (region-end)))))
-    
-    (evil-mode 1))
+                           (comment-or-uncomment-region (region-beginning) (region-end))))))
 
 (use-package evil-collection
     :ensure t
+    :after evil
+    :hook
+    (evil-mode . evil-collection-init)
+
     :custom
     (evil-collection-want-find-usages-bindings t)
-    
-    :hook
-    (evil-mode . evil-collection-init))
+    (evil-collection-setup-minibuffer t))
 
 (use-package undo-tree
     :ensure t
-    
     :hook
     (after-init . global-undo-tree-mode)
     
-    :init
-    (setq undo-tree-visualizer-timestamps t
-          undo-tree-visualizer-diff t
-          undo-limit 800000
-          undo-strong-limit 12000000
-          undo-outer-limit 120000000)
-    
+    :custom
+    (undo-tree-visualizer-timestamps t)
+    (undo-tree-visualizer-diff t)
+    (undo-limit 800000)
+    (undo-strong-limit 12000000)
+    (undo-outer-limit 120000000)
+    (undo-tree-history-directory-alist '(("." . "~/.config/emacs/undotree"))))
+
+;; Icons
+(use-package nerd-icons
+    :ensure t
+    :custom
+    (nerd-icons-font-family "JetBrainsMono Nerd Font"))
+
+(use-package nerd-icons-dired
+    :ensure t
+    :hook
+    (dired-mode . nerd-icons-dired-mode))
+
+(use-package nerd-icons-completion
+    :ensure t
+    :after marginalia
+    :hook
+    (marginalia-mode . nerd-icons-completion-marginalia-setup)
+
     :config
-    (setq undo-tree-history-directory-alist '(("." . "~/.config/emacs/undotree"))))
+    (nerd-icons-completion-mode))
