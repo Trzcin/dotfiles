@@ -114,12 +114,16 @@
     (completion-category-defaults nil)
     (completion-category-overrides '((file (styles partial-completion)))))
 
+
 ;; Vim motions
 (use-package evil
     :ensure t
     :hook
     (after-init . evil-mode)
-    
+
+    :init
+    (defvar-keymap my/leader-map)
+
     :custom
     (evil-want-keybinding nil)
     (evil-want-C-u-scroll t)
@@ -127,30 +131,30 @@
     (evil-want-fine-undo t)
     (evil-leader/in-all-states t)
 
-    :bind (:map evil-normal-state-map
-        ;; Jump to parent directory
-        ("-" . dired-jump)
+    :bind (
+        :map evil-normal-state-map
+        ("-" . dired-jump) ;; Jump to parent directory
 
+        :map my/leader-map
         ;; Clipbaord
-        ("<leader> Y" . clipboard-kill-ring-save)
-        ("<leader> P" . clipboard-yank)
+        ("Y" . clipboard-kill-ring-save)
+        ("P" . clipboard-yank)
 
         ;; Find stuff
-        ("<leader> f f" . find-file)
-        ("<leader> f r" . recentf-open)
+        ("f f" . find-file)
+        ("f r" . recentf-open)
 
         ;; Buffers
-        ("<leader> b" . switch-to-buffer)
+        ("b" . switch-to-buffer)
 
         ;; Remap prefixes to evil leader
-        ("<leader> h" . help-command)
-        ("<leader> w" . evil-window-map)
+        ("h" . help-command)
+        ("w" . evil-window-map)
     )
-    
+
     :config
     (evil-set-undo-system 'undo-tree)
-    (evil-set-leader 'normal (kbd "SPC"))
-    (evil-set-leader 'visual (kbd "SPC"))
+    (keymap-set evil-normal-state-map "SPC" my/leader-map) ; Probably cleaner to use keymaps rather than `evil-set-leader`
     
     ;; Commenting
     (evil-define-key 'normal 'global (kbd "gcc")
@@ -173,6 +177,7 @@
 
     :custom
     (evil-collection-want-find-usages-bindings t)
+    (evil-collection-key-blacklist '("SPC")) ; Stop evil-collection from using leader keys
     (evil-collection-setup-minibuffer t))
 
 (use-package undo-tree
