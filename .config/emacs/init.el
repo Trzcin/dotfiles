@@ -37,7 +37,7 @@
     (use-short-answers t) ;; Shorten yes/no to y/n
 
     ;; Line height
-    (default-text-properties '(line-spacing 0.125 line-height 1.125))
+    (default-text-properties '(line-spacing 0.125 line-height 1.125)) ;; causes issues with vterm
 
     (custom-file (locate-user-emacs-file "custom.el"))
 
@@ -227,4 +227,7 @@
     )
     
     :hook
-    (vterm-mode . (lambda () (setq-local global-hl-line-mode nil))))
+    (vterm-mode . (lambda ()
+                    (setq-local global-hl-line-mode nil)
+                    (setq-local default-text-properties nil) ; vterm does not like line-spacing
+                    )))
