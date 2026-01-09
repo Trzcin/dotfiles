@@ -35,15 +35,14 @@
     (truncate-lines t) ;; Disable line wrap
     (use-dialog-box nil) ;; Prefer minibuffer to dialog boxes
     (use-short-answers t) ;; Shorten yes/no to y/n
+    (frame-title-format "%b")
+    (help-window-select t)
+    (enable-recursive-minibuffers t)
 
     ;; Line height
     (default-text-properties '(line-spacing 0.125 line-height 1.125)) ;; causes issues with vterm
 
     (custom-file (locate-user-emacs-file "custom.el"))
-
-    (frame-title-format "%b")
-
-    (help-window-select t)
 
     :hook
     (prog-mode . display-line-numbers-mode)
@@ -125,9 +124,13 @@
                                                     consult-source-modified-buffer
                                                     consult-source-other-buffer)))
 
+(defvar-keymap my/leader-map)
+
 (use-package embark
     :ensure t
-    :defer t)
+    :bind (:map my/leader-map
+        ("E" . embark-act)
+    ))
 
 (use-package embark-consult
     :ensure t
@@ -140,12 +143,8 @@
     :hook
     (after-init . evil-mode)
 
-    :init
-    (defvar-keymap my/leader-map)
-
     :custom
     (evil-want-keybinding nil)
-    (evil-want-C-u-scroll t)
     (evil-want-Y-yank-to-eol t)
     (evil-want-fine-undo t)
     (evil-leader/in-all-states t)
