@@ -43,6 +43,8 @@
 
     (frame-title-format "%b")
 
+    (help-window-select t)
+
     :hook
     (prog-mode . display-line-numbers-mode)
 
@@ -155,6 +157,7 @@
     :config
     (evil-set-undo-system 'undo-tree)
     (keymap-set evil-normal-state-map "SPC" my/leader-map) ; Probably cleaner to use keymaps rather than `evil-set-leader`
+    (keymap-set evil-visual-state-map "SPC" my/leader-map) ; Probably cleaner to use keymaps rather than `evil-set-leader`
     
     ;; Commenting
     (evil-define-key 'normal 'global (kbd "gcc")
@@ -212,3 +215,16 @@
 
     :config
     (nerd-icons-completion-mode))
+
+(use-package vterm
+    :ensure t
+
+    :config
+    (setq vterm-timer-delay 0.01)
+
+    :bind (:map my/leader-map
+        ("o t" . vterm) ;; Open terminal
+    )
+    
+    :hook
+    (vterm-mode . (lambda () (setq-local global-hl-line-mode nil))))
