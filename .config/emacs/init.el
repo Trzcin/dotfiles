@@ -58,7 +58,6 @@
     (global-auto-revert-mode) ;; Keep unmodified buffers up to date with files
     (recentf-mode)
     (savehist-mode)
-    (save-place-mode)
     (file-name-shadow-mode)
     (modify-coding-system-alist 'file "" 'utf-8)
 
@@ -116,6 +115,24 @@
     (completion-category-defaults nil)
     (completion-category-overrides '((file (styles partial-completion)))))
 
+(use-package consult
+    :ensure t
+    :defer t
+
+    :custom
+    ;; Only show buffers in `consult-buffer`
+    (consult-buffer-sources '(consult-source-buffer consult-source-hidden-buffer
+                                                    consult-source-modified-buffer
+                                                    consult-source-other-buffer)))
+
+(use-package embark
+    :ensure t
+    :defer t)
+
+(use-package embark-consult
+    :ensure t
+    :hook
+    (embark-collect-mode . consult-preview-at-point-mode))
 
 ;; Vim motions
 (use-package evil
@@ -144,10 +161,11 @@
 
         ;; Find stuff
         ("f f" . find-file)
-        ("f r" . recentf-open)
+        ("f r" . consult-recent-file)
 
         ;; Buffers
-        ("b" . switch-to-buffer)
+        ("b b" . consult-buffer)
+        ("b i" . ibuffer)
 
         ;; Remap prefixes to evil leader
         ("h" . help-command)
@@ -215,6 +233,10 @@
 
     :config
     (nerd-icons-completion-mode))
+
+(use-package nerd-icons-ibuffer
+    :ensure t
+    :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
 
 (use-package vterm
     :ensure t
