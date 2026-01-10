@@ -1,4 +1,4 @@
-;; Add MELPA to package.el
+; Add MELPA to package.el
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
@@ -24,7 +24,6 @@
 
     ;; Line and column numbers
     (column-number-mode t)
-    (display-line-numbers-type 'relative)
     (display-line-numbers-width 3)
 
     ;; Scrolling
@@ -146,6 +145,16 @@
     :ensure t
     :defer t
 
+    :bind (:map my/leader-map
+        ("c l" . consult-line)  
+        ("c t" . consult-theme)  
+        ("c i" . consult-info)  
+        ("c m" . consult-man)  
+        ("c o" . consult-outline)  
+        ("c g" . consult-ripgrep)  
+        ("c f" . consult-fd)  
+    )
+
     :custom
     ;; Only show buffers in `consult-buffer`
     (consult-buffer-sources '(consult-source-buffer consult-source-hidden-buffer
@@ -155,7 +164,7 @@
 (use-package embark
     :ensure t
     :bind (:map my/leader-map
-        ("E" . embark-act)
+        ("e" . embark-act)
     ))
 
 (use-package embark-consult
