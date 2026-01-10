@@ -266,15 +266,24 @@
 (use-package vterm
     :ensure t
 
+    :bind (
+        :map my/leader-map
+        ("o t" . vterm) ;; Open terminal
+
+        :map vterm-mode-map
+        ("C-<escape>" . (lambda () (interactive) (vterm-copy-mode)
+                          (turn-on-evil-mode)
+                          (evil-normal-state)))
+    )
+
     :config
     (setq vterm-timer-delay 0.01)
-
-    :bind (:map my/leader-map
-        ("o t" . vterm) ;; Open terminal
-    )
+    (evil-define-key 'normal 'vterm-mode-map (kbd "i") (lambda () (interactive) (turn-off-evil-mode)
+                                                                                (vterm-copy-mode -1)))
     
     :hook
     (vterm-mode . (lambda ()
                     (setq-local global-hl-line-mode nil)
                     (setq-local default-text-properties nil) ; vterm does not like line-spacing
+                    (turn-off-evil-mode)
                     )))
