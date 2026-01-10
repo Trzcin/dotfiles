@@ -2,6 +2,9 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
+;; Global leader map
+(defvar-keymap my/leader-map)
+
 ;; General Emacs settings
 (use-package emacs
     :ensure nil
@@ -74,6 +77,9 @@
     :init
     (load-theme 'modus-operandi t))
 
+(use-package ef-themes
+    :ensure t)
+
 ;; Dired
 (use-package dired
     :ensure nil
@@ -93,6 +99,28 @@
     :ensure nil
     :hook
     (after-init . which-key-mode))
+
+;; Projects
+;; Tip: run `(project-remember-projects-under "<path>" t)` to discover projects in subdirectories
+(use-package project
+    :ensure nil
+    :config
+    (keymap-set my/leader-map "p" project-prefix-map)
+
+    ;; Make <leader>ps open vterm for project
+    (defun my/project-vterm ()
+        (interactive)
+        (require 'comint)
+        (let* ((default-directory (project-root (project-current t)))
+                (default-project-shell-name (project-prefixed-buffer-name "shell"))
+                (shell-buffer (get-buffer default-project-shell-name)))
+            (if (and shell-buffer (not current-prefix-arg))
+                (if (comint-check-proc shell-buffer)
+                    (pop-to-buffer shell-buffer (bound-and-true-p display-comint-buffer-action))
+                (vterm shell-buffer))
+            (vterm (generate-new-buffer-name default-project-shell-name)))))
+
+    (advice-add 'project-shell :override #'my/project-vterm))
 
 ;; Minibuffer enchancements
 (use-package vertico
@@ -123,8 +151,6 @@
     (consult-buffer-sources '(consult-source-buffer consult-source-hidden-buffer
                                                     consult-source-modified-buffer
                                                     consult-source-other-buffer)))
-
-(defvar-keymap my/leader-map)
 
 (use-package embark
     :ensure t
