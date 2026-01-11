@@ -9,3 +9,4 @@
 .config/emacs/recentf
 .config/emacs/tramp
 .config/emacs/projects
+.config/emacs/tree-sitter

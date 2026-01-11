@@ -50,10 +50,6 @@
     (prog-mode . display-line-numbers-mode)
 
     :init
-    (scroll-bar-mode -1)
-    (menu-bar-mode -1)
-    (tool-bar-mode -1)
-    (fringe-mode 0)
     (blink-cursor-mode -1)
     (global-hl-line-mode)
     (global-auto-revert-mode) ;; Keep unmodified buffers up to date with files
@@ -153,6 +149,7 @@
         ("c o" . consult-outline)  
         ("c g" . consult-ripgrep)  
         ("c f" . consult-fd)  
+        ("c s" . consult-imenu) ;; Consult symbols
     )
 
     :custom
@@ -196,6 +193,7 @@
         ;; Find stuff
         ("f f" . find-file)
         ("f r" . consult-recent-file)
+        ("f l" . find-library)
 
         ;; Buffers
         ("b b" . consult-buffer)
@@ -296,3 +294,38 @@
                     (setq-local default-text-properties nil) ; vterm does not like line-spacing
                     (turn-off-evil-mode)
                     )))
+
+;; Treesitter major modes packages
+(use-package html-ts-mode :ensure nil)
+(use-package c-ts-mode :ensure nil)
+(use-package yaml-ts-mode :ensure nil)
+(use-package dockerfile-ts-mode :ensure nil)
+(use-package go-ts-mode :ensure nil)
+(use-package lua-ts-mode :ensure nil)
+(use-package php-ts-mode :ensure nil)
+(use-package heex-ts-mode :ensure nil)
+(use-package java-ts-mode :ensure nil)
+(use-package json-ts-mode :ensure nil)
+(use-package ruby-ts-mode :ensure nil)
+(use-package rust-ts-mode :ensure nil)
+(use-package toml-ts-mode :ensure nil)
+(use-package cmake-ts-mode :ensure nil)
+(use-package elixir-ts-mode :ensure nil)
+(use-package typescript-ts-mode :ensure nil)
+
+;; Where to get Treesitter grammars
+(setq treesit-language-source-alist
+      '((dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")))
+
+;; Remap modes to use Treesitter versions
+(add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+(add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
+(add-to-list 'major-mode-remap-alist '(c-or-c++-mode . c-or-c++-ts-mode))
+(add-to-list 'major-mode-remap-alist '(javascript-mode . js-ts-mode))
+(add-to-list 'major-mode-remap-alist '(sh-mode . bash-ts-mode))
+(add-to-list 'major-mode-remap-alist '(csharp-mode . csharp-ts-mode))
+(add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+
+;; Filename major mode custom associations
+(add-to-list 'auto-mode-alist '("\\.mjs\\'" . js-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx\\|.tsx\\'" . tsx-ts-mode))
