@@ -48,6 +48,7 @@
 
     :hook
     (prog-mode . display-line-numbers-mode)
+    (astro-ts-mode . display-line-numbers-mode)
 
     :init
     (blink-cursor-mode -1)
@@ -312,10 +313,21 @@
 (use-package cmake-ts-mode :ensure nil)
 (use-package elixir-ts-mode :ensure nil)
 (use-package typescript-ts-mode :ensure nil)
+(use-package astro-ts-mode :ensure t)
+(use-package vue-ts-mode
+    :vc (:url "https://github.com/8uff3r/vue-ts-mode.git"
+        :rev "efc7031f50bbfd2a3293aee4fcb34bf0503b7f83"))
+(use-package svelte-mode :ensure t) ;; svelte-ts-mode seems to not be ready yet
 
 ;; Where to get Treesitter grammars
 (setq treesit-language-source-alist
-      '((dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")))
+      '((dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")
+        (astro "https://github.com/virchau13/tree-sitter-astro")
+        (vue "https://github.com/ikatyang/tree-sitter-vue")
+        (svelte "https://github.com/Himujjal/tree-sitter-svelte")
+        (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" nil "typescript/src"))
+        (javascript "https://github.com/tree-sitter/tree-sitter-javascript")
+        (css "https://github.com/tree-sitter/tree-sitter-css")))
 
 ;; Remap modes to use Treesitter versions
 (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
@@ -325,6 +337,7 @@
 (add-to-list 'major-mode-remap-alist '(sh-mode . bash-ts-mode))
 (add-to-list 'major-mode-remap-alist '(csharp-mode . csharp-ts-mode))
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+(add-to-list 'major-mode-remap-alist '(typescript-mode . typescript-ts-mode))
 
 ;; Filename major mode custom associations
 (add-to-list 'auto-mode-alist '("\\.mjs\\'" . js-ts-mode))
