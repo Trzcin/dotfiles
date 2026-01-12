@@ -48,6 +48,7 @@
 
     :hook
     (prog-mode . display-line-numbers-mode)
+    (text-mode . visual-line-mode) ;; Enable word wrap for prose
     (astro-ts-mode . display-line-numbers-mode)
 
     :init
@@ -316,9 +317,13 @@
 (use-package elixir-ts-mode :ensure nil)
 (use-package typescript-ts-mode :ensure nil)
 (use-package astro-ts-mode :ensure t)
+;; (use-package markdown-ts-mode
+;;     :ensure t
+;;     :mode ("\\.md\\'" . markdown-ts-mode))
 (use-package svelte-ts-mode
     :vc (:url "https://github.com/leafOfTree/svelte-ts-mode.git"
-         :rev "7fdb9816535692bfd8cd85baa0f2bad052369233"))
+              :rev "7fdb9816535692bfd8cd85baa0f2bad052369233")
+    :mode "\\.svelte\\'")
 (use-package vue-ts-mode
     :vc (:url "https://github.com/theschmocker/vue-ts-mode.git"
          :rev "b1ba7195917cda08ffeac797e14bac0353c1dbe7")
@@ -332,7 +337,9 @@
         (svelte "https://github.com/Himujjal/tree-sitter-svelte")
         (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" nil "typescript/src"))
         (javascript "https://github.com/tree-sitter/tree-sitter-javascript")
-        (css "https://github.com/tree-sitter/tree-sitter-css")))
+        (css "https://github.com/tree-sitter/tree-sitter-css")
+        (markdown "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown/src")
+        (markdown-inline "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown-inline/src")))
 
 ;; Remap modes to use Treesitter versions
 (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
@@ -347,3 +354,33 @@
 ;; Filename major mode custom associations
 (add-to-list 'auto-mode-alist '("\\.mjs\\'" . js-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx\\|.tsx\\'" . tsx-ts-mode))
+
+;; Markdown
+(use-package markdown-mode
+    :ensure t
+    :mode ("\\.md\\'" . markdown-mode)
+    :custom
+    (markdown-fontify-code-blocks-natively t)
+    :config
+    (custom-set-faces
+        '(markdown-header-face ((t (:inherit font-lock-function-name-face :weight bold :family "variable-pitch"))))
+        '(markdown-header-face-1 ((t (:inherit markdown-header-face :height 2.0))))
+        '(markdown-header-face-2 ((t (:inherit markdown-header-face :height 1.7))))
+        '(markdown-header-face-3 ((t (:inherit markdown-header-face :height 1.4))))
+        '(markdown-header-face-4 ((t (:inherit markdown-header-face :height 1.1))))
+        '(markdown-header-face-5 ((t (:inherit markdown-header-face :height 1.0))))
+        '(markdown-header-face-6 ((t (:inherit markdown-header-face :height 1.0)))))
+    :hook
+    (markdown-mode . (lambda () (markdown-display-inline-images))))
+
+;; Mixed pitch fonts
+(use-package mixed-pitch
+    :ensure t
+    :hook
+    (markdown-mode . mixed-pitch-mode))
+
+;; Center prose buffers
+(use-package olivetti
+    :ensure t
+    :hook
+    (markdown-mode . olivetti-mode))
