@@ -316,10 +316,13 @@
 (use-package elixir-ts-mode :ensure nil)
 (use-package typescript-ts-mode :ensure nil)
 (use-package astro-ts-mode :ensure t)
+(use-package svelte-ts-mode
+    :vc (:url "https://github.com/leafOfTree/svelte-ts-mode.git"
+         :rev "7fdb9816535692bfd8cd85baa0f2bad052369233"))
 (use-package vue-ts-mode
-    :vc (:url "https://github.com/8uff3r/vue-ts-mode.git"
-        :rev "efc7031f50bbfd2a3293aee4fcb34bf0503b7f83"))
-(use-package svelte-mode :ensure t) ;; svelte-ts-mode seems to not be ready yet
+    :vc (:url "https://github.com/theschmocker/vue-ts-mode.git"
+         :rev "b1ba7195917cda08ffeac797e14bac0353c1dbe7")
+    :mode "\\.vue\\'")
 
 ;; Where to get Treesitter grammars
 (setq treesit-language-source-alist
