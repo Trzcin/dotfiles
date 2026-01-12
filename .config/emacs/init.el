@@ -251,7 +251,9 @@
 (use-package nerd-icons
     :ensure t
     :custom
-    (nerd-icons-font-family "JetBrainsMono Nerd Font"))
+    (nerd-icons-font-family "JetBrainsMono Nerd Font")
+    :config
+    (add-to-list 'nerd-icons-extension-icon-alist '("astro" nerd-icons-devicon "nf-dev-astro" :face nerd-icons-orange)))
 
 (use-package nerd-icons-dired
     :ensure t
