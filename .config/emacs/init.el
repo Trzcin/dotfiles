@@ -20,6 +20,7 @@
 
     ;; Indentation
     (indent-tabs-mode nil)
+    (tab-always-indent 'complete)
     (tab-width 4)
 
     ;; Line and column numbers
@@ -175,6 +176,26 @@
     :hook
     (embark-collect-mode . consult-preview-at-point-mode))
 
+;; Completion at point
+;; Can be requested by hitting TAB
+(use-package corfu
+    :ensure t
+    :defer t
+    :custom
+    (corfu-auto t)                        ;; Only completes when hitting TAB
+    (corfu-auto-delay 0)                ;; Delay before popup (enable if corfu-auto is t)
+    (corfu-auto-prefix 1)                  ;; Trigger completion after typing 1 character
+    (corfu-quit-no-match t)                ;; Quit popup if no match
+    (corfu-scroll-margin 5)                ;; Margin when scrolling completions
+    (corfu-max-width 50)                   ;; Maximum width of completion popup
+    (corfu-min-width 50)                   ;; Minimum width of completion popup
+    (corfu-auto-trigger ".")
+    :config
+    (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)
+    :init
+    (global-corfu-mode)
+    (corfu-popupinfo-mode t))
+
 ;; Vim motions
 (use-package evil
     :ensure t
@@ -239,6 +260,13 @@
     (evil-collection-key-blacklist '("SPC")) ; Stop evil-collection from using leader keys
     (evil-collection-setup-minibuffer t))
 
+;; Multicursor
+(use-package evil-mc
+    :ensure t
+    :config
+    (global-evil-mc-mode 1)
+    (evil-define-key '(normal visual) 'global (kbd "g m") evil-mc-cursors-map))
+
 (use-package undo-tree
     :ensure t
     :hook
@@ -277,6 +305,11 @@
 (use-package nerd-icons-ibuffer
     :ensure t
     :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
+
+(use-package nerd-icons-corfu
+    :ensure t
+    :defer t
+    :after corfu)
 
 (use-package vterm
     :ensure t
@@ -382,6 +415,7 @@
     (set-face-attribute 'markdown-header-face-4 nil :inherit 'markdown-header-face :height 1.1)
     (set-face-attribute 'markdown-header-face-5 nil :inherit 'markdown-header-face :height 1.0)
     (set-face-attribute 'markdown-header-face-6 nil :inherit 'markdown-header-face :height 1.0)
+
     :hook
     (markdown-mode . (lambda () (markdown-display-inline-images))))
 
