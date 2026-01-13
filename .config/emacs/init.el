@@ -41,6 +41,10 @@
     (help-window-select t)
     (enable-recursive-minibuffers t)
 
+    ;; use-package lazy loading stats
+    ;; Tip: run M-x 'use-package-report'
+    (use-package-compute-statistics t)
+
     ;; Line height
     (default-text-properties '(line-spacing 0.125 line-height 1.125)) ;; causes issues with vterm
 
@@ -300,13 +304,21 @@
                     )))
 
 ;; Treesitter major modes packages
-(use-package html-ts-mode :ensure nil)
+(use-package html-ts-mode
+    :ensure nil
+    :mode "\\.html\\'")
 (use-package c-ts-mode :ensure nil)
-(use-package yaml-ts-mode :ensure nil)
-(use-package dockerfile-ts-mode :ensure nil)
+(use-package yaml-ts-mode
+    :ensure nil
+    :mode "\\.ya?ml\\'")
+(use-package dockerfile-ts-mode
+    :ensure nil
+    :mode "\\(?:Dockerfile\\(?:\\..*\\)?\\|\\.[Dd]ockerfile\\)\\'")
 (use-package go-ts-mode :ensure nil)
 (use-package lua-ts-mode :ensure nil)
-(use-package php-ts-mode :ensure nil)
+(use-package php-ts-mode
+    :ensure nil
+    :mode "\\.php\\|.phtml\\'")
 (use-package heex-ts-mode :ensure nil)
 (use-package java-ts-mode :ensure nil)
 (use-package json-ts-mode :ensure nil)
@@ -315,11 +327,12 @@
 (use-package toml-ts-mode :ensure nil)
 (use-package cmake-ts-mode :ensure nil)
 (use-package elixir-ts-mode :ensure nil)
-(use-package typescript-ts-mode :ensure nil)
-(use-package astro-ts-mode :ensure t)
-;; (use-package markdown-ts-mode
-;;     :ensure t
-;;     :mode ("\\.md\\'" . markdown-ts-mode))
+(use-package typescript-ts-mode
+  :ensure nil
+  :mode (("\\.ts\\'" . typescript-ts-mode) ("\\.jsx\\|.tsx\\'" . tsx-ts-mode)))
+(use-package astro-ts-mode
+    :ensure t
+    :mode "\\.astro\\'")
 (use-package svelte-ts-mode
     :vc (:url "https://github.com/leafOfTree/svelte-ts-mode.git"
               :rev "7fdb9816535692bfd8cd85baa0f2bad052369233")
@@ -353,7 +366,6 @@
 
 ;; Filename major mode custom associations
 (add-to-list 'auto-mode-alist '("\\.mjs\\'" . js-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.jsx\\|.tsx\\'" . tsx-ts-mode))
 
 ;; Markdown
 (use-package markdown-mode
@@ -361,15 +373,15 @@
     :mode ("\\.md\\'" . markdown-mode)
     :custom
     (markdown-fontify-code-blocks-natively t)
+
     :config
-    (custom-set-faces
-        '(markdown-header-face ((t (:inherit font-lock-function-name-face :weight bold :family "variable-pitch"))))
-        '(markdown-header-face-1 ((t (:inherit markdown-header-face :height 2.0))))
-        '(markdown-header-face-2 ((t (:inherit markdown-header-face :height 1.7))))
-        '(markdown-header-face-3 ((t (:inherit markdown-header-face :height 1.4))))
-        '(markdown-header-face-4 ((t (:inherit markdown-header-face :height 1.1))))
-        '(markdown-header-face-5 ((t (:inherit markdown-header-face :height 1.0))))
-        '(markdown-header-face-6 ((t (:inherit markdown-header-face :height 1.0)))))
+    (set-face-attribute 'markdown-header-face nil :weight 'bold)
+    (set-face-attribute 'markdown-header-face-1 nil :inherit 'markdown-header-face :height 2.0)
+    (set-face-attribute 'markdown-header-face-2 nil :inherit 'markdown-header-face :height 1.7)
+    (set-face-attribute 'markdown-header-face-3 nil :inherit 'markdown-header-face :height 1.4)
+    (set-face-attribute 'markdown-header-face-4 nil :inherit 'markdown-header-face :height 1.1)
+    (set-face-attribute 'markdown-header-face-5 nil :inherit 'markdown-header-face :height 1.0)
+    (set-face-attribute 'markdown-header-face-6 nil :inherit 'markdown-header-face :height 1.0)
     :hook
     (markdown-mode . (lambda () (markdown-display-inline-images))))
 
