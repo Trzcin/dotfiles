@@ -8,8 +8,7 @@
                    marginalia markdown-mode mixed-pitch
                    nerd-icons-completion nerd-icons-corfu
                    nerd-icons-dired nerd-icons-ibuffer olivetti
-                   orderless svelte-ts-mode undo-tree vertico vterm
-                   vue-ts-mode))
+                   svelte-ts-mode undo-tree vertico vterm vue-ts-mode))
  '(package-vc-selected-packages
    '((vue-ts-mode :url "https://github.com/theschmocker/vue-ts-mode.git")
      (svelte-ts-mode :url

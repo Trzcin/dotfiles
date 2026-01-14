@@ -1,4 +1,4 @@
-; Add MELPA to package.el
+;; Add MELPA to package.el
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
@@ -10,10 +10,10 @@
     :ensure nil
     :custom
     ;; Disable autosave, backups, lockfiles etc.
-    (auto-save-default nil)
-    (auto-save-list-file-prefix nil)
-    (create-lockfiles nil)
-    (make-backup-files nil)
+    (auto-save-default nil) 
+    (auto-save-list-file-prefix nil) 
+    (create-lockfiles nil) 
+    (make-backup-files nil) 
     
     (delete-by-moving-to-trash t)
     (global-auto-revert-non-file-buffers t)
@@ -43,8 +43,13 @@
     (enable-recursive-minibuffers t)
 
     ;; Completion style (fuzzy, case insensitive matching)
-    (completion-styles '(flex basic))
+    (completion-styles '(emacs22 substring flex))
     (completion-ignore-case t)
+    (read-file-name-completion-ignore-case t)
+    (read-buffer-completion-ignore-case t)
+
+    ;; Clipboard
+    (select-enable-clipboard nil)
 
     ;; use-package lazy loading stats
     ;; Tip: run M-x 'use-package-report'
@@ -74,6 +79,8 @@
     (set-face-attribute 'default nil :family "JetBrainsMono Nerd Font" :height 120)
     (set-face-attribute 'fixed-pitch nil :family "JetBrainsMono Nerd Font" :height 120)
     (set-face-attribute 'variable-pitch nil :family "Inter" :height 120)
+
+    (put 'narrow-to-region 'disabled nil)
 
     (load custom-file 'noerror 'nomessage))
 
@@ -147,11 +154,11 @@
         ("c l" . consult-line)  
         ("c t" . consult-theme)  
         ("c i" . consult-info)  
-        ("c m" . consult-man)  
         ("c o" . consult-outline)  
         ("c g" . consult-ripgrep)  
         ("c f" . consult-fd)  
         ("c s" . consult-imenu) ; Consult symbols
+        ("c L" . consult-goto-line)
     )
 
     :custom
@@ -208,10 +215,15 @@
         ("-" . dired-jump) ; Jump to parent directory
 
         :map my/leader-map
-        ;; Clipbaord
-        ("Y" . clipboard-kill-ring-save)
-        ("P" . clipboard-yank)
-
+        ;; Call commands
+        ("/" . execute-extended-command)
+        
+        ;; Clipboard
+        ("Y" . (lambda () (interactive) (evil-use-register ?+)
+                 (call-interactively 'evil-yank)))
+        ("P" . (lambda () (interactive) (evil-use-register ?+)
+                 (call-interactively 'evil-paste-after)))
+        
         ;; Find stuff
         ("f f" . find-file)
         ("f r" . consult-recent-file)
@@ -220,6 +232,7 @@
         ;; Buffers
         ("b b" . consult-buffer)
         ("b i" . ibuffer)
+        ("b s" . save-buffer)
 
         ;; Remap prefixes to evil leader
         ("h" . help-command)
@@ -228,8 +241,7 @@
 
     :config
     (evil-set-undo-system 'undo-tree)
-    (keymap-set evil-normal-state-map "SPC" my/leader-map) ; Probably cleaner to use keymaps rather than `evil-set-leader`
-    (keymap-set evil-visual-state-map "SPC" my/leader-map) ; Probably cleaner to use keymaps rather than `evil-set-leader`
+    (evil-define-key '(normal visual) 'global (kbd "SPC") my/leader-map) ; Probably cleaner to use keymaps rather than `evil-set-leader`
     
     ;; Commenting
     (evil-define-key 'normal 'global (kbd "gcc")
