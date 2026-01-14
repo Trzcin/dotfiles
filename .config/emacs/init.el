@@ -31,35 +31,39 @@
     (pixel-scroll-precision-mode t)
     (scroll-conservatively 101)
 
-    (ring-bell-function 'ignore) ;; Disable bell audio
+    (ring-bell-function 'ignore) ; Disable bell audio
 
     (switch-to-buffer-obey-display-actions t)
-    (treesit-font-lock-level 4) ;; Use treesitter where possible
-    (truncate-lines t) ;; Disable line wrap
-    (use-dialog-box nil) ;; Prefer minibuffer to dialog boxes
-    (use-short-answers t) ;; Shorten yes/no to y/n
+    (treesit-font-lock-level 4) ; Use treesitter where possible
+    (truncate-lines t) ; Disable line wrap
+    (use-dialog-box nil) ; Prefer minibuffer to dialog boxes
+    (use-short-answers t) ; Shorten yes/no to y/n
     (frame-title-format "%b")
     (help-window-select t)
     (enable-recursive-minibuffers t)
+
+    ;; Completion style (fuzzy, case insensitive matching)
+    (completion-styles '(flex basic))
+    (completion-ignore-case t)
 
     ;; use-package lazy loading stats
     ;; Tip: run M-x 'use-package-report'
     (use-package-compute-statistics t)
 
     ;; Line height
-    (default-text-properties '(line-spacing 0.125 line-height 1.125)) ;; causes issues with vterm
+    (default-text-properties '(line-spacing 0.125 line-height 1.125)) ; causes issues with vterm
 
     (custom-file (locate-user-emacs-file "custom.el"))
 
     :hook
     (prog-mode . display-line-numbers-mode)
-    (text-mode . visual-line-mode) ;; Enable word wrap for prose
+    (text-mode . visual-line-mode) ; Enable word wrap for prose
     (astro-ts-mode . display-line-numbers-mode)
 
     :init
     (blink-cursor-mode -1)
     (global-hl-line-mode)
-    (global-auto-revert-mode) ;; Keep unmodified buffers up to date with files
+    (global-auto-revert-mode) ; Keep unmodified buffers up to date with files
     (recentf-mode)
     (savehist-mode)
     (file-name-shadow-mode)
@@ -75,12 +79,12 @@
 
 ;; Theme
 (use-package modus-themes
-    :ensure nil
-    :init
-    (load-theme 'modus-operandi t))
+    :ensure nil)
 
 (use-package ef-themes
-    :ensure t)
+    :ensure t
+    :init
+    (load-theme 'ef-bio t))
 
 ;; Dired
 (use-package dired
@@ -89,7 +93,7 @@
     (dired-recursive-copies 'always)
     (dired-recursive-deletes 'always)
     (dired-listing-switches "-AGFhlv --group-directories-first")
-    (dired-dwim-target t) ;; Easy dual pane usage for moving files
+    (dired-dwim-target t) ; Easy dual pane usage for moving files
     (dired-kill-when-opening-new-dired-buffer t)
     (dired-free-space nil)
 
@@ -135,15 +139,6 @@
     :hook
     (after-init . marginalia-mode))
 
-(use-package orderless
-    :ensure t
-    :after vertico
-    
-    :custom
-    (completion-styles '(orderless basic))
-    (completion-category-defaults nil)
-    (completion-category-overrides '((file (styles partial-completion)))))
-
 (use-package consult
     :ensure t
     :defer t
@@ -156,7 +151,7 @@
         ("c o" . consult-outline)  
         ("c g" . consult-ripgrep)  
         ("c f" . consult-fd)  
-        ("c s" . consult-imenu) ;; Consult symbols
+        ("c s" . consult-imenu) ; Consult symbols
     )
 
     :custom
@@ -182,13 +177,13 @@
     :ensure t
     :defer t
     :custom
-    (corfu-auto t)                        ;; Only completes when hitting TAB
-    (corfu-auto-delay 0)                ;; Delay before popup (enable if corfu-auto is t)
-    (corfu-auto-prefix 1)                  ;; Trigger completion after typing 1 character
-    (corfu-quit-no-match t)                ;; Quit popup if no match
-    (corfu-scroll-margin 5)                ;; Margin when scrolling completions
-    (corfu-max-width 50)                   ;; Maximum width of completion popup
-    (corfu-min-width 50)                   ;; Minimum width of completion popup
+    (corfu-auto t)                        ; Only completes when hitting TAB
+    (corfu-auto-delay 0)                ; Delay before popup (enable if corfu-auto is t)
+    (corfu-auto-prefix 1)                  ; Trigger completion after typing 1 character
+    (corfu-quit-no-match t)                ; Quit popup if no match
+    (corfu-scroll-margin 5)                ; Margin when scrolling completions
+    (corfu-max-width 50)                   ; Maximum width of completion popup
+    (corfu-min-width 50)                   ; Minimum width of completion popup
     (corfu-auto-trigger ".")
     :config
     (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)
@@ -210,7 +205,7 @@
 
     :bind (
         :map evil-normal-state-map
-        ("-" . dired-jump) ;; Jump to parent directory
+        ("-" . dired-jump) ; Jump to parent directory
 
         :map my/leader-map
         ;; Clipbaord
@@ -316,7 +311,7 @@
 
     :bind (
         :map my/leader-map
-        ("o t" . vterm) ;; Open terminal
+        ("o t" . vterm) ; Open terminal
 
         :map vterm-mode-map
         ("C-<escape>" . (lambda () (interactive) (vterm-copy-mode)
