@@ -151,7 +151,6 @@
     :defer t
 
     :bind (:map my/leader-map
-        ("c l" . consult-line)  
         ("c t" . consult-theme)  
         ("c i" . consult-info)  
         ("c o" . consult-outline)  
@@ -213,6 +212,7 @@
     :bind (
         :map evil-normal-state-map
         ("-" . dired-jump) ; Jump to parent directory
+        ("/" . consult-line)
 
         :map my/leader-map
         ;; Call commands
@@ -273,6 +273,13 @@
     :config
     (global-evil-mc-mode 1)
     (evil-define-key '(normal visual) 'global (kbd "g m") evil-mc-cursors-map))
+
+;; Jump to visible text with keyboard
+(use-package avy
+    :ensure t
+    :bind (:map evil-normal-state-map
+        ("s" . avy-goto-word-0)
+    ))
 
 (use-package undo-tree
     :ensure t

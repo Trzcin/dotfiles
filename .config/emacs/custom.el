@@ -4,8 +4,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(astro-ts-mode corfu ef-themes embark-consult evil-collection evil-mc
-                   marginalia markdown-mode mixed-pitch
+   '(astro-ts-mode avy corfu ef-themes embark-consult evil-collection
+                   evil-mc marginalia markdown-mode mixed-pitch
                    nerd-icons-completion nerd-icons-corfu
                    nerd-icons-dired nerd-icons-ibuffer olivetti
                    svelte-ts-mode undo-tree vertico vterm vue-ts-mode))
