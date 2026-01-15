@@ -42,12 +42,6 @@
     (help-window-select t)
     (enable-recursive-minibuffers t)
 
-    ;; Completion style (fuzzy, case insensitive matching)
-    (completion-styles '(emacs21 substring flex))
-    (completion-ignore-case t)
-    (read-file-name-completion-ignore-case t)
-    (read-buffer-completion-ignore-case t)
-
     ;; Clipboard
     (select-enable-clipboard nil)
 
@@ -145,6 +139,17 @@
     :ensure t
     :hook
     (after-init . marginalia-mode))
+
+;; Fuzzy, orderless completion
+(use-package orderless
+    :ensure t
+    :custom
+    (completion-styles '(orderless basic))
+    (completion-category-overrides '((file (styles partial-completion))))
+    (completion-ignore-case t)
+    (read-file-name-completion-ignore-case t)
+    (read-buffer-completion-ignore-case t)
+    (orderless-matching-styles '(orderless-literal orderless-regexp orderless-flex)))
 
 (use-package consult
     :ensure t
@@ -278,7 +283,7 @@
 (use-package avy
     :ensure t
     :bind (:map evil-normal-state-map
-        ("s" . avy-goto-word-0)
+        ("s" . avy-goto-word-1)
     ))
 
 (use-package undo-tree
@@ -340,8 +345,9 @@
 
     :config
     (setq vterm-timer-delay 0.01)
-    (evil-define-key 'normal 'vterm-mode-map (kbd "i") (lambda () (interactive) (turn-off-evil-mode)
-                                                                                (vterm-copy-mode -1)))
+    (evil-define-key 'normal vterm-copy-mode-map (kbd "i") (lambda () (interactive) (turn-off-evil-mode)
+                                                             (vterm-copy-mode -1)
+                                                             (setq cursor-type 'bar)))
     
     :hook
     (vterm-mode . (lambda ()
