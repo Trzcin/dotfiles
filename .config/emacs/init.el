@@ -43,7 +43,7 @@
     (enable-recursive-minibuffers t)
 
     ;; Completion style (fuzzy, case insensitive matching)
-    (completion-styles '(emacs22 substring flex))
+    (completion-styles '(emacs21 substring flex))
     (completion-ignore-case t)
     (read-file-name-completion-ignore-case t)
     (read-buffer-completion-ignore-case t)
@@ -90,8 +90,8 @@
 
 (use-package ef-themes
     :ensure t
-    :init
-    (load-theme 'ef-bio t))
+    :config
+    (ef-themes-load-theme 'ef-bio))
 
 ;; Dired
 (use-package dired
