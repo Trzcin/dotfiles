@@ -52,8 +52,6 @@
     ;; Line height
     (default-text-properties '(line-spacing 0.125 line-height 1.125)) ; causes issues with vterm
 
-    (custom-file (locate-user-emacs-file "custom.el"))
-
     :hook
     (prog-mode . display-line-numbers-mode)
     (text-mode . visual-line-mode) ; Enable word wrap for prose
@@ -68,7 +66,6 @@
     (file-name-shadow-mode)
     (modify-coding-system-alist 'file "" 'utf-8)
 
-    :config
     ;; Fonts
     (set-face-attribute 'default nil :family "JetBrainsMono Nerd Font" :height 120)
     (set-face-attribute 'fixed-pitch nil :family "JetBrainsMono Nerd Font" :height 120)
@@ -76,6 +73,10 @@
 
     (put 'narrow-to-region 'disabled nil)
 
+    (load (locate-user-emacs-file "modeline.el"))
+
+    ;; Customize file
+    (setq custom-file (locate-user-emacs-file "custom.el"))
     (load custom-file 'noerror 'nomessage))
 
 ;; Theme
@@ -238,6 +239,10 @@
         ("b b" . consult-buffer)
         ("b i" . ibuffer)
         ("b s" . save-buffer)
+
+        ;; Narrowing
+        ("n n" . narrow-to-region)
+        ("n w" . widen)
 
         ;; Remap prefixes to evil leader
         ("h" . help-command)
