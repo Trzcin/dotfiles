@@ -209,12 +209,6 @@
     :hook
     (after-init . evil-mode)
 
-    :custom
-    (evil-want-keybinding nil)
-    (evil-want-Y-yank-to-eol t)
-    (evil-want-fine-undo t)
-    (evil-leader/in-all-states t)
-
     :bind (
         :map evil-normal-state-map
         ("-" . dired-jump) ; Jump to parent directory
@@ -248,6 +242,12 @@
         ("h" . help-command)
         ("w" . evil-window-map)
     )
+
+    :init
+    (setq evil-want-keybinding nil)
+    (setq evil-want-Y-yank-to-eol t)
+    (setq evil-want-fine-undo t)
+    (setq evil-leader/in-all-states t)
 
     :config
     (evil-set-undo-system 'undo-tree)
