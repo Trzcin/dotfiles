@@ -145,7 +145,7 @@
 (use-package orderless
     :ensure t
     :custom
-    (completion-styles '(orderless basic))
+    (completion-styles '(substring orderless basic))
     (completion-category-overrides '((file (styles partial-completion))))
     (completion-ignore-case t)
     (read-file-name-completion-ignore-case t)

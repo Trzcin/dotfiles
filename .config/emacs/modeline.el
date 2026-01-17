@@ -9,7 +9,7 @@
 
 (defvar-local my/mode-line-buffer-name
     '(:eval (cond ((project-current) (file-relative-name buffer-file-name (project-root (project-current))))
-                  (buffer-file-name buffer-file-name)
+                  (buffer-file-truename buffer-file-truename)
                   (t "%b")))
     "Name of the current buffer or file path.")
 (put 'my/mode-line-buffer-name 'risky-local-variable t)
