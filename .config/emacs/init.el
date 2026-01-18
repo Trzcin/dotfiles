@@ -81,7 +81,13 @@
 
 ;; Theme
 (use-package modus-themes
-    :ensure nil)
+    :ensure nil
+    :custom
+    ;; Variable fonts sizes for headings
+    (modus-themes-headings '((1 . (2.0))
+                             (2 . (1.7))
+                             (3 . (1.4))
+                             (4 . (1.1)))))
 
 (use-package ef-themes
     :ensure t
@@ -213,6 +219,12 @@
         :map evil-normal-state-map
         ("-" . dired-jump) ; Jump to parent directory
         ("/" . consult-line)
+
+        ;; Make working with line wrap easier
+        ("j" . evil-next-visual-line)
+        ("k" . evil-previous-visual-line)
+        ("$" . evil-end-of-visual-line)
+        ("0" . evil-beginning-of-visual-line)
 
         :map my/leader-map
         ;; Call commands
@@ -431,15 +443,6 @@
     :mode ("\\.md\\'" . markdown-mode)
     :custom
     (markdown-fontify-code-blocks-natively t)
-
-    :config
-    (set-face-attribute 'markdown-header-face nil :weight 'bold)
-    (set-face-attribute 'markdown-header-face-1 nil :inherit 'markdown-header-face :height 2.0)
-    (set-face-attribute 'markdown-header-face-2 nil :inherit 'markdown-header-face :height 1.7)
-    (set-face-attribute 'markdown-header-face-3 nil :inherit 'markdown-header-face :height 1.4)
-    (set-face-attribute 'markdown-header-face-4 nil :inherit 'markdown-header-face :height 1.1)
-    (set-face-attribute 'markdown-header-face-5 nil :inherit 'markdown-header-face :height 1.0)
-    (set-face-attribute 'markdown-header-face-6 nil :inherit 'markdown-header-face :height 1.0)
 
     :hook
     (markdown-mode . (lambda () (markdown-display-inline-images))))

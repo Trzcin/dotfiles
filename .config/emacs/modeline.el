@@ -1,21 +1,21 @@
-(defvar-local my/mode-line-pos
-    '(:eval (when (mode-line-window-selected-p)
-                (list "l: %l/"
-                      (number-to-string (line-number-at-pos (point-max)))
-                      "  "
-                      "c: %c")))
-    "Point line and column position string for the modeline.")
-(put 'my/mode-line-pos 'risky-local-variable t)
+(defvar-local my/mode-line-buffer-icon
+    '(:eval (nerd-icons-icon-for-buffer :face (if (mode-line-window-selected-p)
+                                                  'mode-line-active
+                                                  'mode-line-inactive)))
+    "Icon for the buffer.")
+(put 'my/mode-line-buffer-icon 'risky-local-variable t)
 
 (defvar-local my/mode-line-buffer-name
-    '(:eval (cond ((project-current) (file-relative-name buffer-file-name (project-root (project-current))))
+    '(:eval (cond ((and buffer-file-name (project-current)) (file-relative-name buffer-file-name (project-root (project-current))))
                   (buffer-file-truename buffer-file-truename)
                   (t "%b")))
     "Name of the current buffer or file path.")
 (put 'my/mode-line-buffer-name 'risky-local-variable t)
 
 (defvar-local my/mode-line-buffer-status
-    '(:eval "%+")
+    '(:eval (cond (buffer-read-only " ")
+                  ((buffer-modified-p) " 󰆓")
+                  (t "")))
     "Visual representation of the buffer status.")
 (put 'my/mode-line-buffer-status 'risky-local-variable t)
 
@@ -35,15 +35,26 @@
     '(:eval
       (when-let* (((mode-line-window-selected-p))
                   (file (or buffer-file-name default-directory))
-                  (backend (or (vc-backend file) 'Git)))
-            (my/mode-line--vc-branch-name file backend)))
+                  (backend (or (vc-backend file) 'Git))
+                  (branch (my/mode-line--vc-branch-name file backend)))
+            (format " %s" branch)))
     "Mode line construct to return propertized VC branch.")
 (put 'my/mode-line-vc-branch 'risky-local-variable t)
 
+(defvar-local my/mode-line-pos
+    '(:eval (when (mode-line-window-selected-p)
+                (list "L: %l/"
+                      (number-to-string (line-number-at-pos (point-max)))
+                      "  "
+                      "C: %c")))
+    "Point line and column position string for the modeline.")
+(put 'my/mode-line-pos 'risky-local-variable t)
+
 (setq-default mode-line-format
               '(" "
-                my/mode-line-buffer-name
+                my/mode-line-buffer-icon
                 " "
+                my/mode-line-buffer-name
                 my/mode-line-buffer-status
                 "  "
                 my/mode-line-major-mode
