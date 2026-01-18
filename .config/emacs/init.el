@@ -458,3 +458,9 @@
     :ensure t
     :hook
     (markdown-mode . olivetti-mode))
+
+;; Nice padding around various UI elements
+(use-package spacious-padding
+    :ensure t
+    :config
+    (spacious-padding-mode))
