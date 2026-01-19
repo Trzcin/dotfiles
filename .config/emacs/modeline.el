@@ -24,6 +24,16 @@
     "Visual representation of the buffer status.")
 (put 'my/mode-line-major-mode 'risky-local-variable t)
 
+(defvar-local my/mode-line-project
+    '(:eval
+      (when-let* (((mode-line-window-selected-p))
+                  (project (project-current))
+                  (name (project-name project))
+                  (dir (project-root project)))
+                  (list "  " (nerd-icons-icon-for-dir dir :face 'mode-line-active) " " name)))
+    "Name of the current project.")
+(put 'my/mode-line-project 'risky-local-variable t)
+
 ;; See 'https://protesilaos.com/dotemacs'
 (defun my/mode-line--vc-branch-name (file backend)
     "Return VC branch name for FILE with BACKEND."
@@ -58,6 +68,7 @@
                 my/mode-line-buffer-status
                 "  "
                 my/mode-line-major-mode
+                my/mode-line-project
                 "  "
                 my/mode-line-vc-branch
                 mode-line-format-right-align
