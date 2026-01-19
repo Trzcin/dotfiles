@@ -464,3 +464,17 @@
     :ensure t
     :config
     (spacious-padding-mode))
+
+;; Spellchecking
+(use-package ispell
+    :ensure nil
+    :custom
+    (ispell-program-name "/usr/bin/hunspell")
+    (ispell-dictionary "en_US,pl_PL")
+    :hook
+    (text-mode . flyspell-mode)
+    (prog-mode . flyspell-prog-mode)
+    :config
+    (ispell-find-hunspell-dictionaries)
+    (ispell-set-spellchecker-params)
+    (ispell-hunspell-add-multi-dic "en_US,pl_PL"))
