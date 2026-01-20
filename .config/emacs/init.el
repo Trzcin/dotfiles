@@ -473,8 +473,32 @@
     (ispell-dictionary "en_US,pl_PL")
     :hook
     (text-mode . flyspell-mode)
-    (prog-mode . flyspell-prog-mode)
     :config
     (ispell-find-hunspell-dictionaries)
     (ispell-set-spellchecker-params)
     (ispell-hunspell-add-multi-dic "en_US,pl_PL"))
+
+;; Better PDF viewer
+(use-package pdf-tools
+    :ensure t
+    :mode ("\\.pdf\\'" . pdf-view-mode)
+
+    :custom
+    (large-file-warning-threshold nil) ; PDFs are often large and cause a warning to show up
+
+    :config
+    (pdf-tools-install)
+    (pdf-loader-install)
+
+    :hook
+    (pdf-view-mode . (lambda ()
+                         (setq-local global-hl-line-mode nil)
+                         (setq-local default-text-properties nil)
+                         (pdf-view-fit-height-to-window)
+                         (save-place-local-mode)
+                         )))
+
+;; Remember page positions in PDFs
+(use-package saveplace-pdf-view
+    :ensure t
+    :after pdf-tools)

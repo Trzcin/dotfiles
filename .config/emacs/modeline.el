@@ -51,13 +51,27 @@
     "Mode line construct to return propertized VC branch.")
 (put 'my/mode-line-vc-branch 'risky-local-variable t)
 
+(defvar-local my/mode-line-text-pos
+    '(:eval (list "L: %l/"
+                  (number-to-string (line-number-at-pos (point-max)))
+                  "  "
+                  "C: %c"))
+    "Point line and column position string for the modeline.")
+(put 'my/mode-line-text-pos 'risky-local-variable t)
+
+(defvar-local my/mode-line-pdf-pos
+    '(:eval (format "P: %d/%d"
+                    (pdf-view-current-page)
+                    (pdf-cache-number-of-pages)))
+    "Current page and total page number display in PDF buffers.")
+(put 'my/mode-line-pdf-pos 'risky-local-variable t)
+
 (defvar-local my/mode-line-pos
     '(:eval (when (mode-line-window-selected-p)
-                (list "L: %l/"
-                      (number-to-string (line-number-at-pos (point-max)))
-                      "  "
-                      "C: %c")))
-    "Point line and column position string for the modeline.")
+                (if (eq major-mode 'pdf-view-mode)
+                    my/mode-line-pdf-pos
+                    my/mode-line-text-pos)))
+    "General position dependant on the major mode.")
 (put 'my/mode-line-pos 'risky-local-variable t)
 
 (setq-default mode-line-format
