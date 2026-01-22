@@ -73,7 +73,9 @@
 
     (put 'narrow-to-region 'disabled nil)
 
+    ;; Additional files
     (load (locate-user-emacs-file "modeline.el"))
+    (load (locate-user-emacs-file "lsp.el"))
 
     ;; Customize file
     (setq custom-file (locate-user-emacs-file "custom.el"))
@@ -429,6 +431,7 @@
 (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
 (add-to-list 'major-mode-remap-alist '(c-or-c++-mode . c-or-c++-ts-mode))
 (add-to-list 'major-mode-remap-alist '(javascript-mode . js-ts-mode))
+(add-to-list 'major-mode-remap-alist '(css-mode . css-ts-mode))
 (add-to-list 'major-mode-remap-alist '(sh-mode . bash-ts-mode))
 (add-to-list 'major-mode-remap-alist '(csharp-mode . csharp-ts-mode))
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))

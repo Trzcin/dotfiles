@@ -1,0 +1,78 @@
+(use-package lsp-mode
+    :ensure t
+
+    :hook (
+            (lsp-mode . lsp-enable-which-key-integration)
+            ((
+              ;; Configs
+              json-ts-mode
+              yaml-ts-mode
+
+              ;; Web
+              html-ts-mode
+              css-ts-mode
+              js-ts-mode
+              typescript-ts-mode
+              tsx-ts-mode
+
+              ;; Other languages
+              python-ts-mode
+              go-ts-mode
+            ) . lsp-deferred))
+
+    :commands lsp
+
+    :custom
+    (lsp-inlay-hint-enable nil)
+    (lsp-completion-provider :none)
+    (lsp-session-file (locate-user-emacs-file ".lsp-session"))
+    (lsp-log-io nil)
+    (lsp-idle-delay 0.5)
+    (lsp-keep-workspace-alive nil)
+
+    ;; Core settings
+    (lsp-enable-xref t)
+    (lsp-auto-configure t)
+    (lsp-enable-links nil)
+    (lsp-eldoc-enable-hover t)
+    ;; (lsp-signature-doc-lines 1)
+    (lsp-eldoc-render-all t)
+    (lsp-enable-file-watchers nil)
+    (lsp-enable-folding nil)
+    (lsp-enable-imenu t)
+    (lsp-enable-indentation nil)
+    (lsp-enable-on-type-formatting nil)
+    (lsp-enable-suggest-server-download t)
+    (lsp-enable-symbol-highlighting nil)
+    (lsp-enable-text-document-color t)
+
+    ;; Completion settings
+    (lsp-completion-enable t)
+    (lsp-completion-enable-additional-text-edit t)
+    (lsp-enable-snippet nil)
+    (lsp-completion-show-kind t)
+
+    ;; Lens settings
+    (lsp-lens-enable nil)
+
+    ;; Headerline settings
+    (lsp-headerline-breadcrumb-enable nil)
+
+    ;; Semantic settings
+    (lsp-semantic-tokens-enable nil)
+
+    :config
+    (keymap-set my/leader-map "l" lsp-command-map))
+
+;; Documentation in child frame
+(use-package eldoc-box
+    :ensure t
+    :after evil
+    :init
+    (global-eldoc-mode -1)
+    :custom
+    (eldoc-echo-area-use-multiline-p nil)
+    :bind (:map evil-normal-state-map
+        ("K" . (lambda () (interactive) (eldoc)
+                                        (eldoc-box-help-at-point)))
+    ))

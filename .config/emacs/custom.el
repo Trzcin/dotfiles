@@ -4,9 +4,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(astro-ts-mode avy corfu ef-themes embark-consult evil-collection
-                   evil-mc marginalia markdown-mode mixed-pitch
-                   nerd-icons-completion nerd-icons-corfu
+   '(astro-ts-mode avy corfu ef-themes eldoc-box embark-consult
+                   evil-collection evil-mc lsp-mode marginalia
+                   mixed-pitch nerd-icons-completion nerd-icons-corfu
                    nerd-icons-dired nerd-icons-ibuffer olivetti
                    orderless pdf-tools saveplace-pdf-view
                    spacious-padding svelte-ts-mode undo-tree vertico
