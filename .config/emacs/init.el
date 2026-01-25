@@ -497,11 +497,20 @@
     (pdf-view-mode . (lambda ()
                          (setq-local global-hl-line-mode nil)
                          (setq-local default-text-properties nil)
-                         (pdf-view-fit-height-to-window)
                          (save-place-local-mode)
+                         (pdf-view-fit-height-to-window)
+                         (pdf-view-themed-minor-mode)
+                         (pdf-view-roll-minor-mode)
+                         (setq-local evil-default-cursor '(ignore))
+                         (setq cursor-type nil)
                          )))
 
 ;; Remember page positions in PDFs
 (use-package saveplace-pdf-view
     :ensure t
     :after pdf-tools)
+
+(use-package calendar
+    :ensure nil
+    :custom
+    (calendar-week-start-day 1))

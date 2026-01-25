@@ -35,7 +35,6 @@
     (lsp-auto-configure t)
     (lsp-enable-links nil)
     (lsp-eldoc-enable-hover t)
-    ;; (lsp-signature-doc-lines 1)
     (lsp-eldoc-render-all t)
     (lsp-enable-file-watchers nil)
     (lsp-enable-folding nil)
