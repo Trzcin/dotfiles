@@ -60,6 +60,10 @@
     ;; Semantic settings
     (lsp-semantic-tokens-enable nil)
 
+    :init
+    ;; Ensure installed language servers
+    (lsp-ensure-server 'eslint)
+
     :config
     (keymap-set my/leader-map "l" lsp-command-map))
 

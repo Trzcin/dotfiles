@@ -10,5 +10,5 @@
 .config/emacs/tramp
 .config/emacs/projects
 .config/emacs/tree-sitter
-.config/emacs/.cache/lsp/npm/yaml-language-server
 .config/emacs/.lsp-session
+.config/emacs/.cache/lsp/
