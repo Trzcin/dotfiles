@@ -3,6 +3,9 @@
 gui:
   nerdFontsVersion: "3"
   showFileIcons: false
+  spinner:
+    rate: 5000
 git:
   paging:
     externalDiffCommand: difft --color=always
+  autoFetch: false
