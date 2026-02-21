@@ -136,7 +136,34 @@
                 (vterm shell-buffer))
             (vterm (generate-new-buffer-name default-project-shell-name)))))
 
-    (advice-add 'project-shell :override #'my/project-vterm))
+    (advice-add 'project-shell :override #'my/project-vterm)
+
+    ;; Detect directories with '.project' file as project roots
+    (defgroup project-local nil
+        "Local, non-VC-backed project.el root directories."
+        :group 'project)
+
+    (defcustom project-local-identifier ".project"
+        "You can specify a single filename or a list of names."
+        :type '(choice (string :tag "Single file")
+                       (repeat (string :tag "Filename")))
+        :group 'project-local)
+
+    (cl-defmethod project-root ((project (head local)))
+        "Return root directory of current PROJECT."
+        (cdr project))
+
+    (defun project-local-try-local (dir)
+      "Determine if DIR is a non-VC project. DIR must include a file with the name determined by the variable `project-local-identifier' to be considered a project."
+      (if-let ((root (if (listp project-local-identifier)
+                         (seq-some (lambda (n)
+                                     (locate-dominating-file dir n))
+                                   project-local-identifier)
+                       (locate-dominating-file dir project-local-identifier))))
+          (cons 'local root)))
+
+      (customize-set-variable 'project-find-functions
+                              (list #'project-try-vc #'project-local-try-local)))
 
 ;; Minibuffer enchancements
 (use-package vertico
@@ -228,6 +255,8 @@
         ("$" . evil-end-of-visual-line)
         ("0" . evil-beginning-of-visual-line)
 
+        ("U" . evil-redo) ; Helix-like redo
+
         :map my/leader-map
         ;; Call commands
         ("/" . execute-extended-command)
@@ -262,6 +291,7 @@
     (setq evil-want-Y-yank-to-eol t)
     (setq evil-want-fine-undo t)
     (setq evil-leader/in-all-states t)
+    (setq evil-disable-insert-state-bindings t)
 
     :config
     (evil-set-undo-system 'undo-tree)
@@ -454,13 +484,15 @@
 (use-package mixed-pitch
     :ensure t
     :hook
-    (markdown-mode . mixed-pitch-mode))
+    (markdown-mode . mixed-pitch-mode)
+    (org-mode . mixed-pitch-mode))
 
 ;; Center prose buffers
 (use-package olivetti
     :ensure t
     :hook
-    (markdown-mode . olivetti-mode))
+    (markdown-mode . olivetti-mode)
+    (org-mode . olivetti-mode))
 
 ;; Nice padding around various UI elements
 (use-package spacious-padding
@@ -474,6 +506,7 @@
     :custom
     (ispell-program-name "/usr/bin/hunspell")
     (ispell-dictionary "en_US,pl_PL")
+    (text-mode-ispell-word-completion nil)
     :hook
     (text-mode . flyspell-mode)
     :config
@@ -514,3 +547,13 @@
     :ensure nil
     :custom
     (calendar-week-start-day 1))
+
+;; Org
+(use-package org
+    :ensure nil
+    :custom
+    (org-M-RET-may-split-line nil)
+    (org-log-done 'time))
+
+(use-package org-tempo
+    :ensure nil)
