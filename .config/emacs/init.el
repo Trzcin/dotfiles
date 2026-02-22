@@ -553,7 +553,37 @@
     :ensure nil
     :custom
     (org-M-RET-may-split-line nil)
-    (org-log-done 'time))
+    (org-log-done 'time)
+
+    :config
+    (defun my/org-toggle-task ()
+        "Toggle an Org Mode TODO heading or checkbox. Based on 'org-ctrl-c-ctrl-c'."
+        (interactive)
+        (let* (
+            (context (org-element-lineage (org-element-context)
+                ;; Limit to supported contexts.
+                '(babel-call clock dynamic-block footnote-definition
+                    footnote-reference inline-babel-call inline-src-block
+                    inlinetask item keyword node-property paragraph
+                    plain-list planning property-drawer radio-target
+                    src-block statistics-cookie table table-cell table-row
+                    timestamp) t))
+	        (type (org-element-type context)))
+
+            ;; Go into paragraph
+            (when (eq type 'paragraph)
+                (let ((parent (org-element-parent context)))
+                (when (and (org-element-type-p parent 'item)
+                        (= (line-beginning-position)
+                        (org-element-begin parent)))
+                    (setq context parent)
+                    (setq type 'item))))
+
+            (pcase type
+                (`item (org-ctrl-c-ctrl-c))
+                ((or `headline (and `nil (guard (org-at-heading-p)))) (org-todo)))))
+
+    (evil-define-key 'normal org-mode-map (kbd "SPC t") 'my/org-toggle-task))
 
 (use-package org-tempo
     :ensure nil)
