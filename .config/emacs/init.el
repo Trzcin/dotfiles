@@ -583,7 +583,10 @@
                 (`item (org-ctrl-c-ctrl-c))
                 ((or `headline (and `nil (guard (org-at-heading-p)))) (org-todo)))))
 
-    (evil-define-key 'normal org-mode-map (kbd "SPC t") 'my/org-toggle-task))
+    (evil-define-key 'normal org-mode-map (kbd "SPC t") 'my/org-toggle-task)
+    (evil-define-key 'normal org-mode-map (kbd "SPC T") (lambda () (interactive)
+                                                          (insert "** ")
+                                                          (org-timestamp nil))))
 
 (use-package org-tempo
     :ensure nil)
