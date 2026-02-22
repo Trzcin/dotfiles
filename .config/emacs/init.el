@@ -546,7 +546,16 @@
 (use-package calendar
     :ensure nil
     :custom
-    (calendar-week-start-day 1))
+    (calendar-week-start-day 1)
+    :bind (:map my/leader-map
+        ("o c" . calendar)
+    ))
+
+(use-package calc
+    :ensure nil
+    :bind (:map my/leader-map
+        ("o C" . full-calc)
+    ))
 
 ;; Org
 (use-package org
