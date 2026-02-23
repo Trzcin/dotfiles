@@ -9,8 +9,9 @@
                    mixed-pitch nerd-icons-completion nerd-icons-corfu
                    nerd-icons-dired nerd-icons-ibuffer olivetti
                    orderless pdf-tools saveplace-pdf-view
-                   spacious-padding svelte-ts-mode undo-tree vertico
-                   vterm vue-ts-mode))
+                   spacious-padding svelte-ts-mode typst-preview
+                   typst-ts-mode undo-tree vertico vterm vue-ts-mode
+                   websocket))
  '(package-vc-selected-packages
    '((vue-ts-mode :url "https://github.com/theschmocker/vue-ts-mode.git")
      (svelte-ts-mode :url

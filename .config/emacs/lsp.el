@@ -18,6 +18,7 @@
               ;; Other languages
               python-ts-mode
               go-ts-mode
+              typst-ts-mode
             ) . lsp-deferred))
 
     :commands lsp

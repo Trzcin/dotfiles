@@ -433,6 +433,9 @@
 (use-package typescript-ts-mode
   :ensure nil
   :mode (("\\.ts\\'" . typescript-ts-mode) ("\\.jsx\\|.tsx\\'" . tsx-ts-mode)))
+(use-package typst-ts-mode
+    :ensure t
+    :mode "\\.typ\\'")
 (use-package astro-ts-mode
     :ensure t
     :mode "\\.astro\\'")
@@ -455,6 +458,7 @@
         (javascript "https://github.com/tree-sitter/tree-sitter-javascript")
         (css "https://github.com/tree-sitter/tree-sitter-css")
         (markdown "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown/src")
+        (typst "https://github.com/uben0/tree-sitter-typst")
         (markdown-inline "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown-inline/src")))
 
 ;; Remap modes to use Treesitter versions
@@ -600,3 +604,12 @@
 
 (use-package org-tempo
     :ensure nil)
+
+;; Typst
+(use-package websocket
+    :ensure t)
+
+(use-package typst-preview
+    :ensure t
+    :custom
+    (typst-preview-invert-colors "never"))
