@@ -76,6 +76,7 @@
     ;; Additional files
     (load (locate-user-emacs-file "modeline.el"))
     (load (locate-user-emacs-file "lsp.el"))
+    (load (locate-user-emacs-file "enauczanie.el"))
 
     ;; Customize file
     (setq custom-file (locate-user-emacs-file "custom.el"))
