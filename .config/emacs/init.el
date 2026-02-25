@@ -568,8 +568,11 @@
     :custom
     (org-M-RET-may-split-line nil)
     (org-log-done 'time)
+    (auto-save-visited-predicate (lambda () (eq major-mode 'org-mode)))
 
     :config
+    (auto-save-visited-mode)
+    
     (defun my/org-toggle-task ()
         "Toggle an Org Mode TODO heading or checkbox. Based on 'org-ctrl-c-ctrl-c'."
         (interactive)
