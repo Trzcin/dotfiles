@@ -18,6 +18,7 @@
               ;; Other languages
               python-ts-mode
               go-ts-mode
+              rust-ts-mode
               typst-ts-mode
             ) . lsp-deferred))
 
