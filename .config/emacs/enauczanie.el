@@ -1,8 +1,11 @@
 (defvar my/enauczanie-course-list '(
+                                    ("Angielski" . "https://enauczanie.pg.edu.pl/2025/course/view.php?id=3592")
                                     ("Metody badawcze w informatyce" . "https://enauczanie.pg.edu.pl/2025/course/view.php?id=3945")
-                                    ("Sieciowe systemy operacyjne" . "https://enauczanie.pg.edu.pl/2025/course/view.php?id=4074")
+                                    ("Badania operacyjne" . "https://enauczanie.pg.edu.pl/2025/course/view.php?id=4941")
+                                    ("Niezawodność systemów sieciowych" . "https://enauczanie.pg.edu.pl/2025/course/view.php?id=5158")
                                     ("Podstawy analizy rynków kapitałowych" . "https://enauczanie.pg.edu.pl/2025/course/view.php?id=4686")
                                     ("Sieci Ethernet" . "https://enauczanie.pg.edu.pl/2025/course/view.php?id=4229")
+                                    ("Sieciowe systemy operacyjne" . "https://enauczanie.pg.edu.pl/2025/course/view.php?id=4074")
                                     ("Systemy obliczeniowe wysokiej wydajności" . "https://enauczanie.pg.edu.pl/2025/course/view.php?id=4831")
                                     ("Zarządzanie środowiskiem chmurowym" . "https://enauczanie.pg.edu.pl/2025/course/view.php?id=4151")
                                     ("Zespołowy projekt badawczy" . "https://enauczanie.pg.edu.pl/2025/course/view.php?id=4323"))
