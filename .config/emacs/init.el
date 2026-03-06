@@ -566,6 +566,7 @@
 (use-package org
     :ensure nil
     :custom
+    (org-M-RET-may-split-line nil)
     (org-log-done 'time)
     (auto-save-visited-predicate (lambda () (eq major-mode 'org-mode)))
 
@@ -599,7 +600,6 @@
                 (`item (org-ctrl-c-ctrl-c))
                 ((or `headline (and `nil (guard (org-at-heading-p)))) (org-todo)))))
 
-    (evil-define-key 'insert org-mode-map (kbd "RET") 'org-meta-return)
     (evil-define-key 'normal org-mode-map (kbd "SPC t") 'my/org-toggle-task)
     (evil-define-key 'normal org-mode-map (kbd "SPC T") (lambda () (interactive)
                                                           (insert "** ")
