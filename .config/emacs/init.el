@@ -56,6 +56,7 @@
     (prog-mode . display-line-numbers-mode)
     (text-mode . visual-line-mode) ; Enable word wrap for prose
     (astro-ts-mode . display-line-numbers-mode)
+    (typst-ts-mode . display-line-numbers-mode)
 
     :init
     (blink-cursor-mode -1)

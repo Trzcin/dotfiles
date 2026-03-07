@@ -50,7 +50,7 @@
     ;; Completion settings
     (lsp-completion-enable t)
     (lsp-completion-enable-additional-text-edit t)
-    (lsp-enable-snippet nil)
+    (lsp-enable-snippet t)
     (lsp-completion-show-kind t)
 
     ;; Lens settings
@@ -81,3 +81,8 @@
         ("K" . (lambda () (interactive) (eldoc)
                                         (eldoc-box-help-at-point)))
     ))
+
+(use-package yasnippet
+    :ensure t
+    :hook
+    (typst-ts-mode . yas-minor-mode))
