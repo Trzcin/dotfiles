@@ -1,26 +1,29 @@
 (use-package lsp-mode
     :ensure t
 
-    :hook (
-            (lsp-mode . lsp-enable-which-key-integration)
-            ((
-              ;; Configs
-              json-ts-mode
-              yaml-ts-mode
+    :hook
+    (lsp-mode . lsp-enable-which-key-integration)
+    ((
+        ;; Configs
+        json-ts-mode
+        yaml-ts-mode
 
-              ;; Web
-              html-ts-mode
-              css-ts-mode
-              js-ts-mode
-              typescript-ts-mode
-              tsx-ts-mode
+        ;; Web
+        html-ts-mode
+        css-ts-mode
+        js-ts-mode
+        typescript-ts-mode
+        tsx-ts-mode
+        svelte-ts-mode
+        astro-ts-mode
+        vue-ts-mode
 
-              ;; Other languages
-              python-ts-mode
-              go-ts-mode
-              rust-ts-mode
-              typst-ts-mode
-            ) . lsp-deferred))
+        ;; Other languages
+        python-ts-mode
+        go-ts-mode
+        rust-ts-mode
+        typst-ts-mode
+    ) . lsp-deferred)
 
     :commands lsp
 
@@ -65,6 +68,19 @@
     :init
     ;; Ensure installed language servers
     (lsp-ensure-server 'eslint)
+    (lsp-ensure-server 'svelte-ls)
+    (lsp-ensure-server 'vue-semantic-server)
+
+    ;; Add emmet support
+    ;; Some issues with 'completionItem/resolve'.
+    ;; 'npm i -g @olrtg/emmet-language-server'
+    (lsp-register-client (make-lsp-client
+                          :new-connection (lsp-stdio-connection '("emmet-language-server" "--stdio"))
+                          :priority -1
+                          :add-on? t
+                          :multi-root t
+                          :activation-fn (lsp-activate-on "html" "javascriptreact" "typescriptreact" "astro" "svelte" "vue" "css" "scss")
+                          :server-id 'emmet))
 
     :config
     (keymap-set my/leader-map "l" lsp-command-map))
@@ -84,5 +100,5 @@
 
 (use-package yasnippet
     :ensure t
-    :hook
-    (typst-ts-mode . yas-minor-mode))
+    :init
+    (yas-global-mode))
