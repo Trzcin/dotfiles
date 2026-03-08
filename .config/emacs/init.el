@@ -83,6 +83,7 @@
     (astro-ts-mode . display-line-numbers-mode)
     (typst-ts-mode . display-line-numbers-mode)
     (html-ts-mode . display-line-numbers-mode)
+    (yaml-ts-mode . display-line-numbers-mode)
 
     :init
     (blink-cursor-mode -1)
