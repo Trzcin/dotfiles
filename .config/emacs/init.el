@@ -644,3 +644,9 @@
     :ensure t
     :custom
     (typst-preview-invert-colors "never"))
+
+(use-package magit
+    :ensure t
+    :bind (:map my/leader-map
+        ("o m" . magit-status)
+    ))
