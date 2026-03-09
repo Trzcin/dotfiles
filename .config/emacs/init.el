@@ -648,5 +648,41 @@
 (use-package magit
     :ensure t
     :bind (:map my/leader-map
-        ("o m" . magit-status)
+        ("p m" . magit-status)
     ))
+
+(use-package gnome-accent-theme-switcher
+    :vc (:url "https://github.com/protesilaos/gnome-accent-theme-switcher.git"
+         :rev "f1f20081f15b67f176273100dab1a940b3ecc840")
+
+    :custom
+    (gnome-accent-theme-switcher-collection '(("blue"
+                                               :light (ef-maris-light ef-deuteranopia-light)
+                                               :dark  (ef-night ef-deuteranopia-dark ef-dark ef-duo-dark doric-mermaid standard-dark-tinted))
+                                              ("teal"
+                                               :light (ef-spring ef-frost doric-wind doric-jade)
+                                               :dark  (ef-maris-dark doric-valley))
+                                              ("green"
+                                               :light (ef-cyprus)
+                                               :dark  (ef-bio))
+                                              ("yellow"
+                                               :light (ef-melissa-light ef-duo-light ef-eagle doric-earth)
+                                               :dark  (ef-melissa-dark))
+                                              ("orange"
+                                               :light (ef-orange ef-day doric-beach)
+                                               :dark  (ef-autumn doric-copper))
+                                              ("red"
+                                               :light (modus-operandi-tinted standard-light-tinted ef-tritanopia-light ef-arbutus)
+                                               :dark  (ef-tritanopia-dark doric-fire))
+                                              ("pink"
+                                               :light (ef-summer ef-reverie doric-cherry ef-kassio)
+                                               :dark  (ef-cherie ef-rosa))
+                                              ("purple"
+                                               :light (ef-trio-light ef-light doric-siren)
+                                               :dark  (ef-trio-dark ef-winter ef-fig ef-dream doric-plum))
+                                              ("slate"
+                                               :light (doric-marble doric-light)
+                                               :dark  (ef-owl doric-obsidian doric-water doric-dark))))
+
+    :config
+    (gnome-accent-theme-switcher-mode))
