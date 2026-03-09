@@ -23,6 +23,7 @@
         go-ts-mode
         rust-ts-mode
         typst-ts-mode
+        c-ts-mode
     ) . lsp-deferred)
 
     :commands lsp
