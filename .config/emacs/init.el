@@ -647,6 +647,8 @@
 
 (use-package magit
     :ensure t
+    :custom
+    (magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1)
     :bind (:map my/leader-map
         ("p m" . magit-status)
     ))
