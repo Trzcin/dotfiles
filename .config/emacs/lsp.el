@@ -71,6 +71,10 @@
     (lsp-ensure-server 'svelte-ls)
     (lsp-ensure-server 'vue-semantic-server)
 
+    ;; Astro
+    ;; 'sudo npm i -g @astrojs/language-server'
+    ;; 'sudo npm i -g prettier prettier-plugin-astro'
+
     ;; Add emmet support
     ;; Some issues with 'completionItem/resolve'.
     ;; 'npm i -g @olrtg/emmet-language-server'
