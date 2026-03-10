@@ -1,3 +1,6 @@
+(setq inhibit-startup-echo-area-message "trzcin")
+;; (eval '(setq inhibit-startup-echo-area-message "trzcin"))
+
 ;; Add MELPA to package.el
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -66,6 +69,7 @@
     (frame-title-format "%b")
     (help-window-select t)
     (enable-recursive-minibuffers t)
+    (inhibit-startup-screen t)
 
     ;; Clipboard
     (select-enable-clipboard nil)
@@ -689,3 +693,49 @@
 
     :config
     (gnome-accent-theme-switcher-mode))
+
+
+;; Startup screen
+;; See 'https://xenodium.com/bending-emacs-episode-2'
+(defun my/show-welcome-buffer ()
+    "Show *Welcome* buffer."
+    (with-current-buffer (get-buffer-create "*Welcome*")
+        (setq truncate-lines t)
+        (setq-local evil-default-cursor '(ignore))
+        (setq cursor-type nil)
+        (setq-local global-hl-line-mode nil)
+        (setq-local default-text-properties nil)
+        (read-only-mode)
+        (my/refresh-welcome-buffer)
+        (add-hook 'window-size-change-functions
+            (lambda (_frame)
+                (my/refresh-welcome-buffer)) nil t)
+        (add-hook 'window-configuration-change-hook
+            #'my/refresh-welcome-buffer nil t)
+        (switch-to-buffer (current-buffer))
+        (message "")))
+
+(defun my/refresh-welcome-buffer ()
+    "Refresh welcome buffer content for WINDOW."
+    (when-let* ((inhibit-read-only t)
+                   (welcome-buffer (get-buffer "*Welcome*"))
+                   (window (get-buffer-window welcome-buffer))
+                   (image-path "~/.config/emacs/sugarcane.png")
+                   (image (create-image image-path nil nil))
+                   (image-height (cdr (image-size image)))
+                   (image-width (car (image-size image)))
+                   (top-margin (floor (/ (- (window-height window) image-height) 2)))
+                   (left-margin (floor (/ (- (window-width window) image-width) 2)))
+                   (title "Welcome to Emacs"))
+        (with-current-buffer welcome-buffer
+            (erase-buffer)
+            (setq mode-line-format nil)
+            (goto-char (point-min))
+            (insert (make-string top-margin ?\n))
+            (insert (make-string left-margin ?\ ))
+            (insert-image image)
+            (insert "\n\n")
+            (insert (make-string (- (floor (/ (- (window-width window) (string-width title)) 2)) 1) ?\ ))
+            (insert (propertize title 'face '(:inherit variable-pitch :height 1.2 :weight bold))))))
+
+(my/show-welcome-buffer)
