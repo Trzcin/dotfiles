@@ -50,6 +50,7 @@
     (lsp-enable-suggest-server-download t)
     (lsp-enable-symbol-highlighting nil)
     (lsp-enable-text-document-color t)
+    (lsp-auto-register-remote-clients nil)
 
     ;; Completion settings
     (lsp-completion-enable t)
