@@ -4,8 +4,8 @@
 (setenv "LSP_USE_PLISTS" "true")
 
 ;; Maximize on startup
-(setq initial-frame-alist '((fullscreen . maximized)))
-(setq default-frame-alist '((undecorated . t)))
+;; (setq initial-frame-alist '((fullscreen . maximized)))
+(setq default-frame-alist '((undecorated . t) (fullscreen . maximized)))
 
 ;; Disable some UI elements
 (scroll-bar-mode -1)

@@ -70,6 +70,7 @@
     (help-window-select t)
     (enable-recursive-minibuffers t)
     (inhibit-startup-screen t)
+    (server-client-instructions nil)
 
     ;; Clipboard
     (select-enable-clipboard nil)
@@ -309,6 +310,7 @@
         ("b b" . consult-buffer)
         ("b i" . ibuffer)
         ("b s" . save-buffer)
+        ("b k" . kill-buffer)
 
         ;; Narrowing
         ("n n" . narrow-to-region)
@@ -694,10 +696,10 @@
     :config
     (gnome-accent-theme-switcher-mode))
 
-
 ;; Startup screen
 ;; See 'https://xenodium.com/bending-emacs-episode-2'
 (defun my/show-welcome-buffer ()
+    (interactive)
     "Show *Welcome* buffer."
     (with-current-buffer (get-buffer-create "*Welcome*")
         (setq truncate-lines t)
@@ -713,7 +715,8 @@
         (add-hook 'window-configuration-change-hook
             #'my/refresh-welcome-buffer nil t)
         (switch-to-buffer (current-buffer))
-        (message "")))
+        (message ""))
+    (get-buffer "*Welcome*"))
 
 (defun my/refresh-welcome-buffer ()
     "Refresh welcome buffer content for WINDOW."
@@ -726,7 +729,7 @@
                    (image-width (car (image-size image)))
                    (top-margin (floor (/ (- (window-height window) image-height) 2)))
                    (left-margin (floor (/ (- (window-width window) image-width) 2)))
-                   (title "Welcome to Emacs"))
+                   (title (format "Welcome to Emacs %s!" user-full-name)))
         (with-current-buffer welcome-buffer
             (erase-buffer)
             (setq mode-line-format nil)
@@ -738,4 +741,8 @@
             (insert (make-string (- (floor (/ (- (window-width window) (string-width title)) 2)) 1) ?\ ))
             (insert (propertize title 'face '(:inherit variable-pitch :height 1.2 :weight bold))))))
 
-(my/show-welcome-buffer)
+;; Show dashboard in new frames
+(setq initial-buffer-choice 'my/show-welcome-buffer)
+
+;; Clear minibuffer in new frames
+(add-hook 'server-after-make-frame-hook (lambda () (message "")))
