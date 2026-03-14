@@ -516,6 +516,10 @@
     :custom
     (markdown-fontify-code-blocks-natively t)
 
+    :config
+    (evil-define-key 'normal markdown-mode-map (kbd "SPC n s") 'markdown-narrow-to-subtree)
+    (evil-define-key 'normal markdown-mode-map (kbd "SPC n b") 'markdown-narrow-to-block)
+
     :hook
     (markdown-mode . (lambda () (markdown-display-inline-images))))
 
@@ -635,6 +639,9 @@
             (pcase type
                 (`item (org-ctrl-c-ctrl-c))
                 ((or `headline (and `nil (guard (org-at-heading-p)))) (org-todo)))))
+
+    (evil-define-key 'normal org-mode-map (kbd "SPC n s") 'org-narrow-to-subtree)
+    (evil-define-key 'normal org-mode-map (kbd "SPC n b") 'org-narrow-to-block)
 
     (evil-define-key 'normal org-mode-map (kbd "SPC t") 'my/org-toggle-task)
     (evil-define-key 'normal org-mode-map (kbd "SPC T") (lambda () (interactive)
