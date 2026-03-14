@@ -35,6 +35,12 @@
                     (or (vc-git--symbolic-ref buffer-file-name)
                         (substring rev 0 7)))))))
 
+(defvar-local my/mode-line-narrow
+    '(:eval (when (and (mode-line-window-selected-p) (buffer-narrowed-p))
+                (propertize " Narrow " 'face '(:inherit mode-line-highlight :box nil))))
+    "Displays if the buffer is narrowed")
+(put 'my/mode-line-narrow 'risky-local-variable t)
+
 (defvar-local my/mode-line-buffer-icon
     '(:eval (nerd-icons-icon-for-buffer :face (if (mode-line-window-selected-p)
                                                   'mode-line-active
@@ -110,19 +116,21 @@
 (put 'my/mode-line-pos 'risky-local-variable t)
 
 (setq-default mode-line-format
-    '(" "
-         my/mode-line-buffer-icon
-         " "
-         my/mode-line-buffer-name
-         my/mode-line-buffer-status
-         "  "
-         my/mode-line-major-mode
-         my/mode-line-project
-         "  "
-         my/mode-line-vc-branch
-         mode-line-format-right-align
-         my/mode-line-pos
-         " "))
+    '(""
+      my/mode-line-narrow
+      " "
+      my/mode-line-buffer-icon
+      " "
+      my/mode-line-buffer-name
+      my/mode-line-buffer-status
+      "  "
+      my/mode-line-major-mode
+      my/mode-line-project
+      "  "
+      my/mode-line-vc-branch
+      mode-line-format-right-align
+      my/mode-line-pos
+      " "))
 
 ;; Disable VC in TRAMP (performance)
 (setq vc-ignore-dir-regexp
