@@ -29,7 +29,7 @@
                 (inhibit-read-only t)
                 (welcome-buffer (get-buffer "*Welcome*"))
                 (window (get-buffer-window welcome-buffer))
-                (image-path "~/.config/emacs/sugarcane.png")
+                (image-path "~/.config/emacs/assets/sugarcane.png")
                 (image (create-image image-path nil nil))
                 (image-height (cdr (image-size image)))
                 (image-width (car (image-size image)))

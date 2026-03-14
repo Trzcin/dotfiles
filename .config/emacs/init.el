@@ -8,6 +8,8 @@
 ;; Global leader map
 (defvar-keymap my/leader-map)
 
+(use-package f :ensure nil)
+
 ;; General Emacs settings
 (use-package emacs
     :ensure nil
@@ -106,11 +108,8 @@
 
     (put 'narrow-to-region 'disabled nil)
 
-    ;; Additional files
-    (load (locate-user-emacs-file "modeline.el"))
-    (load (locate-user-emacs-file "lsp.el"))
-    (load (locate-user-emacs-file "enauczanie.el"))
-    (load (locate-user-emacs-file "welcome.el"))
+    ;; Load additional files
+    (mapc 'load (f-files (f-join user-emacs-directory "autoload") (lambda (f) (f-ext-p f "el"))))
 
     ;; Customize file
     (setq custom-file (locate-user-emacs-file "custom.el"))
