@@ -532,7 +532,8 @@
     :hook
     (markdown-mode . olivetti-mode)
     (org-mode . olivetti-mode)
-    (Man-mode . olivetti-mode))
+    (Man-mode . olivetti-mode)
+    (Info-mode . olivetti-mode))
 
 ;; Nice padding around various UI elements
 (use-package spacious-padding
