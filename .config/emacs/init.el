@@ -646,7 +646,7 @@
     (evil-define-key 'normal org-mode-map (kbd "SPC t") 'my/org-toggle-task)
     (evil-define-key 'normal org-mode-map (kbd "SPC T") (lambda () (interactive)
                                                           (insert "** ")
-                                                          (org-timestamp nil))))
+                                                          (org-insert-timestamp (current-time)))))
 
 (use-package org-tempo
     :ensure nil)
