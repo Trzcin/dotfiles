@@ -716,4 +716,4 @@
     (setq gptel-backend (gptel-make-ollama "Ollama"
                        :host "localhost:11434"
                        :stream t
-                       :models '(mistral:latest))))
+                       :models '(mistral:latest SpeakLeash/bielik-4.5b-v3.0-instruct:Q8_0))))
