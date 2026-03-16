@@ -703,3 +703,17 @@
 
     :config
     (gnome-accent-theme-switcher-mode))
+
+(use-package gptel
+    :ensure t
+
+    :bind (:map my/leader-map
+        ("o g" . (lambda () (interactive) (switch-to-buffer (gptel "*Ollama*"))))
+    )
+
+    :config
+    (setq gptel-model 'mistral:latest)
+    (setq gptel-backend (gptel-make-ollama "Ollama"
+                       :host "localhost:11434"
+                       :stream t
+                       :models '(mistral:latest))))

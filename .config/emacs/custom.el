@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
       '(astro-ts-mode avy corfu eldoc-box embark-consult evil-collection
-           evil-mc gnome-accent-theme-switcher lsp-mode magit
+           evil-mc gnome-accent-theme-switcher gptel lsp-mode magit
            marginalia mixed-pitch nerd-icons-completion
            nerd-icons-corfu nerd-icons-dired nerd-icons-ibuffer
            olivetti orderless pdf-tools saveplace-pdf-view
