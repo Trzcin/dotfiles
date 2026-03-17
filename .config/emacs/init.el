@@ -666,7 +666,9 @@
     (magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1)
     :bind (:map my/leader-map
         ("p m" . magit-status)
-    ))
+    )
+    :config
+    (keymap-unset magit-status-mode-map "SPC"))
 
 (use-package gnome-accent-theme-switcher
     :vc (:url "https://github.com/protesilaos/gnome-accent-theme-switcher.git"
