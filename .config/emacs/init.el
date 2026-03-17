@@ -73,6 +73,7 @@
     (enable-recursive-minibuffers t)
     (inhibit-startup-screen t)
     (server-client-instructions nil)
+    (browse-url-browser-function 'browse-url-xdg-open)
 
     ;; Clipboard
     (select-enable-clipboard nil)
