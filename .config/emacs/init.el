@@ -1,5 +1,4 @@
 (setq inhibit-startup-echo-area-message "trzcin")
-;; (eval '(setq inhibit-startup-echo-area-message "trzcin"))
 
 ;; Add MELPA to package.el
 (require 'package)
