@@ -140,6 +140,10 @@
     (dired-dwim-target t) ; Easy dual pane usage for moving files
     (dired-kill-when-opening-new-dired-buffer t)
     (dired-free-space nil)
+    (dired-omit-files "^[.].+$")
+
+    :config
+    (evil-define-key 'normal dired-mode-map (kbd "SPC t h") 'dired-omit-mode)
 
     :hook
     (dired-mode . dired-hide-details-mode))
