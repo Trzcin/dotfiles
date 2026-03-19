@@ -655,6 +655,19 @@
 (use-package org-tempo
     :ensure nil)
 
+;; Org babel languages
+(use-package ob-python :after org)
+(use-package ob-lua :after org)
+
+;; Http requests from Org source blocks
+(use-package verb
+    :ensure t
+    :after org
+    :config
+    (org-babel-do-load-languages
+        'org-babel-load-languages
+        '((verb . t))))
+
 ;; Typst
 (use-package websocket
     :ensure t)

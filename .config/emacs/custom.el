@@ -10,7 +10,7 @@
            nerd-icons-corfu nerd-icons-dired nerd-icons-ibuffer
            olivetti orderless pdf-tools saveplace-pdf-view
            spacious-padding svelte-ts-mode typst-preview typst-ts-mode
-           undo-tree vertico vterm vue-ts-mode yasnippet))
+           undo-tree verb vertico vterm vue-ts-mode yasnippet))
  '(package-vc-selected-packages
       '((gnome-accent-theme-switcher :url
             "https://github.com/protesilaos/gnome-accent-theme-switcher.git")
