@@ -108,3 +108,21 @@
     :ensure t
     :init
     (yas-global-mode))
+
+(use-package flymake
+    :ensure nil
+    :config
+    (put 'flymake-error 'flymake-margin-string (alist-get 'error flymake-margin-indicators-string))
+    (put 'flymake-warning 'flymake-margin-string (alist-get 'warning flymake-margin-indicators-string))
+    (put 'flymake-note 'flymake-margin-string (alist-get 'note flymake-margin-indicators-string))
+    :custom
+    (flymake-indicator-type 'margins)
+    (flymake-margin-indicators-string
+        `((error " " compilation-error)
+          (warning " " compilation-warning)
+             (note " " compilation-info)))
+    (flymake-show-diagnostics-at-end-of-line t)
+    :bind (:map evil-normal-state-map
+        ("]d" . flymake-goto-next-error)
+        ("[d" . flymake-goto-prev-error)
+    ))

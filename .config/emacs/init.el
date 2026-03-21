@@ -237,6 +237,7 @@
         ("c f" . consult-fd)  
         ("c s" . consult-imenu) ; Consult symbols
         ("c L" . consult-goto-line)
+        ("c d" . consult-flymake)
     )
 
     :custom
