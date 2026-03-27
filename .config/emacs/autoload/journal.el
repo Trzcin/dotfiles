@@ -2,7 +2,7 @@
     "~/Documents/org-notes/Journal"
     "The directory in which journal entries will be stored.")
 
-(defun my/create-or-edit-current-journal-entry ()
+(defun my/journal-create-or-edit-todays-entry ()
     "Switches to todays journal file if it exists or creates one if needed."
     (interactive)
     (let*
@@ -10,4 +10,5 @@
         (find-file journal-file)
         (when (not (file-exists-p journal-file))
             (insert "* ")
-            (org-insert-timestamp (current-time)))))
+            (org-insert-timestamp (current-time))
+            (insert " Dziennik"))))
