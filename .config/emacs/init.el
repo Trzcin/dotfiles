@@ -737,3 +737,23 @@
                        :host "localhost:11434"
                        :stream t
                        :models '(mistral:latest SpeakLeash/bielik-4.5b-v3.0-instruct:Q8_0))))
+
+(use-package artist
+    :ensure nil
+    :config
+    (defvar my/artist-buffer-name
+        "*Drawing*"
+        "Name of the 'artist-mode' buffer created by 'my/artist-new-buffer'.")
+
+    (defun my/artist-new-buffer ()
+        "Creates a new *Drawing* buffer and starts 'artist-mode'."
+        (interactive)
+        (let* (
+                  (new-drawing (eq (get-buffer my/artist-buffer-name) nil))
+                  (drawing-buffer (get-buffer-create my/artist-buffer-name)))
+            (switch-to-buffer drawing-buffer)
+            (when new-drawing
+                (setq-local global-hl-line-mode nil)
+                (setq-local default-text-properties nil)
+                (turn-off-evil-mode)
+                (artist-mode)))))
