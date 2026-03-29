@@ -613,7 +613,7 @@
     :custom
     (org-M-RET-may-split-line nil)
     (org-log-done 'time)
-    (auto-save-visited-predicate (lambda () (eq major-mode 'org-mode)))
+    (auto-save-visited-predicate (lambda () (and (eq major-mode 'org-mode) (not (epa-file-name-p buffer-file-name)))))
 
     :config
     (auto-save-visited-mode)
@@ -757,3 +757,8 @@
                 (setq-local default-text-properties nil)
                 (turn-off-evil-mode)
                 (artist-mode)))))
+
+(use-package epa
+    :ensure nil
+    :custom
+    (epg-pinentry-mode 'loopback))
