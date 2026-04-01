@@ -761,4 +761,5 @@
 (use-package epa
     :ensure nil
     :custom
-    (epg-pinentry-mode 'loopback))
+    (epg-pinentry-mode 'loopback)
+    (epa-file-select-keys 'no))
