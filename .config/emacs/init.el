@@ -648,6 +648,8 @@
     (evil-define-key 'normal org-mode-map (kbd "SPC n s") 'org-narrow-to-subtree)
     (evil-define-key 'normal org-mode-map (kbd "SPC n b") 'org-narrow-to-block)
 
+    (evil-define-key 'normal org-mode-map (kbd "SPC l") 'org-latex-preview)
+
     (evil-define-key 'normal org-mode-map (kbd "SPC t") 'my/org-toggle-task)
     (evil-define-key 'normal org-mode-map (kbd "SPC T") (lambda () (interactive)
                                                           (insert "** ")
