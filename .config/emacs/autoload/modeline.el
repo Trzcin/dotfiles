@@ -107,6 +107,12 @@
     "Current page and total page number display in PDF buffers.")
 (put 'my/mode-line-pdf-pos 'risky-local-variable t)
 
+(defvar-local my/mode-line-diagnostics
+    '(:eval (when (mode-line-window-selected-p)
+                flymake-mode-line-counters))
+    "Display buffer diagnostic counters")
+(put 'my/mode-line-diagnostics 'risky-local-variable t)
+
 (defvar-local my/mode-line-pos
     '(:eval (when (mode-line-window-selected-p)
                 (if (eq major-mode 'pdf-view-mode)
@@ -128,7 +134,11 @@
       my/mode-line-project
       "  "
       my/mode-line-vc-branch
+
       mode-line-format-right-align
+
+      my/mode-line-diagnostics
+      "  "
       my/mode-line-pos
       " "))
 
