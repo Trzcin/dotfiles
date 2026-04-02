@@ -661,6 +661,7 @@
 ;; Org babel languages
 (use-package ob-python :after org)
 (use-package ob-lua :after org)
+(use-package ob-gnuplot :after org)
 
 ;; Http requests from Org source blocks
 (use-package verb
