@@ -137,7 +137,8 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
             (my/flymake--mode-line-counter-1 type sign))
       probe)))
 
-;; (advice-add 'flymake--publish-diagnostics :after (lambda () (message "aa") (setq my/flymake--mode-line-counter-cache nil)))
+;; Reset cache when diagnostics change
+(advice-add 'flymake--publish-diagnostics :after (lambda (&rest _) (setq my/flymake--mode-line-counter-cache nil)))
 
 (defvar-local my/mode-line-diagnostics
     '(:eval (when (and (mode-line-window-selected-p) (flymake-running-backends))
