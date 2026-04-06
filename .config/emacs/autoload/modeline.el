@@ -141,7 +141,7 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 (advice-add 'flymake--publish-diagnostics :after (lambda (&rest _) (setq my/flymake--mode-line-counter-cache nil)))
 
 (defvar-local my/mode-line-diagnostics
-    '(:eval (when (and (mode-line-window-selected-p) (flymake-running-backends))
+    '(:eval (when (and (mode-line-window-selected-p) (flymake-running-backends) flymake-mode)
                 (let* ((error-sign (cl-first (alist-get 'error flymake-margin-indicators-string)))
                        ;; (error-counter (s-join "" '(error-sign flymake-mode-line-error-counter)))
                        (warn-sign (cl-first (alist-get 'warning flymake-margin-indicators-string)))
