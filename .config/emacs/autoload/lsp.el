@@ -117,6 +117,7 @@
     (put 'flymake-note 'flymake-margin-string (alist-get 'note flymake-margin-indicators-string))
     :custom
     (flymake-indicator-type 'margins)
+    (flymake-suppress-zero-counters t)
     (flymake-margin-indicators-string
         `((error " " compilation-error)
           (warning " " compilation-warning)

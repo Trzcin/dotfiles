@@ -107,10 +107,54 @@
     "Current page and total page number display in PDF buffers.")
 (put 'my/mode-line-pdf-pos 'risky-local-variable t)
 
+(defvar-local my/flymake--mode-line-counter-cache nil)
+
+(defun my/flymake--mode-line-counter-1 (type sign)
+  (let ((count 0)
+        (face (flymake--lookup-type-property type
+                                             'mode-line-face
+                                             'compilation-error)))
+    (dolist (d (flymake-diagnostics))
+      (when (= (flymake--severity type)
+               (flymake--severity (flymake-diagnostic-type d)))
+        (cl-incf count)))
+    (when (or (cl-plusp count)
+              (cond ((eq flymake-suppress-zero-counters t)
+                     nil)
+                    (flymake-suppress-zero-counters
+                     (>= (flymake--severity type)
+                         (warning-numeric-level
+                          flymake-suppress-zero-counters)))
+                    (t t)))
+          (format "%s%s" sign count))))
+
+(defun my/flymake--mode-line-counter (type sign)
+  "Compute numb SIGN er of diagnostics in buffer with TYPE's severity.
+TYPE is usually keyword `:error', `:warning' or `:note'."
+  (let ((probe (alist-get type my/flymake--mode-line-counter-cache 'none)))
+    (if (eq probe 'none)
+        (setf (alist-get type my/flymake--mode-line-counter-cache)
+            (my/flymake--mode-line-counter-1 type sign))
+      probe)))
+
+;; (advice-add 'flymake--publish-diagnostics :after (lambda () (message "aa") (setq my/flymake--mode-line-counter-cache nil)))
+
 (defvar-local my/mode-line-diagnostics
-    '(:eval (when (mode-line-window-selected-p)
-                flymake-mode-line-counters))
-    "Display buffer diagnostic counters")
+    '(:eval (when (and (mode-line-window-selected-p) (flymake-running-backends))
+                (let* ((error-sign (cl-first (alist-get 'error flymake-margin-indicators-string)))
+                       ;; (error-counter (s-join "" '(error-sign flymake-mode-line-error-counter)))
+                       (warn-sign (cl-first (alist-get 'warning flymake-margin-indicators-string)))
+                       ;; (warn-counter (s-join "" '(warn-sign flymake-mode-line-warning-counter)))
+                       (note-sign (cl-first (alist-get 'note flymake-margin-indicators-string))))
+                       ;; (note-counter (s-join "" '(note-sign flymake-mode-line-note-counter))))
+                    (s-join " "
+                        (list
+                            (my/flymake--mode-line-counter :error error-sign)
+                            (my/flymake--mode-line-counter :warning warn-sign)
+                            (my/flymake--mode-line-counter :note note-sign)
+                         )
+                        ))))
+    "Display buffer diagnostic counters.")
 (put 'my/mode-line-diagnostics 'risky-local-variable t)
 
 (defvar-local my/mode-line-pos
