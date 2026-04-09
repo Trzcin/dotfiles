@@ -234,7 +234,7 @@
         ("c i" . consult-info)  
         ("c o" . consult-outline)  
         ("c g" . consult-ripgrep)  
-        ("c f" . consult-fd)  
+        ("c f" . consult-find)
         ("c s" . consult-imenu) ; Consult symbols
         ("c L" . consult-goto-line)
         ("c d" . consult-flymake)
