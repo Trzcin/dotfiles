@@ -12,3 +12,5 @@
 .config/emacs/tree-sitter
 .config/emacs/.lsp-session
 .config/emacs/.cache/lsp/
+/.config/emacs/image-dired/
+/.config/emacs/url/
