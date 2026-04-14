@@ -766,3 +766,14 @@
     :custom
     (epg-pinentry-mode 'loopback)
     (epa-file-select-keys 'no))
+
+(use-package nov
+    :ensure t
+    :mode ("\\.epub\\'" . nov-mode)
+    :custom
+    (nov-text-width 70)
+    :hook
+    (nov-mode . (lambda () (setq-local global-hl-line-mode nil)
+                           (olivetti-mode)
+                           (setq-local olivetti-body-width 80)
+                           (scroll-lock-mode))))

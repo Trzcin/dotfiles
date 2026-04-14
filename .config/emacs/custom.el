@@ -7,7 +7,7 @@
       '(astro-ts-mode avy corfu eldoc-box embark-consult evil-collection
            evil-mc gnome-accent-theme-switcher gptel lsp-mode magit
            marginalia mixed-pitch nerd-icons-completion
-           nerd-icons-corfu nerd-icons-dired nerd-icons-ibuffer
+           nerd-icons-corfu nerd-icons-dired nerd-icons-ibuffer nov
            olivetti orderless pdf-tools saveplace-pdf-view
            spacious-padding svelte-ts-mode typst-preview typst-ts-mode
            undo-tree verb vertico vterm vue-ts-mode yasnippet))

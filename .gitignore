@@ -14,3 +14,4 @@
 .config/emacs/.cache/lsp/
 /.config/emacs/image-dired/
 /.config/emacs/url/
+/.config/emacs/nov-places
