@@ -146,7 +146,11 @@
     (evil-define-key 'normal dired-mode-map (kbd "SPC t h") 'dired-omit-mode)
 
     :hook
-    (dired-mode . dired-hide-details-mode))
+    (dired-mode . (lambda () (dired-hide-details-mode)
+                      (when (string= dired-directory "~/Downloads/")
+                          ;; Sort Downloads directory by time
+                          (setq-local dired-actual-switches "-AGFhlt")
+                          (revert-buffer)))))
 
 ;; which-key - show possible keybinds
 (use-package which-key
