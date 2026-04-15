@@ -555,18 +555,19 @@
     (spacious-padding-mode))
 
 ;; Spellchecking
-(use-package ispell
-    :ensure nil
+;; jinx is much faster than flyspell
+;; Needs 'enchant2-devel' dnf package
+(use-package jinx
+    :ensure t
     :custom
-    (ispell-program-name "/usr/bin/hunspell")
-    (ispell-dictionary "en_US,pl_PL")
-    (text-mode-ispell-word-completion nil)
+    (jinx-languages "en_US pl_PL")
     :hook
-    (text-mode . flyspell-mode)
-    :config
-    (ispell-find-hunspell-dictionaries)
-    (ispell-set-spellchecker-params)
-    (ispell-hunspell-add-multi-dic "en_US,pl_PL"))
+    (text-mode . jinx-mode)
+    :bind (:map evil-normal-state-map
+        ("z=" . jinx-correct)
+        ("]s" . jinx-next)
+        ("[s" . jinx-previous)
+    ))
 
 ;; Better PDF viewer
 (use-package pdf-tools
