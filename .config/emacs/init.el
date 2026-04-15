@@ -250,6 +250,9 @@
                                                     consult-source-modified-buffer
                                                     consult-source-other-buffer)))
 
+(use-package wgrep
+    :ensure t)
+
 (use-package embark
     :ensure t
     :bind (:map my/leader-map
