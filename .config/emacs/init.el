@@ -564,6 +564,7 @@
     :ensure t
     :custom
     (jinx-languages "en_US pl_PL")
+    (text-mode-ispell-word-completion nil)
     :hook
     (text-mode . jinx-mode)
     :bind (:map evil-normal-state-map
