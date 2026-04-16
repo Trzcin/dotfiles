@@ -612,7 +612,7 @@
 (use-package calc
     :ensure nil
     :bind (:map my/leader-map
-        ("o C" . full-calc)
+        ("o C" . calc)
     ))
 
 ;; Org
