@@ -14,11 +14,11 @@
     :ensure nil
     :custom
     ;; Disable autosave, backups, lockfiles etc.
-    (auto-save-default nil) 
-    (auto-save-list-file-prefix nil) 
-    (create-lockfiles nil) 
-    (make-backup-files nil) 
-    
+    (auto-save-default nil)
+    (auto-save-list-file-prefix nil)
+    (create-lockfiles nil)
+    (make-backup-files nil)
+
     (delete-by-moving-to-trash t)
     (global-auto-revert-non-file-buffers t)
 
@@ -85,8 +85,10 @@
     (default-text-properties '(line-spacing 0.125 line-height 1.125)) ; causes issues with vterm
 
     :hook
-    (prog-mode . display-line-numbers-mode)
-    (text-mode . visual-line-mode) ; Enable word wrap for prose
+    (prog-mode . (lambda () (display-line-numbers-mode)
+                            (setq-local show-trailing-whitespace t)))
+    (text-mode . (lambda () (visual-line-mode) ; Enable word wrap for prose
+                            (setq-local show-trailing-whitespace t)))
     (astro-ts-mode . display-line-numbers-mode)
     (typst-ts-mode . display-line-numbers-mode)
     (html-ts-mode . display-line-numbers-mode)
@@ -234,10 +236,10 @@
     :defer t
 
     :bind (:map my/leader-map
-        ("c t" . consult-theme)  
-        ("c i" . consult-info)  
-        ("c o" . consult-outline)  
-        ("c g" . consult-ripgrep)  
+        ("c t" . consult-theme)
+        ("c i" . consult-info)
+        ("c o" . consult-outline)
+        ("c g" . consult-ripgrep)
         ("c f" . consult-find)
         ("c s" . consult-imenu) ; Consult symbols
         ("c L" . consult-goto-line)
@@ -306,13 +308,13 @@
         :map my/leader-map
         ;; Call commands
         ("/" . execute-extended-command)
-        
+
         ;; Clipboard
         ("Y" . (lambda () (interactive) (evil-use-register ?+)
                  (call-interactively 'evil-yank)))
         ("P" . (lambda () (interactive) (evil-use-register ?+)
                  (call-interactively 'evil-paste-after)))
-        
+
         ;; Find stuff
         ("f f" . find-file)
         ("f r" . consult-recent-file)
@@ -343,14 +345,14 @@
     :config
     (evil-set-undo-system 'undo-tree)
     (evil-define-key '(normal visual) 'global (kbd "SPC") my/leader-map) ; Probably cleaner to use keymaps rather than `evil-set-leader`
-    
+
     ;; Commenting
     (evil-define-key 'normal 'global (kbd "gcc")
                      (lambda ()
                        (interactive)
                        (if (not (use-region-p))
                            (comment-or-uncomment-region (line-beginning-position) (line-end-position)))))
-    
+
     (evil-define-key 'visual 'global (kbd "gc")
                      (lambda ()
                        (interactive)
@@ -386,7 +388,7 @@
     :ensure t
     :hook
     (after-init . global-undo-tree-mode)
-    
+
     :custom
     (undo-tree-visualizer-timestamps t)
     (undo-tree-visualizer-diff t)
@@ -444,7 +446,7 @@
     (evil-define-key 'normal vterm-copy-mode-map (kbd "i") (lambda () (interactive) (turn-off-evil-mode)
                                                              (vterm-copy-mode -1)
                                                              (setq cursor-type 'bar)))
-    
+
     :hook
     (vterm-mode . (lambda ()
                     (setq-local global-hl-line-mode nil)
@@ -626,7 +628,7 @@
 
     :config
     (auto-save-visited-mode)
-    
+
     (defun my/org-toggle-task ()
         "Toggle an Org Mode TODO heading or checkbox. Based on 'org-ctrl-c-ctrl-c'."
         (interactive)
