@@ -123,7 +123,8 @@
           (warning " " compilation-warning)
              (note " " compilation-info)))
     (flymake-show-diagnostics-at-end-of-line t)
-    :bind (:map evil-normal-state-map
-        ("]d" . flymake-goto-next-error)
-        ("[d" . flymake-goto-prev-error)
-    ))
+    ;; :bind (:map evil-normal-state-map
+    ;;     ("]d" . flymake-goto-next-error)
+    ;;     ("[d" . flymake-goto-prev-error)
+    ;;           )
+    )

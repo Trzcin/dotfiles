@@ -793,11 +793,13 @@
                            (setq-local olivetti-body-width 80)
                            (scroll-lock-mode))))
 
-;; Give meow a try
+;; Meow modal editing
 (use-package meow
     :ensure t
     :custom
     (meow-use-cursor-position-hack t)
+    (meow-keypad-message nil)
+    (meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
     (meow-expand-hint-counts '(
         (word . 0)
         (line . 0)
@@ -805,6 +807,7 @@
         (find . 0)
         (till . 0)
         (symbol . 0)))
+
     :init
     (defun meow-dwim-delete ()
         "If no selection, call 'meow-delete', 'meow-kill' otherwise."
@@ -820,11 +823,21 @@
             (comment-or-uncomment-region (region-beginning) (region-end))
             (comment-or-uncomment-region (line-beginning-position) (line-end-position))))
 
+    (defun meow-quit-minibuffer ()
+        "If in the minibuffer, quit it, otherwise do nothing"
+        (interactive)
+        (when (minibufferp)
+            (meow-minibuffer-quit)))
+
     (defun meow-setup ()
         (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
         (meow-motion-define-key
+            '("h" . meow-left)
             '("j" . meow-next)
             '("k" . meow-prev)
+            '("l" . meow-right)
+            '("-" . dired-jump)
+            '("/" . consult-line)
             '("<escape>" . ignore))
         (meow-leader-define-key
             ;; Use SPC (0-9) for digit arguments.
@@ -838,6 +851,8 @@
             '("8" . meow-digit-argument)
             '("9" . meow-digit-argument)
             '("0" . meow-digit-argument)
+            '("e" . embark-act)
+            '("p" . "C-x p")
             '("/" . meow-keypad-describe-key)
             '("?" . meow-cheatsheet))
         (meow-normal-define-key
@@ -851,7 +866,8 @@
             '("3" . meow-expand-3)
             '("2" . meow-expand-2)
             '("1" . meow-expand-1)
-            '("-" . negative-argument)
+            '("_" . negative-argument)
+            '("-" . dired-jump)
             '(";" . meow-reverse)
             '("," . meow-inner-of-thing)
             '("." . meow-bounds-of-thing)
@@ -883,26 +899,30 @@
             '("m" . meow-join)
             '("n" . meow-search)
             '("o" . meow-block)
-            '("O" . meow-to-block)
             '("p" . meow-yank)
+            '("P" . clipboard-yank)
             '("q" . meow-quit)
             '("r" . meow-replace)
             '("R" . meow-swap-grab)
             '("t" . meow-till)
             '("u" . meow-undo)
-            '("U" . meow-undo-in-selection)
+            '("U" . undo-redo)
             '("v" . avy-goto-word-1)
             '("w" . meow-mark-word)
             '("W" . meow-mark-symbol)
             '("x" . meow-line)
             '("X" . consult-goto-line)
             '("y" . meow-save)
+            '("Y" . meow-clipboard-save)
             '("Y" . meow-sync-grab)
             '("z" . meow-pop-selection)
+            '("Z" . recenter)
             '("'" . repeat)
             '("/" . consult-line)
-            '("<escape>" . ignore)))
+            '("<escape>" . meow-quit-minibuffer)))
     :hook
     (after-init . (lambda () (meow-setup)
-                             (meow-global-mode)))
+                      (meow-global-mode)))
+    (minibuffer-mode . (lambda () (meow-mode)
+                                  (meow-insert-mode)))
     )
