@@ -50,6 +50,7 @@
     (typescript-ts-mode-indent-offset 4)
     (markdown-list-indent-width 4)
     (lsp-magik-formatting-indent-width 4)
+    (typst-ts-indent-offset 2)
     (evil-shift-width 4)
 
     ;; Line and column numbers
