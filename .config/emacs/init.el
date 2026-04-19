@@ -334,6 +334,9 @@
         ;; Remap prefixes to evil leader
         ("h" . help-command)
         ("w" . evil-window-map)
+
+        ;; Commands
+        ("&" . async-shell-command)
     )
 
     :init
