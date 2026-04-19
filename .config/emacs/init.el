@@ -927,7 +927,6 @@
             '("X" . consult-goto-line)
             '("y" . meow-save)
             '("Y" . meow-clipboard-save)
-            '("Y" . meow-sync-grab)
             '("z" . meow-pop-selection)
             '("Z" . recenter)
             '("'" . repeat)
