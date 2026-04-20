@@ -696,10 +696,19 @@
     :custom
     (typst-preview-invert-colors "never"))
 
+;; Evil-like transient quit (mainly for magit)
+(use-package transient
+    :ensure t
+    :bind (:map transient-map
+        ("<escape>" . transient-quit-one)
+        ("C-<escape>" . transient-quit-all)
+    ))
+
 (use-package magit
     :ensure t
     :custom
     (magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1)
+    (magit-section-initial-visibility-alist '((stashes . hide) (unpushed . show)))
     :bind (:map my/leader-map
         ("p m" . magit-status)
     )
