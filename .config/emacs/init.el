@@ -816,3 +816,11 @@
                            (olivetti-mode)
                            (setq-local olivetti-body-width 80)
                            (scroll-lock-mode))))
+
+(use-package docker
+    :ensure t
+    :custom
+    (docker-compose-command "docker compose")
+    :bind (:map my/leader-map
+        ("o d" . docker)
+    ))
