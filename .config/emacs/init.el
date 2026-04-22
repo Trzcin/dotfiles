@@ -591,14 +591,15 @@
 ;; Better PDF viewer
 (use-package pdf-tools
     :ensure t
+    :defer nil
     :mode ("\\.pdf\\'" . pdf-view-mode)
-
     :custom
     (large-file-warning-threshold nil) ; PDFs are often large and cause a warning to show up
 
     :config
     (pdf-tools-install)
     (pdf-loader-install)
+    (pdf-virtual-global-minor-mode)
 
     :hook
     (pdf-view-mode . (lambda ()
