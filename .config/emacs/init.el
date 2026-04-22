@@ -165,6 +165,15 @@
 ;; Tip: run `(project-remember-projects-under "<path>" t)` to discover projects in subdirectories
 (use-package project
     :ensure nil
+    :custom
+    ;; Commands available after 'SPC p p'
+    (project-switch-commands '((project-find-file "Find file")
+                               (project-find-regexp "Find regexp")
+                               (project-find-dir "Find directory")
+                               (project-shell "Shell")
+                               (my/magit-status "Magit")
+                               (project-dired "Root directory")
+                               (project-any-command "Other")))
     :config
     (keymap-set my/leader-map "p" project-prefix-map)
 
@@ -710,10 +719,16 @@
     (magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1)
     (magit-section-initial-visibility-alist '((stashes . hide) (unpushed . show)))
     :bind (:map my/leader-map
-        ("p m" . magit-status)
+        ("p m" . my/magit-status)
     )
     :config
-    (keymap-unset magit-status-mode-map "SPC"))
+    (keymap-unset magit-status-mode-map "SPC")
+    (defun my/magit-status ()
+        "Like 'magit-status' but respect 'project-current-directory-override'."
+        (interactive)
+        (if project-current-directory-override
+            (magit-status project-current-directory-override)
+            (magit-status))))
 
 (use-package gnome-accent-theme-switcher
     :vc (:url "https://github.com/protesilaos/gnome-accent-theme-switcher.git"
