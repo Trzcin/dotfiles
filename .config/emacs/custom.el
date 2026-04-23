@@ -8,10 +8,10 @@
            evil-collection evil-mc gnome-accent-theme-switcher gptel
            jinx lsp-mode magit marginalia mixed-pitch
            nerd-icons-completion nerd-icons-corfu nerd-icons-dired
-           nerd-icons-ibuffer nov olivetti orderless pdf-tools
-           saveplace-pdf-view spacious-padding svelte-ts-mode
-           typst-preview typst-ts-mode undo-tree verb vertico vterm
-           vue-ts-mode wgrep yasnippet))
+           nerd-icons-grep nerd-icons-ibuffer nerd-icons-xref nov
+           olivetti orderless pdf-tools saveplace-pdf-view
+           spacious-padding svelte-ts-mode typst-preview typst-ts-mode
+           undo-tree verb vertico vterm vue-ts-mode wgrep yasnippet))
  '(package-vc-selected-packages
       '((gnome-accent-theme-switcher :url
             "https://github.com/protesilaos/gnome-accent-theme-switcher.git")

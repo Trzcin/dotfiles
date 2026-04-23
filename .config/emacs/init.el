@@ -441,6 +441,12 @@
     :defer t
     :after corfu)
 
+(use-package nerd-icons-grep
+    :ensure t)
+
+(use-package nerd-icons-xref
+    :ensure t)
+
 (use-package vterm
     :ensure t
 
@@ -719,6 +725,7 @@
     :custom
     (magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1)
     (magit-section-initial-visibility-alist '((stashes . hide) (unpushed . show)))
+    (magit-format-file-function 'magit-format-file-nerd-icons)
     :bind (:map my/leader-map
         ("p m" . my/magit-status)
     )
