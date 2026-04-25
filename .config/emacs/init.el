@@ -150,7 +150,8 @@
 
     :hook
     (dired-mode . (lambda () (dired-hide-details-mode)
-                      (when (string= dired-directory "~/Downloads/")
+                      (when (and (stringp dired-directory)
+                                 (string= dired-directory "~/Downloads/"))
                           ;; Sort Downloads directory by time
                           (setq-local dired-actual-switches "-AGFhlt")
                           (revert-buffer)))))
