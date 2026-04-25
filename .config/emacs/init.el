@@ -686,6 +686,9 @@
                                                           (insert "** ")
                                                           (org-insert-timestamp (current-time)))))
 
+(use-package ox-typst
+    :ensure t)
+
 (use-package org-tempo
     :ensure nil)
 
