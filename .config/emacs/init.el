@@ -358,7 +358,10 @@
 
     :config
     (evil-set-undo-system 'undo-tree)
-    (evil-define-key '(normal visual) 'global (kbd "SPC") my/leader-map) ; Probably cleaner to use keymaps rather than `evil-set-leader`
+    (evil-define-key '(normal visual motion) 'global (kbd "SPC") my/leader-map) ; Probably cleaner to use keymaps rather than `evil-set-leader`
+
+    ;; Initial states
+    (evil-set-initial-state 'org-agenda-mode 'motion)
 
     ;; Commenting
     (evil-define-key 'normal 'global (kbd "gcc")
@@ -382,6 +385,7 @@
     :custom
     (evil-collection-want-find-usages-bindings t)
     (evil-collection-key-blacklist '("SPC")) ; Stop evil-collection from using leader keys
+    (evil-collection-org-setup)
     (evil-collection-setup-minibuffer t))
 
 ;; Multicursor
@@ -647,9 +651,40 @@
     (org-M-RET-may-split-line nil)
     (org-log-done 'time)
     (auto-save-visited-predicate (lambda () (and (eq major-mode 'org-mode) (not (epa-file-name-p buffer-file-name)))))
+    (org-agenda-files '("~/Documents/org-notes/Notes PG/mgr/"))
+    (org-agenda-skip-scheduled-if-done t)
+    (org-agenda-custom-commands
+        '(("s" "Scheduled TODOs by date"
+            agenda ""
+            ((org-agenda-entry-types '(:scheduled))
+             (org-agenda-start-day "0d")
+             (org-agenda-span 'year)
+             (org-agenda-show-all-dates nil)
+             (org-agenda-scheduled-leaders '(" " ""))
+             (org-agenda-overriding-header "Scheduled TODO items")))))
+
+    :bind (:map my/leader-map
+        ("o a" . (lambda () (interactive) (org-agenda nil "s")))
+    )
 
     :config
     (auto-save-visited-mode)
+
+    (defun my/org-agenda-switch-to-other-window ()
+        "Open current org agenda item in the other window."
+        (interactive)
+        (let ((marker (or (org-get-at-bol 'org-hd-marker)
+                          (org-get-at-bol 'org-marker))))
+            (when marker
+                (other-window 1)
+                (switch-to-buffer (marker-buffer marker))
+                (goto-char marker)
+                (org-show-context)
+                (org-fold-show-siblings)
+                (org-fold-show-subtree))))
+
+    ;; Some fixes for evil org agenda
+    (evil-define-key 'motion org-agenda-mode-map (kbd "RET") 'my/org-agenda-switch-to-other-window)
 
     (defun my/org-toggle-task ()
         "Toggle an Org Mode TODO heading or checkbox. Based on 'org-ctrl-c-ctrl-c'."
