@@ -680,6 +680,9 @@
                 (switch-to-buffer (marker-buffer marker))
                 (goto-char marker)
                 (org-show-context)
+                (save-excursion
+                    (when (org-up-heading-safe)
+                        (org-fold-show-entry)))
                 (org-fold-show-siblings)
                 (org-fold-show-subtree))))
 
