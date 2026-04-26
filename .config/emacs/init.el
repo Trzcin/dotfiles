@@ -417,7 +417,8 @@
     :custom
     (nerd-icons-font-family "JetBrainsMono Nerd Font")
     :config
-    (add-to-list 'nerd-icons-extension-icon-alist '("astro" nerd-icons-devicon "nf-dev-astro" :face nerd-icons-orange)))
+    (add-to-list 'nerd-icons-extension-icon-alist '("astro" nerd-icons-devicon "nf-dev-astro" :face nerd-icons-orange))
+    (add-to-list 'nerd-icons-extension-icon-alist '("typ" nerd-icons-flicon "nf-linux-typst" :face nerd-icons-cyan)))
 
 (use-package nerd-icons-dired
     :ensure t
