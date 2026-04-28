@@ -388,6 +388,26 @@
     (evil-collection-org-setup)
     (evil-collection-setup-minibuffer t))
 
+;; Vim-like numbers workflow
+;; Fix missing incf function: 'https://github.com/juliapath/evil-numbers/issues/30'
+(require 'cl-lib)
+(defalias 'incf 'cl-incf)
+(with-eval-after-load 'comp
+    (add-to-list 'native-comp-jit-compilation-deny-list "evil-numbers"))
+
+(use-package evil-numbers
+    :ensure t
+    :after evil
+
+    :bind (:map evil-normal-state-map
+        ("g =" . evil-numbers/inc-at-pt)
+        ("g -" . evil-numbers/dec-at-pt)
+
+        :map evil-visual-state-map
+        ("g =" . evil-numbers/inc-at-pt-incremental)
+        ("g -" . evil-numbers/dec-at-pt-incremental)
+    ))
+
 ;; Multicursor
 (use-package evil-mc
     :ensure t
