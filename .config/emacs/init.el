@@ -102,7 +102,10 @@
     (recentf-mode)
     (savehist-mode)
     (file-name-shadow-mode)
+
+    ;; Encoding system
     (modify-coding-system-alist 'file "" 'utf-8)
+    (add-to-list 'file-coding-system-alist '("\\.\\(?:png\\|jpg\\|jpeg\\|gif\\|webp\\|bmp\\)\\'" . raw-text))
 
     ;; Fonts
     (set-face-attribute 'default nil :family "JetBrainsMono Nerd Font" :height 120)
@@ -145,16 +148,23 @@
     (dired-free-space nil)
     (dired-omit-files "^[.].+$")
 
-    :config
-    (evil-define-key 'normal dired-mode-map (kbd "SPC t h") 'dired-omit-mode)
-
     :hook
     (dired-mode . (lambda () (dired-hide-details-mode)
+                      (evil-local-set-key 'normal (kbd "s h") 'dired-omit-mode)
                       (when (and (stringp dired-directory)
                                  (string= dired-directory "~/Downloads/"))
                           ;; Sort Downloads directory by time
                           (setq-local dired-actual-switches "-AGFhlt")
                           (revert-buffer)))))
+
+(use-package dired-preview
+    :ensure t
+    :after dired
+    :custom
+    (dired-preview-delay 0)
+    :config
+    :hook
+    (dired-mode . (lambda () (evil-local-set-key 'normal (kbd "s p") 'dired-preview-mode))))
 
 ;; which-key - show possible keybinds
 (use-package which-key
