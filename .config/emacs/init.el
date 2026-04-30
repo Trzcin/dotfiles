@@ -905,3 +905,14 @@
     :bind (:map my/leader-map
         ("o d" . docker)
     ))
+
+(use-package ready-player
+    :ensure t
+    :hook
+    (ready-player-major-mode . (lambda ()
+                                   (setq olivetti-body-width 0)
+                                   (olivetti-mode)
+                                   (visual-line-mode)))
+    :config
+    (ready-player-mode)
+    (evil-define-key 'normal ready-player-major-mode-map (kbd "m") 'ready-player-menu))
