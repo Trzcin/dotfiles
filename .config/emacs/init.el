@@ -633,6 +633,7 @@
 ;; Better PDF viewer
 (use-package pdf-tools
     :ensure t
+    :pin melpa
     :defer nil
     :mode ("\\.pdf\\'" . pdf-view-mode)
     :custom

@@ -12,6 +12,7 @@ abbr -a --position command code code --ozone-platform=wayland
 abbr -a lg lazygit
 abbr -a bc bluetoothctl connect
 abbr -a dc docker compose
+abbr -a k kubectl
 
 set NVCC_PREPEND_FLAGS "-ccbin /home/linuxbrew/.linuxbrew/bin/g++-13"
 
