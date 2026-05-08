@@ -145,6 +145,7 @@
     (dired-listing-switches "-AGFhlv --group-directories-first")
     (dired-dwim-target t) ; Easy dual pane usage for moving files
     (dired-kill-when-opening-new-dired-buffer t)
+    (dired-compress-directory-default-suffix ".zip")
     (dired-free-space nil)
     (dired-omit-files "^[.].+$")
 
