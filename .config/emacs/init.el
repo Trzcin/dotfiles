@@ -578,6 +578,7 @@
 
 ;; Filename major mode custom associations
 (add-to-list 'auto-mode-alist '("\\.mjs\\'" . js-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.cu\\'" . c-ts-mode)) ; CUDA C
 
 ;; Markdown
 (use-package markdown-mode
