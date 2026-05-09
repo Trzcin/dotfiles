@@ -9,11 +9,10 @@
 (defun my/git-clone ()
     "Git clone"
     (interactive)
-    (when-let* ((copied (evil-get-register ?+ t))
+    (when-let* ((copied (or (evil-get-register ?+ t) ""))
                 (clone-urls (s-split "\n" (shell-command-to-string my/git-clone-list-repo-urls-cmd) t))
-                (clone-urls (if (and copied
-                                     (or (string-match-p "^\\(?:http\\|https\\|ssh\\|git\\)://" copied)
-                                         (string-match-p "^git@" copied)))
+                (clone-urls (if (or (string-match-p "^\\(?:http\\|https\\|ssh\\|git\\)://" copied)
+                                    (string-match-p "^git@" copied))
                                 (cons copied clone-urls)
                                 clone-urls))
                 (clone-url (let ((vertico-sort-function nil)) (completing-read "Clone URL: " clone-urls)))
