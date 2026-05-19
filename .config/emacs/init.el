@@ -919,3 +919,21 @@
     :config
     (ready-player-mode)
     (evil-define-key 'normal ready-player-major-mode-map (kbd "m") 'ready-player-menu))
+
+(use-package dwim-shell-command
+    :ensure t
+    :bind (([remap shell-command] . dwim-shell-command)
+           :map dired-mode-map
+           ([remap dired-do-async-shell-command] . dwim-shell-command)
+           ([remap dired-do-shell-command] . dwim-shell-command)
+           ([remap dired-smart-shell-command] . dwim-shell-command))
+    :config
+    (defun my/merge-pdfs ()
+        "Merge all marked pdfs into one file."
+        (interactive)
+        (when-let* ((output-file (read-string "Output PDF: ")))
+            (dwim-shell-command-on-marked-files
+                "Merge PDFs"
+                (format "pdfunite <<*>> '%s'" output-file)
+                :extensions "pdf"
+                :utils "pdfunite"))))
