@@ -937,3 +937,11 @@
                 (format "pdfunite <<*>> '%s'" output-file)
                 :extensions "pdf"
                 :utils "pdfunite"))))
+
+(use-package notmuch
+    :ensure t
+    :custom
+    (notmuch-search-oldest-first nil)
+    :bind (:map my/leader-map
+        ("o e" . notmuch)
+    ))
