@@ -700,6 +700,12 @@
         ("o a" . (lambda () (interactive) (org-agenda nil "s")))
     )
 
+    :hook
+    (org-mode . (lambda ()
+                    (setq-local paragraph-start "\\|[ 	]*$")
+                    (setq-local paragraph-separate "[ 	]*$")
+                    ))
+
     :config
     (auto-save-visited-mode)
 
