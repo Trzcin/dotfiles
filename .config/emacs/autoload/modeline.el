@@ -186,9 +186,3 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
       "  "
       my/mode-line-pos
       " "))
-
-;; Disable VC in TRAMP (performance)
-(setq vc-ignore-dir-regexp
-    (format "%s\\|%s"
-        vc-ignore-dir-regexp
-        tramp-file-name-regexp))
