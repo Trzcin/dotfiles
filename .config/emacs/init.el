@@ -304,6 +304,7 @@
     (corfu-auto-trigger ".")
     :config
     (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)
+    (keymap-unset corfu-map "RET")
     :init
     (global-corfu-mode)
     (corfu-popupinfo-mode t))
@@ -949,5 +950,15 @@
     :custom
     (notmuch-search-oldest-first nil)
     :bind (:map my/leader-map
-        ("o e" . notmuch)
+        ("o E" . notmuch)
     ))
+
+(use-package eshell
+    :bind (:map my/leader-map
+        ("o e" . eshell)
+    )
+    :config
+    (defun eshell/c ()
+        "Alias for `clear t` in eshell."
+        (interactive)
+        (eshell/clear t)))
