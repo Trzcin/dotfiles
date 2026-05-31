@@ -962,3 +962,8 @@
         "Alias for `clear t` in eshell."
         (interactive)
         (eshell/clear t)))
+
+(use-package man
+    :ensure nil
+    :custom
+    (Man-support-remote-systems t))
