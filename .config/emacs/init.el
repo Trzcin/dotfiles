@@ -19,7 +19,6 @@
     (create-lockfiles nil)
     (make-backup-files nil)
 
-    (delete-by-moving-to-trash t)
     (global-auto-revert-non-file-buffers t)
 
     ;; Indentation
@@ -63,6 +62,7 @@
 
     (ring-bell-function 'ignore) ; Disable bell audio
 
+    (custom-safe-themes t)
     (switch-to-buffer-obey-display-actions t)
     (treesit-font-lock-level 4) ; Use treesitter where possible
     (truncate-lines t) ; Disable line wrap
@@ -70,10 +70,12 @@
     (use-short-answers t) ; Shorten yes/no to y/n
     (frame-title-format "%b")
     (help-window-select t)
+    (help-window-keep-selected t)
     (enable-recursive-minibuffers t)
     (inhibit-startup-screen t)
     (server-client-instructions nil)
     (browse-url-browser-function 'browse-url-xdg-open)
+    (find-library-include-other-files nil)
 
     ;; Clipboard
     (select-enable-clipboard nil)
@@ -109,8 +111,8 @@
 
     ;; Fonts
     (set-face-attribute 'default nil :family "JetBrainsMono Nerd Font" :height 120)
-    (set-face-attribute 'fixed-pitch nil :family "JetBrainsMono Nerd Font" :height 120)
-    (set-face-attribute 'variable-pitch nil :family "Inter" :height 120)
+    (set-face-attribute 'fixed-pitch nil :family "JetBrainsMono Nerd Font" :height 1.0)
+    (set-face-attribute 'variable-pitch nil :family "Inter" :height 1.0)
 
     (put 'narrow-to-region 'disabled nil)
 
@@ -120,6 +122,44 @@
     ;; Customize file
     (setq custom-file (locate-user-emacs-file "custom.el"))
     (load custom-file 'noerror 'nomessage))
+
+;; Buffer display
+(add-to-list 'display-buffer-alist
+    '((or . ((derived-mode . occur-mode)
+             (derived-mode . grep-mode)
+             (derived-mode . Buffer-menu-mode)
+             (derived-mode . log-view-mode)
+             (derived-mode . help-mode)))
+         (display-buffer-reuse-mode-window display-buffer-below-selected)
+         (body-function . select-window)))
+
+(add-to-list 'display-buffer-alist
+    '("\\`\\*\\(Org \\(Select\\|Note\\)\\|Agenda Commands\\)\\*\\'"
+         (display-buffer-in-side-window)
+         (dedicated . t)
+         (side . bottom)
+         (slot . 0)
+         (window-parameters . ((mode-line-format . none)))))
+
+(add-to-list 'display-buffer-alist
+    '((derived-mode . calendar-mode)
+         (display-buffer-reuse-mode-window display-buffer-below-selected)
+         (mode . (calendar-mode bookmark-edit-annotation-mode ert-results-mode))
+         (inhibit-switch-frame . t)
+         (dedicated . t)
+         (window-height . fit-window-to-buffer)))
+
+(add-to-list 'display-buffer-alist
+    '((derived-mode . reb-mode) ; M-x re-builder
+         (display-buffer-reuse-mode-window display-buffer-below-selected)
+         (inhibit-switch-frame . t)
+         (window-height . 4) ; note this is literal lines, not relative
+         (dedicated . t)
+         (preserve-size . (t . t))))
+
+(add-to-list 'display-buffer-alist
+    '((derived-mode . trashed-mode)
+         (display-buffer-same-window)))
 
 ;; Theme
 (use-package modus-themes
@@ -142,12 +182,16 @@
     :custom
     (dired-recursive-copies 'always)
     (dired-recursive-deletes 'always)
+    (delete-by-moving-to-trash t)
     (dired-listing-switches "-AGFhlv --group-directories-first")
     (dired-dwim-target t) ; Easy dual pane usage for moving files
+    (dired-auto-revert-buffer 'dired-directory-changed-p) ;; Immedietly refresh dired buffers on changes
     (dired-kill-when-opening-new-dired-buffer t)
     (dired-compress-directory-default-suffix ".zip")
     (dired-free-space nil)
     (dired-omit-files "^[.].+$")
+    (dired-create-destination-dirs 'ask)
+    (dired-create-destination-dirs-on-trailing-dirsep t)
 
     :hook
     (dired-mode . (lambda () (dired-hide-details-mode)
@@ -157,6 +201,20 @@
                           ;; Sort Downloads directory by time
                           (setq-local dired-actual-switches "-AGFhlt")
                           (revert-buffer)))))
+
+;; Easy Trash directory manipulation (any OS)
+(use-package trashed
+    :ensure t)
+
+(use-package isearch
+    :ensure nil
+    :custom
+    (search-whitespace-regexp ".*?")
+    (isearch-lax-whitespace t)
+    (isearch-regexp-lax-whitespace nil)
+    (isearch-lazy-count t)
+    (lazy-count-prefix-format "(%s/%s) ")
+    (lazy-count-suffix-format nil))
 
 (use-package dired-preview
     :ensure t
@@ -246,6 +304,7 @@
 (use-package orderless
     :ensure t
     :custom
+    (completion-category-defaults nil)
     (completion-styles '(substring orderless basic))
     (completion-category-overrides '((file (styles partial-completion))))
     (completion-ignore-case t)
@@ -820,6 +879,23 @@
         (if project-current-directory-override
             (magit-status project-current-directory-override)
             (magit-status))))
+
+(use-package diff
+    :ensure nil
+    :custom
+    (diff-font-lock-syntax nil)) ; Disable code syntax highlighting in diffs
+
+(use-package ediff
+    :ensure nil
+    :custom
+    (ediff-split-window-function 'split-window-horizontally)
+    (ediff-window-setup-function 'ediff-setup-windows-plain))
+
+(use-package shr
+    :ensure nil
+    :custom
+    (shr-use-colors nil)
+    (shr-use-fonts nil))
 
 (use-package gnome-accent-theme-switcher
     :vc (:url "https://github.com/protesilaos/gnome-accent-theme-switcher.git"

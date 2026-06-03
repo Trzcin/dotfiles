@@ -11,7 +11,7 @@
            nerd-icons-completion nerd-icons-corfu nerd-icons-dired
            nerd-icons-grep nerd-icons-ibuffer nerd-icons-xref notmuch
            nov olivetti orderless ox-typst pdf-tools ready-player
-           saveplace-pdf-view spacious-padding svelte-ts-mode
+           saveplace-pdf-view spacious-padding svelte-ts-mode trashed
            typst-preview typst-ts-mode undo-tree verb vertico vterm
            vue-ts-mode wgrep yasnippet))
  '(package-vc-selected-packages
