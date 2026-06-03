@@ -159,12 +159,14 @@
 
 (add-to-list 'display-buffer-alist
     '((derived-mode . trashed-mode)
-         (display-buffer-same-window)))
+         (display-buffer-same-window)
+         (body-function . select-window)))
 
 ;; Theme
 (use-package modus-themes
     :ensure nil
     :custom
+    (modus-themes-mixed-fonts t)
     ;; Variable fonts sizes for headings
     (modus-themes-headings '((1 . (2.0))
                              (2 . (1.7))
@@ -652,14 +654,8 @@
     (evil-define-key 'normal markdown-mode-map (kbd "SPC n b") 'markdown-narrow-to-block)
 
     :hook
-    (markdown-mode . (lambda () (markdown-display-inline-images))))
-
-;; Mixed pitch fonts
-(use-package mixed-pitch
-    :ensure t
-    :hook
-    (markdown-mode . mixed-pitch-mode)
-    (org-mode . mixed-pitch-mode))
+    (markdown-mode . (lambda () (variable-pitch-mode)
+                         (markdown-display-inline-images))))
 
 ;; Center prose buffers
 (use-package olivetti
@@ -696,7 +692,6 @@
 (use-package pdf-tools
     :ensure t
     :pin melpa
-    :defer nil
     :mode ("\\.pdf\\'" . pdf-view-mode)
     :custom
     (large-file-warning-threshold nil) ; PDFs are often large and cause a warning to show up
@@ -704,16 +699,14 @@
     :config
     (pdf-tools-install)
     (pdf-loader-install)
-    (pdf-virtual-global-minor-mode)
 
     :hook
     (pdf-view-mode . (lambda ()
                          (setq-local global-hl-line-mode nil)
                          (setq-local default-text-properties nil)
                          (save-place-local-mode)
-                         (pdf-view-fit-height-to-window)
+                         (pdf-view-fit-page-to-window)
                          (pdf-view-themed-minor-mode)
-                         (pdf-view-roll-minor-mode)
                          (setq-local evil-default-cursor '(ignore))
                          (setq cursor-type nil)
                          )))
@@ -725,6 +718,7 @@
 
 (use-package calendar
     :ensure nil
+    :defer t
     :custom
     (calendar-week-start-day 1)
     :bind (:map my/leader-map
@@ -733,6 +727,7 @@
 
 (use-package calc
     :ensure nil
+    :defer t
     :bind (:map my/leader-map
         ("o C" . calc)
     ))
@@ -740,6 +735,7 @@
 ;; Org
 (use-package org
     :ensure nil
+    :defer t
     :custom
     (org-M-RET-may-split-line nil)
     (org-log-done 'time)
@@ -762,6 +758,7 @@
 
     :hook
     (org-mode . (lambda ()
+                    (variable-pitch-mode)
                     (setq-local paragraph-start "\\|[ 	]*$")
                     (setq-local paragraph-separate "[ 	]*$")
                     ))
@@ -826,37 +823,33 @@
                                                           (org-insert-timestamp (current-time)))))
 
 (use-package ox-typst
-    :ensure t)
+    :ensure t
+    :after org)
 
 (use-package org-tempo
-    :ensure nil)
+    :ensure nil
+    :after org)
 
 ;; Org babel languages
 (use-package ob-python :after org)
 (use-package ob-lua :after org)
 (use-package ob-gnuplot :after org)
 
-;; Http requests from Org source blocks
-(use-package verb
-    :ensure t
-    :after org
-    :config
-    (org-babel-do-load-languages
-        'org-babel-load-languages
-        '((verb . t))))
-
 ;; Typst
-(use-package websocket
-    :ensure t)
-
 (use-package typst-preview
     :ensure t
+    :defer t
     :custom
     (typst-preview-invert-colors "never"))
+
+(use-package websocket
+    :ensure t
+    :defer t)
 
 ;; Evil-like transient quit (mainly for magit)
 (use-package transient
     :ensure t
+    :defer t
     :bind (:map transient-map
         ("<escape>" . transient-quit-one)
         ("C-<escape>" . transient-quit-all)
@@ -882,17 +875,20 @@
 
 (use-package diff
     :ensure nil
+    :defer t
     :custom
     (diff-font-lock-syntax nil)) ; Disable code syntax highlighting in diffs
 
 (use-package ediff
     :ensure nil
+    :defer t
     :custom
     (ediff-split-window-function 'split-window-horizontally)
     (ediff-window-setup-function 'ediff-setup-windows-plain))
 
 (use-package shr
     :ensure nil
+    :defer t
     :custom
     (shr-use-colors nil)
     (shr-use-fonts nil))
@@ -969,6 +965,7 @@
 
 (use-package epa
     :ensure nil
+    :defer t
     :custom
     (epg-pinentry-mode 'loopback)
     (epa-file-select-keys 'no))
@@ -994,6 +991,7 @@
 
 (use-package ready-player
     :ensure t
+    :defer t
     :hook
     (ready-player-major-mode . (lambda ()
                                    (setq olivetti-body-width 0)
@@ -1041,5 +1039,6 @@
 
 (use-package man
     :ensure nil
+    :defer t
     :custom
     (Man-support-remote-systems t))
