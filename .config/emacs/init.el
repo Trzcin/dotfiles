@@ -689,6 +689,9 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     ;; Initial states
     (evil-set-initial-state 'org-agenda-mode 'motion)
 
+    ;; Replace
+    (evil-define-key '(normal visual) 'global (kbd "?") 'query-replace-regexp)
+
     ;; Commenting
     (evil-define-key 'normal 'global (kbd "gcc")
                      (lambda ()
