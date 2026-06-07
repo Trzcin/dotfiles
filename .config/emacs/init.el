@@ -1409,6 +1409,22 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     (ediff-split-window-function 'split-window-horizontally)
     (ediff-window-setup-function 'ediff-setup-windows-plain))
 
+(use-package diff-hl
+    :ensure t
+    :custom
+    (diff-hl-draw-borders nil)
+    (diff-hl-update-async t)
+    :bind (
+        :map evil-normal-state-map
+        ("[g" . diff-hl-previous-hunk)
+        ("]g" . diff-hl-next-hunk)
+        :map my/leader-map
+        ("gs" . diff-hl-show-hunk))
+    :config
+    (global-diff-hl-mode)
+    (with-eval-after-load 'magit
+        (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)))
+
 (defvar my/git-clone-list-repo-urls-cmd
     "gh repo list -L 100 --json sshUrl -q '.[] | .sshUrl'"
     "Command to list git ssh clone urls of user owned repositories.")
