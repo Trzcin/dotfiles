@@ -992,8 +992,7 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
                          )))
 
 (use-package saveplace-pdf-view
-    :ensure t
-    :after pdf-tools)
+    :ensure t)
 
 ;;; EPUBs
 (use-package nov
