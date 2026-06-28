@@ -1238,6 +1238,7 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 ;; Filename major mode custom associations
 (add-to-list 'auto-mode-alist '("\\.mjs\\'" . js-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.cu\\'" . c-ts-mode)) ; CUDA C
+(add-to-list 'auto-mode-alist '("\\isyncrc\\'" . conf-mode))
 
 ;;;; LSP
 ;; (use-package lsp-mode
