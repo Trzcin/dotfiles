@@ -9,6 +9,9 @@
 (setq custom-file (locate-user-emacs-file "custom.el"))
 (load custom-file 'noerror 'nomessage)
 
+;;; Private file
+(load (locate-user-emacs-file "private.el") 'noerror 'nomessage)
+
 ;;; Package manager
 (use-package package
     :ensure nil
@@ -1490,10 +1493,163 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 ;;; Email
 (use-package notmuch
     :ensure t
+    :config
+    (defun my/notmuch-hello-insert-buttons (searches)
+        "Like 'notmuch-hello-insert-buttons' but includes count of messages with the 'unread' tag"
+        (let* ((widest (notmuch-hello-longest-label searches))
+	              (tags-and-width (notmuch-hello-tags-per-line widest))
+	              (tags-per-line (car tags-and-width))
+	              (column-width (cdr tags-and-width))
+	              (column-indent 0)
+	              (count 0)
+	              (reordered-list (notmuch-hello-reflect searches tags-per-line))
+	              ;; Hack the display of the buttons used.
+	              (widget-push-button-prefix "")
+	              (widget-push-button-suffix ""))
+            ;; dme: It feels as though there should be a better way to
+            ;; implement this loop than using an incrementing counter.
+            (mapc (lambda (elem)
+	                  ;; (not elem) indicates an empty slot in the matrix.
+	                  (when elem
+	                      (when (> column-indent 0)
+		                      (widget-insert (make-string column-indent ? )))
+	                      (let* ((name (plist-get elem :name))
+		                            (query (plist-get elem :query))
+		                            (oldest-first (cl-case (plist-get elem :sort-order)
+				                                      (newest-first nil)
+				                                      (oldest-first t)
+				                                      (otherwise notmuch-search-oldest-first)))
+		                            (exclude (cl-case (plist-get elem :excluded)
+				                                 (hide t)
+				                                 (show nil)
+				                                 (otherwise notmuch-search-hide-excluded)))
+		                            (search-type (plist-get elem :search-type))
+		                            (msg-count (plist-get elem :count))
+                                    (unread-msg-count (plist-get elem :unread)))
+		                      (widget-insert (format "%8s"
+				                                 (notmuch-hello-nice-number msg-count)))
+		                      (widget-insert (format (propertize "(%3d) " 'face 'bold)
+                                                 unread-msg-count))
+		                      (widget-create 'push-button
+			                      :notify #'notmuch-hello-widget-search
+			                      :notmuch-search-terms query
+			                      :notmuch-search-oldest-first oldest-first
+			                      :notmuch-search-type search-type
+			                      :notmuch-search-hide-excluded exclude
+			                      name)
+		                      (setq column-indent
+		                          (1+ (max 0 (- column-width (length name)))))))
+	                  (cl-incf count)
+	                  (when (eq (% count tags-per-line) 0)
+	                      (setq column-indent 0)
+	                      (widget-insert "\n")))
+	            reordered-list)
+            ;; If the last line was not full (and hence did not include a
+            ;; carriage return), insert one now.
+            (unless (eq (% count tags-per-line) 0)
+                (widget-insert "\n"))))
+
+    (defun my/notmuch-hello-query-counts (query-list &rest options)
+        "Like 'notmuch-hello-query-counts' but includes ':unread' with the unread count"
+        (let ((initial-list (with-temp-buffer
+                                (dolist (elem query-list nil)
+                                    (let ((count-query (or (notmuch-saved-search-get elem :count-query)
+                                                           (notmuch-saved-search-get elem :query))))
+                                        (insert
+                                            (replace-regexp-in-string
+                                                "\n" " "
+                                                (notmuch-hello-filtered-query count-query
+                                                    (or (plist-get options :filter-count)
+                                                        (plist-get options :filter))))
+                                            "\n")))
+                                (unless (= (notmuch--call-process-region (point-min) (point-max) notmuch-command
+                                               t t nil "count"
+                                               (if (plist-get options :disable-excludes)
+                                                   "--exclude=false"
+                                                   "--exclude=true")
+                                               "--batch") 0)
+                                    (notmuch-logged-error
+                                        "notmuch count --batch failed"
+                                        "Please check that the notmuch CLI is new enough to support `count
+--batch'. In general we recommend running matching versions of
+the CLI and emacs interface."))
+                                (goto-char (point-min))
+                                (cl-mapcan
+                                    (lambda (elem)
+                                        (let* ((elem-plist (notmuch-hello-saved-search-to-plist elem))
+                                                  (search-query (plist-get elem-plist :query))
+                                                  (filtered-query (notmuch-hello-filtered-query
+                                                                      search-query (plist-get options :filter)))
+                                                  (message-count (prog1 (read (current-buffer))
+                                                                     (forward-line 1))))
+                                            (when (and filtered-query (or (plist-get options :show-empty-searches)
+                                                                          (> message-count 0)))
+                                                (setq elem-plist (plist-put elem-plist :query filtered-query))
+                                                (list (plist-put elem-plist :count message-count)))))
+                                    query-list))))
+            (with-temp-buffer
+                (dolist (elem initial-list nil)
+                    (let ((count-query (or (notmuch-saved-search-get elem :count-query)
+                                           (notmuch-saved-search-get elem :query))))
+                        (insert
+                            (replace-regexp-in-string
+                                "\n" " "
+                                (notmuch-hello-filtered-query count-query
+                                    (or (plist-get options :filter-count)
+                                        (plist-get options :filter))))
+                            " and tag:unread" ; Combine the query with the unread tag
+                            "\n")))
+                (unless (= (notmuch--call-process-region (point-min) (point-max) notmuch-command
+                               t t nil "count"
+                               (if (plist-get options :disable-excludes)
+                                   "--exclude=false"
+                                   "--exclude=true")
+                               "--batch") 0)
+                    (notmuch-logged-error
+                        "notmuch count --batch failed"
+                        "Please check that the notmuch CLI is new enough to support `count
+--batch'. In general we recommend running matching versions of
+the CLI and emacs interface."))
+                (goto-char (point-min))
+                (cl-mapcan
+                    (lambda (elem)
+                        (let* ((elem-plist (notmuch-hello-saved-search-to-plist elem))
+                                  (search-query (plist-get elem-plist :query))
+                                  (filtered-query (notmuch-hello-filtered-query
+                                                      search-query (plist-get options :filter)))
+                                  (message-count (prog1 (read (current-buffer))
+                                                     (forward-line 1))))
+                            (when (and filtered-query (or (plist-get options :show-empty-searches)
+                                                          (> message-count 0)))
+                                (list (plist-put elem-plist :unread message-count)))))
+                    initial-list))))
+
+    (defun my/notmuch-hello-insert-saved-searches ()
+        "Like 'notmuch-hello-insert-saved-searches' but with custom formatting."
+        (let ((searches (my/notmuch-hello-query-counts
+                            (if notmuch-saved-search-sort-function
+                                (funcall notmuch-saved-search-sort-function notmuch-saved-searches)
+                                notmuch-saved-searches)
+                            :show-empty-searches notmuch-show-empty-saved-searches)))
+            (when searches
+                (widget-insert "Saved email searches:")
+                (widget-insert "\n\n")
+                (my/notmuch-hello-insert-buttons searches))))
     :custom
     (notmuch-search-oldest-first nil)
+    (notmuch-show-empty-saved-searches t)
+    (notmuch-column-control 1.0)
+    (notmuch-saved-searches `((:name "󰇮 Inbox (all)" :query "tag:inbox" :key "i")
+                              (:name "󰒊 Sent" :query "tag:sent" :key "s")
+                              (:name " Drafts" :query "tag:draft" :key "d")
+                              (:name "󰃖 Gmail Professional" :query ,(format "to:%s" my/email-gmail-professional) :key "p")
+                              (:name "󰑴 University" :query ,(format "to:%s" my/email-university) :key "u")))
+    (notmuch-hello-sections '(my/notmuch-hello-insert-saved-searches))
     :bind (:map my/leader-map
-        ("o E" . notmuch)
+        ("o E" . (lambda () (interactive)
+                     (notmuch)
+                     (widget-forward 1)
+                     (forward-char 2)))
     ))
 
 (use-package shr
