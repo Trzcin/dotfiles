@@ -1528,7 +1528,7 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
                                     (unread-msg-count (plist-get elem :unread)))
 		                      (widget-insert (format "%8s"
 				                                 (notmuch-hello-nice-number msg-count)))
-		                      (widget-insert (format (propertize "(%3d) " 'face 'bold)
+		                      (widget-insert (format (propertize "(%2d) " 'face 'bold)
                                                  unread-msg-count))
 		                      (widget-create 'push-button
 			                      :notify #'notmuch-hello-widget-search
@@ -1635,6 +1635,8 @@ the CLI and emacs interface."))
                 (widget-insert "Saved email searches:")
                 (widget-insert "\n\n")
                 (my/notmuch-hello-insert-buttons searches))))
+    :hook
+    (notmuch-show . (lambda () (setq-local header-line-format nil)))
     :custom
     (notmuch-search-oldest-first nil)
     (notmuch-show-empty-saved-searches t)
