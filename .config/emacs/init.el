@@ -1635,6 +1635,10 @@ the CLI and emacs interface."))
                 (widget-insert "Saved email searches:")
                 (widget-insert "\n\n")
                 (my/notmuch-hello-insert-buttons searches))))
+
+    (advice-add 'evil-collection-notmuch-show-toggle-delete :override (lambda () (interactive) (evil-collection-notmuch-toggle-tag "del" "show")))
+    (advice-add 'evil-collection-notmuch-tree-toggle-delete :override (lambda () (interactive) (evil-collection-notmuch-toggle-tag "del" "tree")))
+    (advice-add 'evil-collection-notmuch-search-toggle-delete :override (lambda () (interactive) (evil-collection-notmuch-toggle-tag "del" "search" 'notmuch-search-next-thread)))
     :hook
     (notmuch-show . (lambda () (setq-local header-line-format nil)))
     :custom
@@ -1644,8 +1648,8 @@ the CLI and emacs interface."))
     (notmuch-saved-searches `((:name "󰇮 Inbox (all)" :query "tag:inbox" :key "i")
                               (:name "󰒊 Sent" :query "tag:sent" :key "s")
                               (:name " Drafts" :query "tag:draft" :key "d")
-                              (:name "󰃖 Gmail Professional" :query ,(format "to:%s" my/email-gmail-professional) :key "p")
-                              (:name "󰑴 University" :query ,(format "to:%s" my/email-university) :key "u")))
+                              (:name "󰃖 Gmail Professional" :query ,(format "to:%s and tag:inbox" my/email-gmail-professional) :key "p")
+                              (:name "󰑴 University" :query ,(format "to:%s and tag:inbox" my/email-university) :key "u")))
     (notmuch-hello-sections '(my/notmuch-hello-insert-saved-searches))
     :bind (:map my/leader-map
         ("o E" . (lambda () (interactive)
