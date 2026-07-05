@@ -1641,10 +1641,16 @@ the CLI and emacs interface."))
     (advice-add 'evil-collection-notmuch-search-toggle-delete :override (lambda () (interactive) (evil-collection-notmuch-toggle-tag "del" "search" 'notmuch-search-next-thread)))
     :hook
     (notmuch-show . (lambda () (setq-local header-line-format nil)))
+    ;; notmuch-message-mode does not play nice with corfu
+    (notmuch-message-mode . (lambda () (corfu-mode -1)))
     :custom
     (notmuch-search-oldest-first nil)
     (notmuch-show-empty-saved-searches t)
+    (notmuch-always-prompt-for-sender t)
     (notmuch-column-control 1.0)
+    ;; See example: https://github.com/friemen/emacsd/blob/2d5bfda006594a450c7c12cbe301091eb31ebaef/config/my-notmuch.el#L57
+    (notmuch-fcc-dirs `((,my/email-gmail-professional . nil)
+                        (,my/email-university . nil)))
     (notmuch-saved-searches `((:name "󰇮 Inbox (all)" :query "tag:inbox" :key "i")
                               (:name "󰒊 Sent" :query "tag:sent" :key "s")
                               (:name " Drafts" :query "tag:draft" :key "d")
@@ -1657,6 +1663,21 @@ the CLI and emacs interface."))
                      (widget-forward 1)
                      (forward-char 2)))
     ))
+
+(use-package message
+    :ensure nil
+    :defer t
+    :custom
+    (message-signature "Pozdrawiam.\nMikołaj Trzciński")
+    (message-send-mail-function 'message-send-mail-with-sendmail)
+    (message-sendmail-envelope-from 'header)
+    (message-kill-buffer-on-exit t))
+
+(use-package sendmail
+    :ensure nil
+    :defer t
+    :custom
+    (sendmail-program (executable-find "msmtp")))
 
 (use-package shr
     :ensure nil
