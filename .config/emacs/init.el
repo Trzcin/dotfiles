@@ -391,11 +391,8 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 (defvar-local my/mode-line-diagnostics
     '(:eval (when (and (mode-line-window-selected-p) (bound-and-true-p flymake-mode) (flymake-running-backends))
                 (let* ((error-sign (cl-first (alist-get 'error flymake-margin-indicators-string)))
-                       ;; (error-counter (s-join "" '(error-sign flymake-mode-line-error-counter)))
                        (warn-sign (cl-first (alist-get 'warning flymake-margin-indicators-string)))
-                       ;; (warn-counter (s-join "" '(warn-sign flymake-mode-line-warning-counter)))
                        (note-sign (cl-first (alist-get 'note flymake-margin-indicators-string))))
-                       ;; (note-counter (s-join "" '(note-sign flymake-mode-line-note-counter))))
                     (s-join " "
                         (list
                             (my/flymake--mode-line-counter :error error-sign)
