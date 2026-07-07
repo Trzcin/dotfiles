@@ -105,6 +105,7 @@
     (typst-ts-mode . display-line-numbers-mode)
     (html-ts-mode . display-line-numbers-mode)
     (yaml-ts-mode . display-line-numbers-mode)
+    (conf-mode . display-line-numbers-mode)
 
     :init
     (global-hl-line-mode)
@@ -1242,6 +1243,8 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 (add-to-list 'auto-mode-alist '("\\.mjs\\'" . js-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.cu\\'" . c-ts-mode)) ; CUDA C
 (add-to-list 'auto-mode-alist '("\\isyncrc\\'" . conf-mode))
+(add-to-list 'auto-mode-alist '("\\.prettierrc\\'" . json-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.env\\'" . conf-unix-mode))
 
 ;;;; LSP
 (use-package eglot
