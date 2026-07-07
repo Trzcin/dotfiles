@@ -7,10 +7,10 @@
       '(astro-ts-mode avy corfu diff-hl dired-preview docker
            dwim-shell-command eldoc-box embark-consult evil-collection
            evil-mc evil-numbers gnome-accent-theme-switcher gptel jinx
-           lsp-mode magit marginalia meow mixed-pitch
-           nerd-icons-completion nerd-icons-corfu nerd-icons-dired
-           nerd-icons-grep nerd-icons-ibuffer nerd-icons-xref notmuch
-           nov olivetti orderless ox-typst pdf-tools ready-player
+           magit marginalia meow mixed-pitch nerd-icons-completion
+           nerd-icons-corfu nerd-icons-dired nerd-icons-grep
+           nerd-icons-ibuffer nerd-icons-xref notmuch nov olivetti
+           orderless ox-typst pdf-tools ready-player
            saveplace-pdf-view spacious-padding svelte-ts-mode trashed
            typst-preview typst-ts-mode undo-tree verb vertico vterm
            vue-ts-mode wgrep yasnippet))

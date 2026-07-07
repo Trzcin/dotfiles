@@ -1251,10 +1251,25 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 ;;;; LSP
 (use-package eglot
     :ensure nil
+    :config
+    (add-to-list 'eglot-server-programs '(html-ts-mode . ("vscode-html-language-server" "--stdio")))
     :hook
-    (rust-ts-mode . eglot-ensure))
+    (c-ts-mode . eglot-ensure)
+    (c++-ts-mode . eglot-ensure)
+    (rust-ts-mode . eglot-ensure)
+    (html-ts-mode . eglot-ensure)
+    (css-ts-mode . eglot-ensure)
+    (js-ts-mode . eglot-ensure)
+    (typescript-ts-mode . eglot-ensure)
+    (tsx-ts-mode . eglot-ensure)
+    (yaml-ts-mode . eglot-ensure)
+    :bind (:map my/leader-map
+        ("l r" . eglot-rename)
+        ("l a" . eglot-code-actions)
+        ("l f" . eglot-format-buffer)
+    ))
 
-(use-package eldoc-box ; Documentation in child frame
+(use-package eldoc-box
     :ensure t
     :after evil
     :custom
