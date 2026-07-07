@@ -3,7 +3,6 @@
 ;;; Performance
 (setq gc-cons-threshold #x40000000)
 (setq read-process-output-max (* 1024 1024 4))
-(setenv "LSP_USE_PLISTS" "true")
 
 ;;; Customize file
 (setq custom-file (locate-user-emacs-file "custom.el"))
