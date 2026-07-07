@@ -826,6 +826,8 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     (text-mode-ispell-word-completion nil)
     :hook
     (text-mode . jinx-mode)
+    (yaml-ts-mode . (lambda () (jinx-mode -1)))
+    (html-mode . (lambda () (jinx-mode -1)))
     :bind (:map evil-normal-state-map
         ("z=" . jinx-correct)
         ("]s" . jinx-next)
