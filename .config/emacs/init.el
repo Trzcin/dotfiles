@@ -1354,6 +1354,7 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
         ("gs" . diff-hl-show-hunk))
     :init
     (global-diff-hl-mode)
+    (diff-hl-flydiff-mode)
     (with-eval-after-load 'magit
         (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)))
 
