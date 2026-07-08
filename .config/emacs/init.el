@@ -211,38 +211,11 @@
 
 (use-package gnome-accent-theme-switcher
     :vc (:url "https://github.com/protesilaos/gnome-accent-theme-switcher.git"
-         :rev "f1f20081f15b67f176273100dab1a940b3ecc840")
-
-    :custom
-    (gnome-accent-theme-switcher-collection '(("blue"
-                                               :light (ef-maris-light ef-deuteranopia-light)
-                                               :dark  (ef-night ef-deuteranopia-dark ef-dark ef-duo-dark doric-mermaid standard-dark-tinted))
-                                              ("teal"
-                                               :light (ef-spring ef-frost doric-wind doric-jade)
-                                               :dark  (ef-maris-dark doric-valley))
-                                              ("green"
-                                               :light (ef-cyprus)
-                                               :dark  (ef-bio))
-                                              ("yellow"
-                                               :light (ef-melissa-light ef-duo-light ef-eagle doric-earth)
-                                               :dark  (ef-melissa-dark))
-                                              ("orange"
-                                               :light (ef-orange ef-day doric-beach)
-                                               :dark  (ef-autumn doric-copper))
-                                              ("red"
-                                               :light (modus-operandi-tinted standard-light-tinted ef-tritanopia-light ef-arbutus)
-                                               :dark  (ef-tritanopia-dark doric-fire))
-                                              ("pink"
-                                               :light (ef-summer ef-reverie doric-cherry ef-kassio)
-                                               :dark  (ef-cherie ef-rosa))
-                                              ("purple"
-                                               :light (ef-trio-light ef-light doric-siren)
-                                               :dark  (ef-trio-dark ef-winter ef-fig ef-dream doric-plum))
-                                              ("slate"
-                                               :light (doric-marble doric-light)
-                                               :dark  (ef-owl doric-obsidian doric-water doric-dark))))
-
+         :rev "b5c5b5b29234d18bfdd9e9142137a453e07e79e2")
     :config
+    (setq gnome-accent-theme-switcher-collection
+        (cons '("green" :light (ef-cyprus) :dark (ef-bio))
+               (assoc-delete-all "green" gnome-accent-theme-switcher-collection)))
     (gnome-accent-theme-switcher-mode))
 
 ;;;; Modeline
@@ -1206,7 +1179,7 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     :mode "\\.astro\\'")
 (use-package svelte-ts-mode
     :vc (:url "https://github.com/leafOfTree/svelte-ts-mode.git"
-              :rev "7fdb9816535692bfd8cd85baa0f2bad052369233")
+         :rev "b1b5b4a5b09493063394a51d0f0f022645a18444")
     :mode "\\.svelte\\'")
 (use-package vue-ts-mode
     :vc (:url "https://github.com/theschmocker/vue-ts-mode.git"
@@ -1218,7 +1191,7 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
       '((dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")
         (astro "https://github.com/virchau13/tree-sitter-astro")
         (vue "https://github.com/ikatyang/tree-sitter-vue")
-        (svelte "https://github.com/Himujjal/tree-sitter-svelte")
+        (svelte "https://github.com/tree-sitter-grammars/tree-sitter-svelte")
         (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" nil "typescript/src"))
         (javascript "https://github.com/tree-sitter/tree-sitter-javascript")
         (css "https://github.com/tree-sitter/tree-sitter-css")
@@ -1388,9 +1361,9 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     :config
     (setq gptel-model 'mistral:latest)
     (setq gptel-backend (gptel-make-ollama "Ollama"
-                       :host "localhost:11434"
-                       :stream t
-                       :models '(mistral:latest SpeakLeash/bielik-4.5b-v3.0-instruct:Q8_0))))
+                         :host "localhost:11434"
+                         :stream t
+                         :models '(mistral:latest))))
 
 ;;;; Docker
 (use-package docker
