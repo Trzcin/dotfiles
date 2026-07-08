@@ -1171,9 +1171,23 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 (use-package typescript-ts-mode
   :ensure nil
   :mode (("\\.ts\\'" . typescript-ts-mode) ("\\.jsx\\|.tsx\\'" . tsx-ts-mode)))
+
 (use-package typst-ts-mode
     :ensure t
-    :mode "\\.typ\\'")
+    :mode "\\.typ\\'"
+    :config
+    (defun my/typst-start-preview ()
+        "Start Typst preview in a web browser using the tinymist LSP."
+        (interactive)
+        (when-let* ((server (eglot-current-server)))
+            (eglot-execute
+                server
+                '(:title "Start Preview"
+                  :command "tinymist.doStartBrowsingPreview"
+                  :arguments [["--data-plane-host=127.0.0.1:0"
+                               "--invert-colors=never"
+                               "--open"]])))))
+
 (use-package astro-ts-mode
     :ensure t
     :mode "\\.astro\\'")
@@ -1222,6 +1236,7 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     :ensure nil
     :config
     (add-to-list 'eglot-server-programs '(html-ts-mode . ("vscode-html-language-server" "--stdio")))
+    (add-to-list 'eglot-server-programs '(typst-ts-mode . ("tinymist")))
     :hook
     (c-ts-mode . eglot-ensure)
     (c++-ts-mode . eglot-ensure)
@@ -1232,6 +1247,7 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     (typescript-ts-mode . eglot-ensure)
     (tsx-ts-mode . eglot-ensure)
     (yaml-ts-mode . eglot-ensure)
+    (typst-ts-mode . eglot-ensure)
     :bind (:map my/leader-map
         ("l r" . eglot-rename)
         ("l a" . eglot-code-actions)
@@ -1586,14 +1602,3 @@ the CLI and emacs interface."))
     :custom
     (shr-use-colors nil)
     (shr-use-fonts nil))
-
-;;; Typst
-(use-package typst-preview
-    :ensure t
-    :defer t
-    :custom
-    (typst-preview-invert-colors "never"))
-
-(use-package websocket
-    :ensure t
-    :defer t)
