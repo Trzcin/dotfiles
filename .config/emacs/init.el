@@ -808,7 +808,6 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     :ensure nil
     :defer t
     :custom
-    (epg-pinentry-mode 'loopback)
     (epa-file-select-keys 'no))
 
 ;;;; Markdown
@@ -1372,17 +1371,27 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 ;;;; LLMs
 (use-package gptel
     :ensure t
-
     :bind (:map my/leader-map
-        ("o g" . (lambda () (interactive) (switch-to-buffer (gptel "*Ollama*"))))
+        ("o l" . (lambda () (interactive) (switch-to-buffer (gptel "*Gemini*"))))
     )
-
     :config
-    (setq gptel-model 'mistral:latest)
-    (setq gptel-backend (gptel-make-ollama "Ollama"
-                         :host "localhost:11434"
-                         :stream t
-                         :models '(mistral:latest))))
+    ;; Alternative backends/models
+    (gptel-make-ollama "Ollama" :host "localhost:11434" :stream t :models '(mistral:latest))
+
+    (defun my/read-gemini-api-key ()
+        "Reads a Gemini API key from an encrypted file."
+        (with-temp-buffer
+            (let ((inhibit-message t))
+                (epa-file-insert-file-contents "~/.local/share/gptel/.gemini.gpg"))
+            (buffer-string)))
+
+    (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "*Prompt*: ")
+    (setf (alist-get 'org-mode gptel-response-prefix-alist) "*Response*: ")
+
+    ;; Defaults
+    (setq gptel-default-mode 'org-mode)
+    (setq gptel-model 'gemini-3.5-flash)
+    (setq gptel-backend (gptel-make-gemini "Gemini" :key (my/read-gemini-api-key) :stream t)))
 
 ;;;; Docker
 (use-package docker
