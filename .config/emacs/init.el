@@ -203,10 +203,11 @@
     :ensure t
     :config
     (setq ef-themes-mixed-fonts t)
-    (setq ef-themes-headings '((1 . (2.0))
-                          (2 . (1.7))
-                          (3 . (1.4))
-                          (4 . (1.1))))
+    (setq ef-themes-headings '((0 . (2.0))
+                               (1 . (2.0))
+                               (2 . (1.7))
+                               (3 . (1.4))
+                               (4 . (1.1))))
     (ef-themes-load-theme 'ef-bio))
 
 (use-package gnome-accent-theme-switcher
