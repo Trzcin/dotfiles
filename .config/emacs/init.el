@@ -1238,6 +1238,7 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     :config
     (add-to-list 'eglot-server-programs '(html-ts-mode . ("vscode-html-language-server" "--stdio")))
     (add-to-list 'eglot-server-programs '(typst-ts-mode . ("tinymist")))
+    (add-to-list 'eglot-server-programs '(svelte-ts-mode . ("svelteserver" "--stdio")))
     :hook
     (c-ts-mode . eglot-ensure)
     (c++-ts-mode . eglot-ensure)
@@ -1249,6 +1250,7 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     (tsx-ts-mode . eglot-ensure)
     (yaml-ts-mode . eglot-ensure)
     (typst-ts-mode . eglot-ensure)
+    (svelte-ts-mode . eglot-ensure)
     :bind (:map my/leader-map
         ("l r" . eglot-rename)
         ("l a" . eglot-code-actions)
