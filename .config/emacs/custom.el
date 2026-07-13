@@ -10,9 +10,9 @@
            gnome-accent-theme-switcher gptel jinx magit marginalia
            meow mixed-pitch nerd-icons-completion nerd-icons-corfu
            nerd-icons-dired nerd-icons-grep nerd-icons-ibuffer
-           nerd-icons-xref notmuch nov olivetti orderless ox-typst
-           pdf-tools ready-player saveplace-pdf-view spacious-padding
-           svelte-ts-mode trashed typst-ts-mode undo-tree verb vertico
+           nerd-icons-xref notmuch olivetti orderless ox-typst
+           pdf-tools saveplace-pdf-view spacious-padding
+           svelte-ts-mode trashed typst-ts-mode undo-tree vertico
            vterm vue-ts-mode wgrep yasnippet))
  '(package-vc-selected-packages
       '((gnome-accent-theme-switcher :url

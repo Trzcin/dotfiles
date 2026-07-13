@@ -923,10 +923,6 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     :ensure nil
     :after org)
 
-(use-package ob-python :after org)
-(use-package ob-lua :after org)
-(use-package ob-gnuplot :after org)
-
 (defvar my/journal-dir
     "~/Documents/org-notes/Journal"
     "The directory in which journal entries will be stored.")
@@ -968,18 +964,6 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 
 (use-package saveplace-pdf-view
     :ensure t)
-
-;;; EPUBs
-(use-package nov
-    :ensure t
-    :mode ("\\.epub\\'" . nov-mode)
-    :custom
-    (nov-text-width 70)
-    :hook
-    (nov-mode . (lambda () (setq-local global-hl-line-mode nil)
-                           (olivetti-mode)
-                           (setq-local olivetti-body-width 80)
-                           (scroll-lock-mode))))
 
 ;;; Utilities
 (use-package calendar
@@ -1401,19 +1385,6 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     :bind (:map my/leader-map
         ("o d" . docker)
     ))
-
-;;; Music
-(use-package ready-player
-    :ensure t
-    :defer t
-    :hook
-    (ready-player-major-mode . (lambda ()
-                                   (setq olivetti-body-width 0)
-                                   (olivetti-mode)
-                                   (visual-line-mode)))
-    :config
-    (ready-player-mode)
-    (evil-define-key 'normal ready-player-major-mode-map (kbd "m") 'ready-player-menu))
 
 ;;; Email
 (use-package notmuch
