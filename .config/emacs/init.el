@@ -1,9 +1,5 @@
 ;; -*- eval: (outline-minor-mode); -*-
 
-;;; Performance
-(setq gc-cons-threshold #x40000000)
-(setq read-process-output-max (* 1024 1024 4))
-
 ;;; Customize file
 (setq custom-file (locate-user-emacs-file "custom.el"))
 (load custom-file 'noerror 'nomessage)
@@ -12,24 +8,21 @@
 (load (locate-user-emacs-file "private.el") 'noerror 'nomessage)
 
 ;;; Package manager
-(use-package package
-    :ensure nil
-    :init
-    (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
-
 (use-package use-package
-    :ensure nil
     :custom
     ;; use-package lazy loading stats: 'use-package-report'
     (use-package-compute-statistics t))
 
+(use-package package
+    :init
+    (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
+
 ;;; General Emacs settings
 (setq inhibit-startup-echo-area-message "trzcin")
 
-(use-package f :ensure nil)
+(use-package f)
 
 (use-package emacs
-    :ensure nil
     :custom
     ;; Disable autosave, backups, lockfiles etc.
     (auto-save-default nil)
@@ -71,7 +64,6 @@
     (typst-ts-indent-offset 2)
 
     ;; Line and column numbers
-    (column-number-mode t)
     (display-line-numbers-width 3)
 
     ;; Scrolling
@@ -97,9 +89,9 @@
 
     :hook
     (prog-mode . (lambda () (display-line-numbers-mode)
-                            (setq-local show-trailing-whitespace t)))
+                            (setq show-trailing-whitespace t)))
     (text-mode . (lambda () (visual-line-mode)
-                            (setq-local show-trailing-whitespace t)))
+                            (setq show-trailing-whitespace t)))
     (astro-ts-mode . display-line-numbers-mode)
     (typst-ts-mode . display-line-numbers-mode)
     (html-ts-mode . display-line-numbers-mode)
@@ -122,7 +114,6 @@
     (put 'narrow-to-region 'disabled nil))
 
 (use-package isearch
-    :ensure nil
     :custom
     (search-whitespace-regexp ".*?")
     (isearch-lax-whitespace t)
@@ -131,49 +122,14 @@
     (lazy-count-prefix-format "(%s/%s) ")
     (lazy-count-suffix-format nil))
 
-;; which-key - show possible keybinds
-(use-package which-key
-    :ensure nil
-    :hook
-    (after-init . which-key-mode))
+(use-package which-key :hook (after-init . which-key-mode))
 
 ;;; Buffer display
 (add-to-list 'display-buffer-alist
     '((or . ((derived-mode . occur-mode)
              (derived-mode . grep-mode)
-             (derived-mode . Buffer-menu-mode)
-             (derived-mode . log-view-mode)
              (derived-mode . help-mode)))
          (display-buffer-reuse-mode-window display-buffer-below-selected)
-         (body-function . select-window)))
-
-(add-to-list 'display-buffer-alist
-    '("\\`\\*\\(Org \\(Select\\|Note\\)\\|Agenda Commands\\)\\*\\'"
-         (display-buffer-in-side-window)
-         (dedicated . t)
-         (side . bottom)
-         (slot . 0)
-         (window-parameters . ((mode-line-format . none)))))
-
-(add-to-list 'display-buffer-alist
-    '((derived-mode . calendar-mode)
-         (display-buffer-reuse-mode-window display-buffer-below-selected)
-         (mode . (calendar-mode bookmark-edit-annotation-mode ert-results-mode))
-         (inhibit-switch-frame . t)
-         (dedicated . t)
-         (window-height . fit-window-to-buffer)))
-
-(add-to-list 'display-buffer-alist
-    '((derived-mode . reb-mode)
-         (display-buffer-reuse-mode-window display-buffer-below-selected)
-         (inhibit-switch-frame . t)
-         (window-height . 4)
-         (dedicated . t)
-         (preserve-size . (t . t))))
-
-(add-to-list 'display-buffer-alist
-    '((derived-mode . trashed-mode)
-         (display-buffer-same-window)
          (body-function . select-window)))
 
 ;;; Appearence
@@ -214,9 +170,8 @@
     :vc (:url "https://github.com/protesilaos/gnome-accent-theme-switcher.git"
          :rev "b5c5b5b29234d18bfdd9e9142137a453e07e79e2")
     :config
-    (setq gnome-accent-theme-switcher-collection
-        (cons '("green" :light (ef-cyprus) :dark (ef-bio))
-               (assoc-delete-all "green" gnome-accent-theme-switcher-collection)))
+    (setf (alist-get "green" gnome-accent-theme-switcher-collection nil nil #'equal)
+        '(:light (ef-cyprus) :dark (ef-bio)))
     (gnome-accent-theme-switcher-mode))
 
 ;;;; Modeline
@@ -462,7 +417,6 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 
 ;;; Dired file manager
 (use-package dired
-    :ensure nil
     :custom
     (dired-recursive-copies 'always)
     (dired-recursive-deletes 'always)
@@ -511,7 +465,7 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     (defun my/merge-pdfs ()
         "Merge all marked pdfs into one file."
         (interactive)
-        (when-let* ((output-file (read-string "Output PDF: ")))
+        (when-let* ((output-file (expand-file-name (read-file-name "Output PDF: "))))
             (dwim-shell-command-on-marked-files
                 "Merge PDFs"
                 (format "pdfunite <<*>> '%s'" output-file)
@@ -544,12 +498,19 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 (use-package consult
     :ensure t
     :defer t
+    :config
+    (defun my/consult-grep ()
+        "Call 'consult-ripgrep' if possible, fallback to 'consult-grep' otherwise."
+        (interactive)
+        (if (executable-find "rg" t)
+            (consult-ripgrep)
+            (consult-grep)))
 
     :bind (:map my/leader-map
         ("c t" . consult-theme)
         ("c i" . consult-info)
         ("c o" . consult-outline)
-        ("c g" . consult-ripgrep)
+        ("c g" . my/consult-grep)
         ("c f" . consult-find)
         ("c s" . consult-imenu)
         ("c L" . consult-goto-line)
@@ -558,12 +519,12 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 
     :custom
     ;; Only show buffers in `consult-buffer`
-    (consult-buffer-sources '(consult-source-buffer consult-source-hidden-buffer
-                                                    consult-source-modified-buffer
-                                                    consult-source-other-buffer)))
+    (consult-buffer-sources '(consult-source-buffer
+                              consult-source-hidden-buffer
+                              consult-source-modified-buffer
+                              consult-source-other-buffer)))
 
-(use-package wgrep
-    :ensure t)
+(use-package wgrep :ensure t)
 
 (use-package embark
     :ensure t
@@ -582,7 +543,7 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     :defer t
     :custom
     (corfu-auto t)
-    (corfu-auto-delay 0)
+    (corfu-auto-delay 0.01)
     (corfu-auto-prefix 1)
     (corfu-quit-no-match t)
     (corfu-scroll-margin 5)
@@ -610,10 +571,12 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
         ;; Make working with line wrap easier
         ("j" . evil-next-visual-line)
         ("k" . evil-previous-visual-line)
-        ("$" . evil-end-of-visual-line)
-        ("0" . evil-beginning-of-visual-line)
 
         ("U" . evil-redo)
+
+        :map evil-visual-state-map
+        ("/" . (lambda () (interactive) (let* ((initial (buffer-substring (region-beginning) (region-end))))
+                                              (consult-line initial))))
 
         :map my/leader-map
         ("/" . execute-extended-command)
@@ -643,9 +606,6 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
         ;; Remap prefixes to evil leader
         ("h" . help-command)
         ("w" . evil-window-map)
-
-        ;; Commands
-        ("&" . async-shell-command)
     )
 
     :init
@@ -691,8 +651,7 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     (evil-collection-org-setup)
     (evil-collection-setup-minibuffer t))
 
-;; Vim-like numbers workflow
-;; Fix missing incf function: 'https://github.com/juliapath/evil-numbers/issues/30'
+;; Fix missing incf function: 'https://github.com/juliapath/evil-numbers/issues/31'
 (require 'cl-lib)
 (defalias 'incf 'cl-incf)
 (with-eval-after-load 'comp
@@ -711,14 +670,12 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
         ("g -" . evil-numbers/dec-at-pt-incremental)
     ))
 
-;; Multicursor
 (use-package evil-mc
     :ensure t
     :config
     (global-evil-mc-mode 1)
     (evil-define-key '(normal visual) 'global (kbd "g m") evil-mc-cursors-map))
 
-;; Jump to visible text with keyboard
 (use-package avy
     :ensure t
     :bind (:map evil-normal-state-map
@@ -729,13 +686,9 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     :ensure t
     :hook
     (after-init . global-undo-tree-mode)
-
     :custom
     (undo-tree-visualizer-timestamps t)
     (undo-tree-visualizer-diff t)
-    (undo-limit 800000)
-    (undo-strong-limit 12000000)
-    (undo-outer-limit 120000000)
     (undo-tree-history-directory-alist '(("." . "~/.config/emacs/undotree"))))
 
 ;;; Icons
@@ -757,7 +710,6 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     :after marginalia
     :hook
     (marginalia-mode . nerd-icons-completion-marginalia-setup)
-
     :config
     (nerd-icons-completion-mode))
 
@@ -804,9 +756,8 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
         ("[s" . jinx-previous)
     ))
 
-(use-package epa-file :ensure nil)
+(use-package epa-file)
 (use-package epa
-    :ensure nil
     :custom
     (epa-file-select-keys 'no))
 
@@ -816,18 +767,15 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     :mode ("\\.md\\'" . markdown-mode)
     :custom
     (markdown-fontify-code-blocks-natively t)
-
     :config
     (evil-define-key 'normal markdown-mode-map (kbd "SPC n s") 'markdown-narrow-to-subtree)
     (evil-define-key 'normal markdown-mode-map (kbd "SPC n b") 'markdown-narrow-to-block)
-
     :hook
     (markdown-mode . (lambda () (variable-pitch-mode)
                          (markdown-display-inline-images))))
 
 ;;;; Org
 (use-package org
-    :ensure nil
     :defer t
     :custom
     (org-M-RET-may-split-line nil)
@@ -919,10 +867,9 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     :ensure t
     :after org)
 
-(use-package org-tempo
-    :ensure nil
-    :after org)
+(use-package org-tempo :after org)
 
+;;;; Journal
 (defvar my/journal-dir
     "~/Documents/org-notes/Journal"
     "The directory in which journal entries will be stored.")
@@ -946,11 +893,9 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     :mode ("\\.pdf\\'" . pdf-view-mode)
     :custom
     (large-file-warning-threshold nil) ; PDFs are often large and cause a warning to show up
-
     :config
     (pdf-tools-install)
     (pdf-loader-install)
-
     :hook
     (pdf-view-mode . (lambda ()
                          (setq-local global-hl-line-mode nil)
@@ -967,7 +912,6 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 
 ;;; Utilities
 (use-package calendar
-    :ensure nil
     :defer t
     :custom
     (calendar-week-start-day 1)
@@ -976,20 +920,17 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     ))
 
 (use-package calc
-    :ensure nil
     :defer t
     :bind (:map my/leader-map
         ("o C" . calc)
     ))
 
 (use-package man
-    :ensure nil
     :defer t
     :custom
     (Man-support-remote-systems t))
 
 (use-package artist
-    :ensure nil
     :config
     (defvar my/artist-buffer-name
         "*Drawing*"
@@ -1031,31 +972,28 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
                 (browse-url-xdg-open url)))
 
 ;;; Terminals
+;; TODO - replace with 'ghostel'
 (use-package vterm
     :ensure t
-
     :bind (
         :map my/leader-map
         ("o t" . vterm)
-
         :map vterm-mode-map
         ("C-<escape>" . (lambda () (interactive) (vterm-copy-mode)
-                          (turn-on-evil-mode)
-                          (evil-normal-state)))
+                            (turn-on-evil-mode)
+                            (evil-normal-state)))
     )
-
     :config
     (setq vterm-timer-delay 0.01)
     (evil-define-key 'normal vterm-copy-mode-map (kbd "i") (lambda () (interactive) (turn-off-evil-mode)
-                                                             (vterm-copy-mode -1)
-                                                             (setq cursor-type 'bar)))
-
+                                                               (vterm-copy-mode -1)
+                                                               (setq cursor-type 'bar)))
     :hook
     (vterm-mode . (lambda ()
-                    (setq-local global-hl-line-mode nil)
-                    (setq-local default-text-properties nil) ; vterm does not like line-spacing
-                    (turn-off-evil-mode)
-                    )))
+                      (setq-local global-hl-line-mode nil)
+                      (setq-local default-text-properties nil) ; vterm does not like line-spacing
+                      (turn-off-evil-mode)
+                      )))
 
 (use-package eshell
     :bind (:map my/leader-map
@@ -1073,7 +1011,6 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 ;;;; Projects
 ;; Tip: run `(project-remember-projects-under "<path>" t)` to discover projects in subdirectories
 (use-package project
-    :ensure nil
     :custom
     ;; Commands available after 'SPC p p'
     (project-switch-commands '((project-find-file "Find file")
@@ -1102,6 +1039,7 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     (advice-add 'project-shell :override #'my/project-vterm)
 
     ;; Detect directories with '.project' file as project roots
+    ;; This is probably buggy
     (defgroup project-local nil
         "Local, non-VC-backed project.el root directories."
         :group 'project)
@@ -1129,32 +1067,11 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
                               (list #'project-try-vc #'project-local-try-local)))
 
 ;;;; Treesitter
-(use-package html-ts-mode
-    :ensure nil
-    :mode "\\.html\\'")
-(use-package c-ts-mode :ensure nil)
-(use-package yaml-ts-mode
-    :ensure nil
-    :mode "\\.ya?ml\\'")
-(use-package dockerfile-ts-mode
-    :ensure nil
-    :mode "\\(?:Dockerfile\\(?:\\..*\\)?\\|\\.[Dd]ockerfile\\)\\'")
-(use-package go-ts-mode :ensure nil)
-(use-package lua-ts-mode :ensure nil)
-(use-package php-ts-mode
-    :ensure nil
-    :mode "\\.php\\|.phtml\\'")
-(use-package heex-ts-mode :ensure nil)
-(use-package java-ts-mode :ensure nil)
-(use-package json-ts-mode :ensure nil)
-(use-package ruby-ts-mode :ensure nil)
-(use-package rust-ts-mode :ensure nil)
-(use-package toml-ts-mode :ensure nil)
-(use-package cmake-ts-mode :ensure nil)
-(use-package elixir-ts-mode :ensure nil)
-(use-package typescript-ts-mode
-  :ensure nil
-  :mode (("\\.ts\\'" . typescript-ts-mode) ("\\.jsx\\|.tsx\\'" . tsx-ts-mode)))
+(use-package html-ts-mode :mode "\\.html\\'")
+(use-package yaml-ts-mode :mode "\\.ya?ml\\'")
+(use-package dockerfile-ts-mode :mode "\\(?:Dockerfile\\(?:\\..*\\)?\\|\\.[Dd]ockerfile\\)\\'")
+(use-package php-ts-mode :mode "\\.php\\|.phtml\\'")
+(use-package typescript-ts-mode :mode (("\\.ts\\'" . typescript-ts-mode) ("\\.jsx\\|.tsx\\'" . tsx-ts-mode)))
 
 (use-package typst-ts-mode
     :ensure t
@@ -1184,7 +1101,20 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
          :rev "b1ba7195917cda08ffeac797e14bac0353c1dbe7")
     :mode "\\.vue\\'")
 
+;; Remap builtin modes to use Treesitter versions
+;; This can be simplified in Emacs 31
+(add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+(add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
+(add-to-list 'major-mode-remap-alist '(c-or-c++-mode . c-or-c++-ts-mode))
+(add-to-list 'major-mode-remap-alist '(javascript-mode . js-ts-mode))
+(add-to-list 'major-mode-remap-alist '(css-mode . css-ts-mode))
+(add-to-list 'major-mode-remap-alist '(sh-mode . bash-ts-mode))
+(add-to-list 'major-mode-remap-alist '(csharp-mode . csharp-ts-mode))
+(add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+(add-to-list 'major-mode-remap-alist '(typescript-mode . typescript-ts-mode))
+
 ;; Where to get Treesitter grammars
+;; This can be simplified in Emacs 31
 (setq treesit-language-source-alist
       '((dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")
         (astro "https://github.com/virchau13/tree-sitter-astro")
@@ -1197,17 +1127,6 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
         (typst "https://github.com/uben0/tree-sitter-typst")
         (markdown-inline "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown-inline/src")))
 
-;; Remap modes to use Treesitter versions
-(add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
-(add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
-(add-to-list 'major-mode-remap-alist '(c-or-c++-mode . c-or-c++-ts-mode))
-(add-to-list 'major-mode-remap-alist '(javascript-mode . js-ts-mode))
-(add-to-list 'major-mode-remap-alist '(css-mode . css-ts-mode))
-(add-to-list 'major-mode-remap-alist '(sh-mode . bash-ts-mode))
-(add-to-list 'major-mode-remap-alist '(csharp-mode . csharp-ts-mode))
-(add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
-(add-to-list 'major-mode-remap-alist '(typescript-mode . typescript-ts-mode))
-
 ;; Filename major mode custom associations
 (add-to-list 'auto-mode-alist '("\\.mjs\\'" . js-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.cu\\'" . c-ts-mode)) ; CUDA C
@@ -1217,7 +1136,6 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 
 ;;;; LSP
 (use-package eglot
-    :ensure nil
     :config
     (add-to-list 'eglot-server-programs '(html-ts-mode . ("vscode-html-language-server" "--stdio")))
     (add-to-list 'eglot-server-programs '(typst-ts-mode . ("tinymist")))
@@ -1254,7 +1172,6 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     (yas-global-mode))
 
 (use-package flymake
-    :ensure nil
     :config
     (put 'flymake-error 'flymake-margin-string (alist-get 'error flymake-margin-indicators-string))
     (put 'flymake-warning 'flymake-margin-string (alist-get 'warning flymake-margin-indicators-string))
@@ -1300,13 +1217,11 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     ))
 
 (use-package diff
-    :ensure nil
     :defer t
     :custom
-    (diff-font-lock-syntax nil)) ; Disable code syntax highlighting in diffs
+    (diff-font-lock-syntax nil))
 
 (use-package ediff
-    :ensure nil
     :defer t
     :custom
     (ediff-split-window-function 'split-window-horizontally)
@@ -1380,8 +1295,6 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 ;;;; Docker
 (use-package docker
     :ensure t
-    :custom
-    (docker-compose-command "docker compose")
     :bind (:map my/leader-map
         ("o d" . docker)
     ))
@@ -1565,7 +1478,6 @@ the CLI and emacs interface."))
     ))
 
 (use-package message
-    :ensure nil
     :defer t
     :custom
     (message-signature "Pozdrawiam.\nMikołaj Trzciński")
@@ -1574,13 +1486,11 @@ the CLI and emacs interface."))
     (message-kill-buffer-on-exit t))
 
 (use-package sendmail
-    :ensure nil
     :defer t
     :custom
     (sendmail-program (executable-find "msmtp")))
 
 (use-package shr
-    :ensure nil
     :defer t
     :custom
     (shr-use-colors nil)
