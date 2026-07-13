@@ -804,9 +804,9 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
         ("[s" . jinx-previous)
     ))
 
+(use-package epa-file :ensure nil)
 (use-package epa
     :ensure nil
-    :defer t
     :custom
     (epa-file-select-keys 'no))
 
