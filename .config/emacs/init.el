@@ -949,6 +949,11 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
                 (turn-off-evil-mode)
                 (artist-mode)))))
 
+(use-package proced
+    :custom
+    (proced-enable-color-flag t)
+    (proced-format '(user pid tree pcpu rss start time (args comm))))
+
 ;;;; Enauczanie
 (defvar my/enauczanie-course-list '(
                                     ("Angielski" . "https://enauczanie.pg.edu.pl/2025/course/view.php?id=3592")
