@@ -1077,6 +1077,10 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 (use-package dockerfile-ts-mode :mode "\\(?:Dockerfile\\(?:\\..*\\)?\\|\\.[Dd]ockerfile\\)\\'")
 (use-package php-ts-mode :mode "\\.php\\|.phtml\\'")
 (use-package typescript-ts-mode :mode (("\\.ts\\'" . typescript-ts-mode) ("\\.jsx\\|.tsx\\'" . tsx-ts-mode)))
+(use-package rust-ts-mode :mode "\\.rs\\'")
+(use-package java-ts-mode :mode "\\.java\\'")
+(use-package json-ts-mode :mode "\\.json\\'")
+(use-package toml-ts-mode :mode "\\.toml\\'")
 
 (use-package typst-ts-mode
     :ensure t
@@ -1111,6 +1115,7 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
 (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
 (add-to-list 'major-mode-remap-alist '(c-or-c++-mode . c-or-c++-ts-mode))
+(add-to-list 'major-mode-remap-alist '(cmake-mode . cmake-ts-mode))
 (add-to-list 'major-mode-remap-alist '(javascript-mode . js-ts-mode))
 (add-to-list 'major-mode-remap-alist '(css-mode . css-ts-mode))
 (add-to-list 'major-mode-remap-alist '(sh-mode . bash-ts-mode))
