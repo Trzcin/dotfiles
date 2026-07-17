@@ -122,8 +122,6 @@
     (lazy-count-prefix-format "(%s/%s) ")
     (lazy-count-suffix-format nil))
 
-(use-package which-key :hook (after-init . which-key-mode))
-
 ;;; Buffer display
 (add-to-list 'display-buffer-alist
     '((or . ((derived-mode . occur-mode)
@@ -528,6 +526,8 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 
 (use-package embark
     :ensure t
+    :custom
+    (prefix-help-command #'embark-prefix-help-command)
     :bind (:map my/leader-map
         ("e" . embark-act)
     ))
