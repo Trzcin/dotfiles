@@ -919,8 +919,10 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 
 (use-package man
     :defer t
+    :bind (:map help-map ("M" . man))
     :custom
-    (Man-support-remote-systems t))
+    (Man-support-remote-systems t)
+    (Man-notify-method 'aggressive))
 
 (use-package artist
     :config
