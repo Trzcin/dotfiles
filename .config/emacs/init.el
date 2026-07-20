@@ -122,9 +122,9 @@
 
 ;;; Buffer display
 (add-to-list 'display-buffer-alist
-    '((or . ((derived-mode . occur-mode)
-             (derived-mode . grep-mode)
-             (derived-mode . help-mode)))
+    '((or (derived-mode . occur-mode)
+          (derived-mode . grep-mode)
+          (derived-mode . help-mode))
          (display-buffer-reuse-mode-window display-buffer-below-selected)
          (body-function . select-window)))
 
