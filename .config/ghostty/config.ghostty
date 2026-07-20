@@ -1,0 +1,7 @@
+theme = light:Modus Operandi,dark:Modus Vivendi
+font-family = JetBrainsMono NF Medium
+adjust-cell-height = 12.5%
+
+maximize = true
+window-padding-x = 8
+window-padding-y = 8
