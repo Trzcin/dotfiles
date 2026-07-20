@@ -20,8 +20,6 @@
 ;;; General Emacs settings
 (setq inhibit-startup-echo-area-message "trzcin")
 
-(use-package f)
-
 (use-package emacs
     :custom
     ;; Disable autosave, backups, lockfiles etc.
@@ -651,12 +649,6 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     (evil-collection-org-setup)
     (evil-collection-setup-minibuffer t))
 
-;; Fix missing incf function: 'https://github.com/juliapath/evil-numbers/issues/31'
-(require 'cl-lib)
-(defalias 'incf 'cl-incf)
-(with-eval-after-load 'comp
-    (add-to-list 'native-comp-jit-compilation-deny-list "evil-numbers"))
-
 (use-package evil-numbers
     :ensure t
     :after evil
@@ -878,7 +870,7 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     "Switches to todays journal file if it exists or creates one if needed."
     (interactive)
     (let*
-        ((journal-file (f-join my/journal-dir (format-time-string "%Y-%m-%d-dziennik.org.gpg"))))
+        ((journal-file (file-name-concat my/journal-dir (format-time-string "%Y-%m-%d-dziennik.org.gpg"))))
         (find-file journal-file)
         (when (not (file-exists-p journal-file))
             (insert "#+title: Dziennik\n")
@@ -1272,7 +1264,7 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
                                 (cons copied clone-urls)
                                 clone-urls))
                 (clone-url (let ((vertico-sort-function nil)) (completing-read "Clone URL: " clone-urls)))
-                (clone-dir (f-join my/git-clone-base-dir (file-name-base clone-url)))
+                (clone-dir (file-name-concat my/git-clone-base-dir (file-name-base clone-url)))
                 (clone-cmd (format "git clone %s %s" clone-url clone-dir)))
         (shell-command clone-cmd)
         (dired clone-dir)))
