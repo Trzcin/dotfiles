@@ -555,6 +555,11 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     (global-corfu-mode)
     (corfu-popupinfo-mode t))
 
+(use-package cape
+    :ensure t
+    :init
+    (add-hook 'completion-at-point-functions #'cape-file))
+
 ;;; Vim motions
 (use-package evil
     :ensure t
@@ -1203,6 +1208,9 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     :bind (:map my/leader-map
         ("p m" . my/magit-status)
     )
+    :hook
+    (git-commit-mode . (lambda ()
+                           (setq-local completion-at-point-functions '(cape-dabbrev t))))
     :config
     (keymap-unset magit-status-mode-map "SPC")
     (defun my/magit-status ()
