@@ -976,28 +976,17 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
                 (browse-url-xdg-open url)))
 
 ;;; Terminals
-;; TODO - replace with 'ghostel'
-(use-package vterm
+(use-package ghostel
     :ensure t
     :bind (
         :map my/leader-map
-        ("o t" . vterm)
-        :map vterm-mode-map
-        ("C-<escape>" . (lambda () (interactive) (vterm-copy-mode)
-                            (turn-on-evil-mode)
-                            (evil-normal-state)))
-    )
-    :config
-    (setq vterm-timer-delay 0.01)
-    (evil-define-key 'normal vterm-copy-mode-map (kbd "i") (lambda () (interactive) (turn-off-evil-mode)
-                                                               (vterm-copy-mode -1)
-                                                               (setq cursor-type 'bar)))
-    :hook
-    (vterm-mode . (lambda ()
-                      (setq-local global-hl-line-mode nil)
-                      (setq-local default-text-properties nil) ; vterm does not like line-spacing
-                      (turn-off-evil-mode)
-                      )))
+        ("o t" . ghostel)
+    ))
+
+(use-package evil-ghostel
+    :ensure t
+    :after (ghostel evil)
+    :hook (ghostel-mode . evil-ghostel-mode))
 
 (use-package eshell
     :bind (:map my/leader-map
@@ -1020,27 +1009,15 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
     (project-switch-commands '((project-find-file "Find file")
                                (project-find-regexp "Find regexp")
                                (project-find-dir "Find directory")
-                               (project-shell "Shell")
+                               (ghostel-project "Terminal")
                                (my/magit-status "Magit")
                                (project-dired "Root directory")
                                (project-any-command "Other")))
+    :bind (:map project-prefix-map
+        ("t" . ghostel-project)
+    )
     :config
     (keymap-set my/leader-map "p" project-prefix-map)
-
-    ;; Make <leader>ps open vterm for project
-    (defun my/project-vterm ()
-        (interactive)
-        (require 'comint)
-        (let* ((default-directory (project-root (project-current t)))
-                (default-project-shell-name (project-prefixed-buffer-name "shell"))
-                (shell-buffer (get-buffer default-project-shell-name)))
-            (if (and shell-buffer (not current-prefix-arg))
-                (if (comint-check-proc shell-buffer)
-                    (pop-to-buffer shell-buffer (bound-and-true-p display-comint-buffer-action))
-                (vterm shell-buffer))
-            (vterm (generate-new-buffer-name default-project-shell-name)))))
-
-    (advice-add 'project-shell :override #'my/project-vterm)
 
     ;; Detect directories with '.project' file as project roots
     ;; This is probably buggy
