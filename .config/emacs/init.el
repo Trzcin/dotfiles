@@ -1124,8 +1124,13 @@ TYPE is usually keyword `:error', `:warning' or `:note'."
 (use-package eglot
     :config
     (add-to-list 'eglot-server-programs '(html-ts-mode . ("vscode-html-language-server" "--stdio")))
-    (add-to-list 'eglot-server-programs '(typst-ts-mode . ("tinymist")))
+    (add-to-list 'eglot-server-programs '(((js-mode :language-id "javascript")
+                                           (js-ts-mode :language-id "javascript")
+                                           (tsx-ts-mode :language-id "typescriptreact")
+                                           (typescript-ts-mode :language-id "typescript")
+                                           (typescript-mode :language-id "typescript")) . ("vtsls" "--stdio")))
     (add-to-list 'eglot-server-programs '(svelte-ts-mode . ("svelteserver" "--stdio")))
+    (add-to-list 'eglot-server-programs '(typst-ts-mode . ("tinymist")))
     :hook
     (c-ts-mode . eglot-ensure)
     (c++-ts-mode . eglot-ensure)
